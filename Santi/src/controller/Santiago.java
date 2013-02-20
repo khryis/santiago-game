@@ -72,6 +72,7 @@ public class Santiago {
 	public void diaDePaga(){
 		// TODO money money money Chris
 		// parcourir les joueurs et leur donner des sous sous dans leurs popoches
+		// YIPPEE KAY YAY
 	}
 	
 }
