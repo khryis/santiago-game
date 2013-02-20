@@ -18,4 +18,52 @@ public class Joueur {
 		this.solde = 10;
 	}
 	
+	public String getNom() {
+		return nom;
+	}
+
+	public void setNom(String nom) {
+		this.nom = nom;
+	}
+
+	public String getCouleur() {
+		return couleur;
+	}
+
+	public void setCouleur(String couleur) {
+		this.couleur = couleur;
+	}
+
+	public int getNbMarqueurDispos() {
+		return nbMarqueurDispos;
+	}
+
+	public void setNbMarqueurDispos(int nbMarqueurDispos) {
+		this.nbMarqueurDispos = nbMarqueurDispos;
+	}
+
+	public boolean isTuyauSup() {
+		return tuyauSup;
+	}
+
+	public void setTuyauSup(boolean tuyauSup) {
+		this.tuyauSup = tuyauSup;
+	}
+
+	public boolean isEstConstructeur() {
+		return estConstructeur;
+	}
+
+	public void setEstConstructeur(boolean estConstructeur) {
+		this.estConstructeur = estConstructeur;
+	}
+
+	public int getSolde() {
+		return solde;
+	}
+
+	public void setSolde(int solde) {
+		this.solde = solde;
+	}
+	
 }
