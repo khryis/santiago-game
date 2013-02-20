@@ -67,6 +67,8 @@ public class Santiago {
 		// décrémenter le nombre de marqueurs des cartes non irriguées
 		// mettre en sécheresse les cartes sans marqueurs
 		// check si on est au dernier tour ou non
+		// dezoifhiufehr
+		// ofiehruigdfv
 	}
 	
 	public void diaDePaga(){
