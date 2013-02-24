@@ -7,6 +7,8 @@ public class Joueur {
 	private boolean tuyauSup;
 	private boolean estConstructeur;
 	private int solde;
+	private int enchereCarte;
+	private int enchereConstructeur;
 	
 	public Joueur(String nom, String couleur) {
 		super();
@@ -64,6 +66,22 @@ public class Joueur {
 
 	public void setSolde(int solde) {
 		this.solde = solde;
+	}
+
+	public int getEnchereConstructeur() {
+		return enchereConstructeur;
+	}
+
+	public void setEnchereConstructeur(int enchereConstructeur) {
+		this.enchereConstructeur = enchereConstructeur;
+	}
+
+	public int getEnchereCarte() {
+		return enchereCarte;
+	}
+
+	public void setEnchereCarte(int enchereCarte) {
+		this.enchereCarte = enchereCarte;
 	}
 	
 }
