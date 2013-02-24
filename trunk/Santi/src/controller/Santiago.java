@@ -1,7 +1,9 @@
 package controller;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
+import model.Carte;
 import model.Joueur;
 import model.Plateau;
 
@@ -34,14 +36,32 @@ public class Santiago {
 	}
 	
 	public void encherirCarte(){
-		// TODO enchère carte Anthony
-		// appeler une méthode qui va chercher sur le plateau les 4 ou 5 prochaines cartes
-		// changer statut du joueur ayant l'enchère la plus basse en constructeur
-		// prévoir PASSER SON TOUR
-		// mettre à jour possesseur de la carte
-		// pose des cartes dans l'ordre décroissant des enchères
-		// mettre à jour les marqueurs
-		// mettre à jour solde des joueurs
+		/* TODO enchère carte Anthony
+		appeler une méthode qui va chercher sur le plateau les 4 ou 5 prochaines cartes
+		changer statut du joueur ayant l'enchère la plus basse en constructeur
+		prévoir PASSER SON TOUR
+		mettre à jour possesseur de la carte
+		pose des cartes dans l'ordre décroissant des enchères
+		mettre à jour les marqueurs
+		mettre à jour solde des joueurs */
+		int enchereJoueur;
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Tirage des cartes :");
+		ArrayList<Carte> cartesDevoilees = this.plateau.tirerCarte();
+		System.out.println("Voici les cartes tirées :");
+		System.out.println(cartesDevoilees.toString());
+		System.out.println("Phase d'enchère");
+		for (int i=0; i < listJoueurs.size(); i++){
+			System.out.println("Joueur :"+i+1);
+			System.out.println("Veuillez indiquer le montant de votre enchère : (0 pour passer son tour)");
+			enchereJoueur = sc.nextInt();
+			if (enchereJoueur == 0){
+				// méthode passer son tour
+			}
+			else {
+			listJoueurs.get(i).setEnchereCarte(enchereJoueur);
+			}
+		}
 	}
 	
 	public void soudoyerConstructeur(){
