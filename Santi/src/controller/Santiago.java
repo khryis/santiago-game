@@ -65,7 +65,7 @@ public class Santiago {
 				enchereJoueur = sc.nextInt();
 			}
 			if (enchereJoueur == 0){
-				//passer son tour
+				//passer son tour PREVOIR CONSTRUCTEUR
 			}
 			tabEnchere.put(listJoueurs.get(i), enchereJoueur);
 		}
@@ -118,11 +118,35 @@ public class Santiago {
 	}
 	
 	public void irrigationSupplementaire(){
-		// TODO irrigation supplémentaire Anthony
-		// parcours des joueurs
-		// appeler placerCanalSup
-		// changer boolean tuyauSup
-		// prévoir PASSER SON TOUR
+		/* Irrigation supplémentaire Anthony
+		parcours des joueurs
+		appeler placerCanalSup
+		changer boolean tuyauSup
+		prévoir PASSER SON TOUR */
+		Scanner sc = new Scanner(System.in);
+		String choix = "";
+		System.out.println("Phase d'irrigation supplémentaire");
+		for (int i=0; i<listJoueurs.size(); i++){
+			System.out.println("Joueur "+listJoueurs.get(i).getNom());
+			System.out.println("Voulez vous placer un canal supplémentaire ? O/N");
+			choix = sc.nextLine();
+			if (choix.compareTo("O") == 0 || choix.compareTo("o") == 0){
+				if (listJoueurs.get(i).isTuyauSup()){
+					System.out.println("Vous n'avez plus de canal supplémentaire!");
+					break;
+				}
+				else {
+					System.out.println("Indiquez où placer le canal.");
+					// prévoir placement avec position
+					this.plateau.placerCanalSup();
+					listJoueurs.get(i).setTuyauSup(false);
+				}
+			}
+			else if (choix.compareTo("N") == 0 || choix.compareTo("n") == 0)
+				System.out.println("Vous n'avez pas placé de canal pour ce tour.");
+				//Prevoir cas de merde si ce n'est ni "O" ni "N" 
+				//Vraiment besoin de la méthode passer son tour ici ?
+		}
 	}
 	
 	public void secheresse(){
