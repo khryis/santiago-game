@@ -3,6 +3,7 @@ package controller;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Scanner;
 
@@ -94,6 +95,14 @@ public class Santiago {
 	}
 	
 	public void niveauPartie(){
+		// TEST to test Chris
+//		System.out.println("Choisissez votre niveau : 0 pour normal, 1 pour expérimenté");
+//		int s = Saisie.IN.nextIntBlank();
+//		if (s == 1){
+//			this.niveau = 1;
+//		}else{
+//			this.niveau = 0;
+//		}
 		// J'avais commencé à faire un truc dans configurerPartie() ^^'
 		// l'attribut avecPalmier, c'est pas un booleen ?!
 		// Et je viens de revoir qu'on avait seulement mis un niveau (0 ou 1) pour la source. On met pas un booleen pour savoir si on cache l'argent dans joueur ?
@@ -107,7 +116,6 @@ public class Santiago {
 		
 			niveau = sc.nextInt();
 		}
-		// TODO choisir niveau Chris
 	}
 	
 	public void encherirCarte(){
@@ -222,18 +230,18 @@ public class Santiago {
 	}
 	
 	public void secheresse(){
-		// TODO secheresse Chris
-		// décrémenter le nombre de marqueurs des cartes non irriguées
-		// mettre en sécheresse les cartes sans marqueurs
-		// check si on est au dernier tour ou non
-		// dezoifhiufehr
-		// ofiehruigdfv
+		// TEST to test Chris
+		// check si on est arrivé au dernier tour
+		if (this.nbTours > 1){
+			plateau.secheresse();
+		}
 	}
 	
 	public void diaDePaga(){
-		// TODO money money money Chris
-		// parcourir les joueurs et leur donner des sous sous dans leurs popoches
-		// YIPPEE KAY YAY
+		for (Iterator<Joueur> iterator = this.listJoueurs.iterator(); iterator.hasNext();) {
+			Joueur j = iterator.next();
+			j.setSolde(j.getSolde()+3);
+		}
 	}
 	
 }
