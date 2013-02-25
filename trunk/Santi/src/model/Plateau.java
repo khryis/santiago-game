@@ -56,7 +56,8 @@ public class Plateau {
 	}
 	
 	public void poserUneCarte(Carte c){
-		// TODO mettre la carte c de la liste "cartes" à "cartesPosees"
+		// TODO mettre la carte c de la liste "cartes" à "cartesPosees" Allo
+		// Allo ! On a oublié d'attribuer une fonction ! x)
 		// mettre à jour c.position.occupe
 	}
 	
