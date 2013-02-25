@@ -20,11 +20,25 @@ public class Santiago {
 	
 	public void configurer(){
 		// TODO configurer partie Flo
-		// choix du niveau,  
+		
+		// choix du niveau, 
+		niveauPartie();
+		
 		// init liste joueurs, 
-		// nbCanaux en fonction nb joueurs
+		initJoueur();
+		
 		// init plateau (avec positionnement source)
+		plateau = new Plateau(niveau, listJoueurs.size());
+		
 		// mettre a jour le nbTours de la partie
+		// nbCanaux en fonction nb joueurs
+		if (listJoueurs.size() == 3 || listJoueurs.size() == 4) {
+			nbTours = 11;
+			nbCanaux = 11;
+		} else {
+			nbTours = 9;
+			nbCanaux = 9;
+		}
 	}
 	
 	public void initJoueur() {
@@ -32,9 +46,67 @@ public class Santiago {
 		// init couleur et nom pour chaque joueur et remplir la liste
 		// verif nombre joueur
 		// 
+		Scanner sc = new Scanner(System.in);
+		int nbJ = 0;
+		while (nbJ != 3 || nbJ != 4 || nbJ != 5) {
+			System.out.println("\nVeuillez entrer le nombre de joueurs (3, 4 ou 5) pour la partie : ");
+			nbJ = sc.nextInt();
+		}
+		
+		int i = 0;
+		while (i < nbJ) {
+			Joueur j = null;
+			String n = "";
+			ArrayList<String> couleurs = new ArrayList<String>();
+			couleurs.add("blanc");
+			couleurs.add("noir");
+			couleurs.add("violet");
+			couleurs.add("gris");
+			couleurs.add("beige");
+			String c = "";
+			
+			while (n.compareTo("") == 0) {
+				System.out.println("Indiquez le nom du joueur : ");
+				n = sc.next();
+			}
+			
+			int k = 0;
+			while (c.compareTo("") == 0) {
+				System.out.println("Indiquez votre couleur parmi : ");
+				while (k < couleurs.size()) {
+					System.out.println("\t"+couleurs.get(k));
+					k++;
+				}
+				c = sc.next();
+				k = 0;
+				while (c.compareTo(couleurs.get(k)) != 0 && k < couleurs.size()) {
+					k++;
+				}
+				if (k != couleurs.size() && c.compareTo("") != 0) {
+					couleurs.remove(k);
+					j = new Joueur(n, c);
+				}
+			}
+			listJoueurs.add(j);
+			i++;
+		}
+		
 	}
 	
 	public void niveauPartie(){
+		// J'avais commencé à faire un truc dans configurerPartie() ^^'
+		// l'attribut avecPalmier, c'est pas un booleen ?!
+		// Et je viens de revoir qu'on avait seulement mis un niveau (0 ou 1) pour la source. On met pas un booleen pour savoir si on cache l'argent dans joueur ?
+		Scanner sc = new Scanner(System.in);
+		while (niveau != 1 || niveau != 2 || niveau != 3 || niveau != 4) {
+			System.out.println("\nDifférents niveaux vous sont proposés (entrez le numéro) :");
+			System.out.println("\t1 - Pas de palmiers, argent visible");
+			System.out.println("\t2 - Pas de palmiers, argent caché");
+			System.out.println("\t3 - Avec palmiers, argent caché");
+			System.out.println("\t4 - Avec palmiers, argent caché, source sur un bord");
+		
+			niveau = sc.nextInt();
+		}
 		// TODO choisir niveau Chris
 	}
 	
@@ -109,7 +181,7 @@ public class Santiago {
 	
 	public void soudoyerConstructeur(){
 		// TODO tour soudoiement Flo
-		// pose position cannal temp
+		// pose position canal temp
 		// stocker la liste des propositions de placement de canal
 		// associer une position à une liste de joueur
 		// proposer montant (mettre à jour Joueur.enchereConstructeur)
