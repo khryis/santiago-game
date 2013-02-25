@@ -1,12 +1,29 @@
 package model;
 
 public class Carte {
-	private Position position;
+	private PositionCase position;
 	private int nbMarqueurMax;
 	private int nbMarqueurActuel;
-	private boolean estDeserte;
+	private boolean deserte;
 	private String type;
 	private Joueur possesseur;
+	
+	/**
+	 * @param position
+	 * @param nbMarqueurMax
+	 * @param nbMarqueurActuel
+	 * @param deserte
+	 * @param type
+	 * @param possesseur
+	 */
+	public Carte(int nbMarqueurMax, String type) {
+		this.position = null;
+		this.nbMarqueurMax = nbMarqueurMax;
+		this.nbMarqueurActuel = nbMarqueurMax;
+		this.deserte = false;
+		this.type = type;
+		this.possesseur = null;
+	}
 	
 	public Joueur getPossesseur() {
 		return possesseur;
@@ -17,7 +34,7 @@ public class Carte {
 	public Position getPosition() {
 		return position;
 	}
-	public void setPosition(Position position) {
+	public void setPosition(PositionCase position) {
 		this.position = position;
 	}
 	public int getNbMarqueurMax() {
@@ -33,10 +50,10 @@ public class Carte {
 		this.nbMarqueurActuel = nbMarqueurActuel;
 	}
 	public boolean isEstDeserte() {
-		return estDeserte;
+		return deserte;
 	}
 	public void setEstDeserte(boolean estDeserte) {
-		this.estDeserte = estDeserte;
+		this.deserte = estDeserte;
 	}
 	public String getType() {
 		return type;

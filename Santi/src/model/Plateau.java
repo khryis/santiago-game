@@ -2,6 +2,9 @@ package model;
 
 import java.util.ArrayList;
 
+import singleton.Saisie;
+import vue.AffichageConsole;
+
 public class Plateau {
 	private PositionIntersection source;
 	private ArrayList<PositionSegment> canaux;
@@ -9,9 +12,12 @@ public class Plateau {
 	private ArrayList<Carte> cartes;
 	private ArrayList<Carte> cartesPosees;
 	private ArrayList<PositionCase> palmiers;
+	private int nbJoueurs;
+	
 	
 	
 	private Plateau(int niveau){
+		// FIXME fuckin' crackage, constructeur useless
 		this.source = PositionIntersection.aleatoire(niveau);
 		this.canaux = new ArrayList<PositionSegment>(31);
 		this.cases = new ArrayList<PositionCase>(48);
@@ -27,6 +33,7 @@ public class Plateau {
 	 */
 	public Plateau(int niveau, int nbJoueur) {
 		this(niveau);
+		this.nbJoueurs = nbJoueur;
 		switch (nbJoueur) {
 			case 3:
 				this.cartes = new ArrayList<Carte>(44);
@@ -50,16 +57,47 @@ public class Plateau {
 	}
 	
 	public ArrayList<Carte> tirerCarte(){
-		// TODO tirer les 4 ou 5 premières cartes de la liste Chris
-		// mettre références des cartes déjà existantes de "cartes" et ne pas faire de nouvel object ou copie d'un existant
-		return new ArrayList<Carte>();
+		// TEST to test Chris
+		ArrayList<Carte> carteTirage = null;
+		if(this.nbJoueurs==5){
+			carteTirage = this.popArrayList(5);
+		}else{
+			carteTirage = this.popArrayList(4);
+		}
+		return carteTirage;
 	}
 	
-	public void poserUneCarte(Carte c){
-		// TODO mettre la carte c de la liste "cartes" à "cartesPosees" Allo
-		// Allo ! On a oublié d'attribuer une fonction ! x)
-		// mettre à jour c.position.occupe
-	}
+	public void poserUneCarte(Carte carteAPoser){
+		// FIXME basculer l'interaction dans le controleur, rien a foutre dans le model (encherir) !! Chris
+		// TEST to test Chris
+		// Demander à l'utilisateur de  choisir une position pour poser la carte
+		boolean pose = false;
+		while(!pose){
+			System.out.println("Voici le plateau, choississez une position pour poser votre carte");
+			AffichageConsole.afficheMatrice(8, 6);
+			
+			System.out.println("Première coordonnée, les abscisse : ");
+			int x = Saisie.IN.nextIntWithRangeNotBlank(0, 7);
+			
+			System.out.println("Deuxième coordonnée, les ordonnées : ");
+			int y = Saisie.IN.nextIntWithRangeNotBlank(0, 5);
+			
+			Position positionChoisie = new PositionCase(x,y);
+			if (this.cases.contains(positionChoisie)){
+				int indexPosition = this.cases.indexOf(positionChoisie);
+				positionChoisie = this.cases.get(indexPosition);
+				if (positionChoisie.isOccupe()){
+					System.out.println("Cette Case est déjà occupée...");
+				}else{
+					this.cartesPosees.add(carteAPoser);
+					PositionCase positionCase = this.cases.get(indexPosition);
+					positionCase.setOccupe(true);
+					carteAPoser.setPosition(positionCase);
+					pose = true;
+				}
+			}
+		}
+	}	
 	
 	public void placerCanal(){
 		// TODO placerCanal Flo
@@ -118,4 +156,33 @@ public class Plateau {
 	public void setPalmiers(ArrayList<PositionCase> palmiers) {
 		this.palmiers = palmiers;
 	}
+
+	public void secheresse() {
+		// TODO sécheresse Chris
+		// décrémenter le nombre de marqueurs des cartes non irriguées
+		// mettre en sécheresse les cartes sans marqueurs
+		
+	}
+	
+	public void majIrrigation(){
+		// TODO irrigation Chris
+		// FIXME ajouté cette maj a chaque fois que l'on pose un canal
+		// masse calcul
+		
+	}
+	
+	private ArrayList<Carte> popArrayList(int nbCartes){
+		// TEST to test Chris
+		ArrayList<Carte> carteTirage = new ArrayList<Carte>(nbCartes);
+		for (int i = 0 ; i < nbCartes ; i++) {
+			carteTirage.add(this.cartes.get(this.cartes.size()-1));
+			this.cartes.remove(this.cartes.size()-1);
+		}
+		return carteTirage;
+	}
+	
+//	public static void main(String [] args){
+//		Plateau p = new Plateau(0,4);
+//		p.poserUneCarte(new Carte(2, "banane"));
+//	}
 }
