@@ -1,6 +1,9 @@
 package controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.Scanner;
 
 import model.Carte;
@@ -36,7 +39,7 @@ public class Santiago {
 	}
 	
 	public void encherirCarte(){
-		/* TODO enchère carte Anthony
+		/* Enchère carte Anthony
 		appeler une méthode qui va chercher sur le plateau les 4 ou 5 prochaines cartes
 		changer statut du joueur ayant l'enchère la plus basse en constructeur
 		prévoir PASSER SON TOUR
@@ -45,23 +48,63 @@ public class Santiago {
 		mettre à jour les marqueurs
 		mettre à jour solde des joueurs */
 		int enchereJoueur;
+		HashMap<Joueur,Integer> tabEnchere = new HashMap<Joueur, Integer>();
 		Scanner sc = new Scanner(System.in);
+		int carteChoisie;
 		System.out.println("Tirage des cartes :");
 		ArrayList<Carte> cartesDevoilees = this.plateau.tirerCarte();
 		System.out.println("Voici les cartes tirées :");
 		System.out.println(cartesDevoilees.toString());
 		System.out.println("Phase d'enchère");
 		for (int i=0; i < listJoueurs.size(); i++){
-			System.out.println("Joueur :"+i+1);
+			System.out.println("Joueur :"+(i+1));
 			System.out.println("Veuillez indiquer le montant de votre enchère : (0 pour passer son tour)");
 			enchereJoueur = sc.nextInt();
+			while (enchereJoueur > listJoueurs.get(i).getSolde()){
+				System.out.println("Votre enchère est plus élevée que votre solde! Indiquez une nouvelle enchère.");
+				enchereJoueur = sc.nextInt();
+			}
 			if (enchereJoueur == 0){
-				// méthode passer son tour
+				//passer son tour
 			}
-			else {
-			listJoueurs.get(i).setEnchereCarte(enchereJoueur);
-			}
+			tabEnchere.put(listJoueurs.get(i), enchereJoueur);
 		}
+		System.out.println("Résultat de la phase d'enchère...");
+		while (!tabEnchere.isEmpty()){
+			Joueur JoueurGagnant = enchereMax(tabEnchere);
+			System.out.println("Joueur "+JoueurGagnant.getNom()+" avec une enchère de : "+tabEnchere.get(JoueurGagnant).intValue());
+			System.out.println("Liste des cartes : ");
+			System.out.println(cartesDevoilees.toString());
+			System.out.println("Choisissez une carte : ");
+			while (!cartesDevoilees.isEmpty()){
+				for (int i=0; i<cartesDevoilees.size(); i++){
+					System.out.println(cartesDevoilees.get(i).toString()+ " "+(i+1));
+				}
+				carteChoisie = sc.nextInt();
+				//Maj possesseur
+				cartesDevoilees.get(carteChoisie).setPossesseur(JoueurGagnant);
+				//Maj marqueurs
+				JoueurGagnant.setNbMarqueurDispos(JoueurGagnant.getNbMarqueurDispos() - cartesDevoilees.get(carteChoisie).getNbMarqueurMax());
+				//Maj solde
+				JoueurGagnant.setSolde(JoueurGagnant.getSolde() - tabEnchere.get(JoueurGagnant).intValue());
+				//Pose de la carte
+				this.plateau.poserUneCarte(cartesDevoilees.get(carteChoisie));
+				cartesDevoilees.remove(carteChoisie);
+			}
+			tabEnchere.remove(JoueurGagnant);
+		}
+		
+	}
+	
+	public Joueur enchereMax(HashMap<Joueur, Integer> tab){
+		Joueur res = null;
+		int maxValue=(Collections.max(tab.values()));
+		for (Entry<Joueur, Integer> entry : tab.entrySet()) {
+            if (entry.getValue()==maxValue) {
+                 res = entry.getKey();
+            }
+		}
+		return res;
 	}
 	
 	public void soudoyerConstructeur(){
