@@ -95,4 +95,5 @@ public class PositionSegment extends Position {
         
         return false;
     }
+
 }

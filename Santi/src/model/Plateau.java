@@ -96,9 +96,11 @@ public class Plateau {
         }
     }
     
-    public void placerCanal() {
-        // TODO placerCanal Flo
-        // TODO résoudre le motherfucking compromis dans santiago Flo
+    public void placerCanal(int x, int y) {
+        // TEST placerCanal Flo
+        //  résoudre le motherfucking compromis dans santiago Flo
+    	PositionSegment canal = new PositionSegment (x, y, true);
+    	canaux.add(canal);
     }
     
     public void placerCanalSup() {
