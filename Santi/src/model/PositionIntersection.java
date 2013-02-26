@@ -2,8 +2,6 @@ package model;
 
 public class PositionIntersection extends Position{
 	
-	
-	
 	public PositionIntersection() {
 		super();
 	}
