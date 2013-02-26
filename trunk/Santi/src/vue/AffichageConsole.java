@@ -23,6 +23,6 @@ public class AffichageConsole {
 	}
 	
 	public static void main(String [] args){
-		AffichageConsole.afficheMatrice(3, 4);
+		AffichageConsole.afficheMatrice(8, 6);
 	}
 }

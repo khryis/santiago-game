@@ -17,15 +17,6 @@ public class Plateau {
     private int                        nbJoueurs;
     
     
-    
-    private Plateau(int niveau) {
-        // FIXME fuckin' crackage, constructeur useless
-        this.source = PositionIntersection.aleatoire(niveau);
-        this.canaux = new ArrayList<PositionSegment>(31);
-        this.cases = new ArrayList<PositionCase>(48);
-        this.palmiers = new ArrayList<PositionCase>(3);
-    }
-    
     /**
      * @param source
      * @param canaux
@@ -34,7 +25,10 @@ public class Plateau {
      * @param palmiers
      */
     public Plateau(int niveau, int nbJoueur) {
-        this(niveau);
+        this.source = PositionIntersection.aleatoire(niveau);
+        this.canaux = new ArrayList<PositionSegment>(31);
+        this.cases = new ArrayList<PositionCase>(48);
+        this.palmiers = new ArrayList<PositionCase>(3);
         this.nbJoueurs = nbJoueur;
         switch (nbJoueur) {
             case 3:
@@ -181,7 +175,7 @@ public class Plateau {
     
     public void majIrrigationTotale() {
         // TEST to test majIrrigationTotale Chris
-        // FIXME ajouté cette maj a chaque fois que l'on pose un canal
+        // XXX ajouté cette maj a chaque fois que l'on pose un canal
         for (Iterator<Carte> iterator = this.cartesPosees.iterator() ; iterator.hasNext() ;) {
             // on récupère la carte posé de l'itération
             Carte carte = iterator.next();
@@ -191,7 +185,7 @@ public class Plateau {
     
     public void majIrrigation1Carte(Carte carte) {
         // TEST to test irrigation pour une carte Chris
-        // FIXME appele ceci quand on pose une carte
+        // appele ceci quand on pose une carte
         
         // On initialise une position, renseigné par la carte
         Position pc = carte.getPosition();

@@ -1,7 +1,6 @@
 package model;
 
 public class Position {
-	// FIXME ne peut ont pas mettre du fuckin' protected ??
 	protected int x;
 	protected int y;
 	protected boolean occupe;
