@@ -20,7 +20,7 @@ public class PositionCase extends Position{
 	}
 
 	public static PositionCase aleatoire() {
-		// TEST to test Chris
+		// TEST to test positionCase aleatoire Chris
 		int abscisse, ordonnee;
 		double rand = Math.random()*8;
 		rand = Math.floor(rand);
@@ -39,4 +39,14 @@ public class PositionCase extends Position{
 	public boolean isIrriguee(){
 		return irriguee;
 	}
+    
+    public boolean getIrriguee() {
+    
+        return irriguee;
+    }
+    
+    public void setIrriguee(boolean irriguee) {
+    
+        this.irriguee = irriguee;
+    }
 }

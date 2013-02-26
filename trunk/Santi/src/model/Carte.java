@@ -37,6 +37,16 @@ public class Carte {
 	public void setPosition(PositionCase position) {
 		this.position = position;
 	}
+    
+    public PositionCase getPositionCase() {
+    
+        return position;
+    }
+    
+    public void setPositionCase(PositionCase position) {
+    
+        this.position = position;
+    }
 	public int getNbMarqueurMax() {
 		return nbMarqueurMax;
 	}

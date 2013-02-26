@@ -1,9 +1,10 @@
 package model;
 
 public class Position {
-	private int x;
-	private int y;
-	private boolean occupe;
+	// FIXME ne peut ont pas mettre du fuckin' protected ??
+	protected int x;
+	protected int y;
+	protected boolean occupe;
 	
 	public Position(){
 		this.x = 0;
