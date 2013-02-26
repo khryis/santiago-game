@@ -10,6 +10,7 @@ import java.util.Scanner;
 import model.Carte;
 import model.Joueur;
 import model.Plateau;
+import model.PositionSegment;
 
 public class Santiago {
 	private ArrayList<Joueur> listJoueurs;
@@ -20,7 +21,7 @@ public class Santiago {
 	private int nbTours; // décrémenter à chaque fin de tour
 	
 	public void configurer(){
-		// TODO configurer partie Flo
+		// configurer partie Flo
 		
 		// choix du niveau, 
 		niveauPartie();
@@ -43,7 +44,7 @@ public class Santiago {
 	}
 	
 	public void initJoueur() {
-		// TODO init joueur Flo
+		// init joueur Flo
 		// init couleur et nom pour chaque joueur et remplir la liste
 		// verif nombre joueur
 		// 
@@ -188,13 +189,90 @@ public class Santiago {
 	}
 	
 	public void soudoyerConstructeur(){
-		// TODO tour soudoiement Flo
+		// tour soudoiement Flo
+		
+
 		// pose position canal temp
 		// stocker la liste des propositions de placement de canal
 		// associer une position à une liste de joueur
 		// proposer montant (mettre à jour Joueur.enchereConstructeur)
 		// prévoir PASSER SON TOUR
-		// TODO trouver un motherfucking compromis Flo
+		// trouver un motherfucking compromis Flo
+		
+		// Sous quelle forme donne-t-on la position du canal temp ? Ac interface graphique, cliquer sur l'endroit ? Dire: l2, case 3 ?
+		// Tour joueurs, à démarrer à la gauche du constructeur !!
+		int depart = -1;
+		int i = 0;
+		while (i < listJoueurs.size() && depart == -1) {	// Trouver la position de départ (après le constructeur)
+			if (listJoueurs.get(i).isEstConstructeur()) {
+				depart = i+1;
+			}
+			i++;
+		}
+		if (depart == listJoueurs.size()) {
+			depart = 0;
+		}
+		
+		// Tour d'enchères :
+		Scanner sc = new Scanner(System.in);
+		HashMap<PositionSegment, ArrayList<Joueur>> enchereConstr = new HashMap<PositionSegment, ArrayList<Joueur>>();
+		PositionSegment canal = null;
+		ArrayList<Joueur> joueursEnch = new ArrayList<Joueur>();
+		String c = "";
+		int montant = 0;
+		Joueur j = null;
+		// Boucle sur les joueurs :
+		i = depart;
+		while (!listJoueurs.get(i).isEstConstructeur()) {
+			while (i < listJoueurs.size() && !listJoueurs.get(i).isEstConstructeur()) {
+				j = listJoueurs.get(i);
+				System.out.println("Voulez-vous soudoyer le constructeur de canal ? (o/n) ");
+				c = sc.next();
+				if (c.compareTo("o") == 0) {
+					System.out.println("Indiquez où vous souhaitez poser le canal : ");
+					// récupérer la popsition, I don't know how, in which format
+					// transformer cette position en positionSegment 
+					// canal = ;
+					System.out.println("Combien proposez-vous pour votre canal ?");
+					montant = sc.nextInt();
+					if (montant > 0 && montant < j.getSolde()) {
+						// récupérer enchère
+						j.setEnchereConstructeur(montant);
+						if (enchereConstr.containsKey(canal)) {
+							// ajouter le joueur à l'arrayList si position de canal déjà proposée
+							enchereConstr.get(canal).add(j);
+						} else {	// ajouter dans la hashmap
+							joueursEnch.add(j);
+							enchereConstr.put(canal, joueursEnch);
+						}
+					} else {
+						System.out.println("Enchère incorrecte, vous ne pouvez pas poser de canal.");
+					}
+					
+				} else {
+					System.out.println("Vous avez passé votre tour.");
+				}
+				i++;
+			}
+			if (i == listJoueurs.size()) {
+				i = 0;
+			}
+		}
+		
+		// trouver le constructeur 
+		// faire choisir une enchère
+		// placer le canal
+		int constr = -1;
+		if (depart == 0) {
+			constr = listJoueurs.size()-1;
+		} else {
+			constr = depart - 1;
+		}
+		System.out.println("Voici les propositions de construction des canaux : ");
+		// Indiquez quel joueur a proposé quoi ?
+		i = 0;
+		// itérer sur la map, montrer les propositions
+		//while ()
 	}
 	
 	public void irrigationSupplementaire(){
