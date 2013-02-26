@@ -20,7 +20,7 @@ public class PositionCase extends Position{
 	}
 
 	public static PositionCase aleatoire() {
-		// TEST to test positionCase aleatoire Chris
+		// TEST positionCase aleatoire Chris
 		int abscisse, ordonnee;
 		double rand = Math.random()*8;
 		rand = Math.floor(rand);

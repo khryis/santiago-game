@@ -53,7 +53,7 @@ public class Plateau {
     }
     
     public ArrayList<Carte> tirerCarte() {
-        // TEST to test tirerCarte Chris
+        // TEST tirerCarte Chris
         ArrayList<Carte> carteTirage = null;
         if (this.nbJoueurs == 5) {
             carteTirage = this.popArrayList(5);
@@ -66,7 +66,7 @@ public class Plateau {
     public void poserUneCarte(Carte carteAPoser) {
         // FIXME basculer l'interaction dans le controleur, rien a foutre dans
         // le model (encherir) !! Chris
-        // TEST to test poser une carte Chris
+        // TEST poser une carte Chris
         // Demander à l'utilisateur de choisir une position pour poser la carte
         boolean pose = false;
         while (!pose) {
@@ -155,7 +155,7 @@ public class Plateau {
     }
     
     public void secheresse() {
-        // TEST to test secheresse partie 2 Chris
+        // TEST secheresse partie 2 Chris
         // décrémenter le nombre de marqueurs des cartes non irriguées
         // mettre en sécheresse les cartes sans marqueurs
         for (Iterator<Carte> iterator = this.cartesPosees.iterator() ; iterator.hasNext() ;) {
@@ -174,7 +174,7 @@ public class Plateau {
     }
     
     public void majIrrigationTotale() {
-        // TEST to test majIrrigationTotale Chris
+        // TEST majIrrigationTotale Chris
         // XXX ajouté cette maj a chaque fois que l'on pose un canal
         for (Iterator<Carte> iterator = this.cartesPosees.iterator() ; iterator.hasNext() ;) {
             // on récupère la carte posé de l'itération
@@ -184,7 +184,7 @@ public class Plateau {
     }
     
     public void majIrrigation1Carte(Carte carte) {
-        // TEST to test irrigation pour une carte Chris
+        // TEST irrigation pour une carte Chris
         // appele ceci quand on pose une carte
         
         // On initialise une position, renseigné par la carte
@@ -216,7 +216,7 @@ public class Plateau {
     }
     
     private ArrayList<Carte> popArrayList(int nbCartes) {
-        // TEST to test popArrayList Chris
+        // TEST popArrayList Chris
         ArrayList<Carte> carteTirage = new ArrayList<Carte>(nbCartes);
         for (int i = 0 ; i < nbCartes ; i++) {
             carteTirage.add(this.cartes.get(this.cartes.size() - 1));
