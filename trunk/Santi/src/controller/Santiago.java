@@ -96,7 +96,7 @@ public class Santiago {
 	}
 	
 	public void niveauPartie(){
-	    // TEST to test niveau Parti Flo
+	    // TEST niveau Parti Flo
 //		System.out.println("Choisissez votre niveau : 0 pour normal, 1 pour expérimenté");
 //		int s = Saisie.IN.nextIntBlank();
 //		if (s == 1){
@@ -308,7 +308,7 @@ public class Santiago {
 	}
 	
 	public void secheresse(){
-		// TEST to test secheresse partie 1 Chris
+		// TEST secheresse partie 1 Chris
 		// check si on est arrivé au dernier tour
 		if (this.nbTours > 1){
 			plateau.secheresse();
