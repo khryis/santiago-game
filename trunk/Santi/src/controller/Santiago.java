@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 
@@ -16,7 +17,7 @@ public class Santiago {
 	private ArrayList<Joueur> listJoueurs;
 	private int nbCanaux;
 	private int niveau;
-	private String avecPalmier;
+	private boolean avecPalmier;
 	private Plateau plateau;
 	private int nbTours; // décrémenter à chaque fin de tour
 	
@@ -44,7 +45,7 @@ public class Santiago {
 	}
 	
 	public void initJoueur() {
-		// init joueur Flo
+		// TEST init joueur Flo
 		// init couleur et nom pour chaque joueur et remplir la liste
 		// verif nombre joueur
 		// 
@@ -108,14 +109,30 @@ public class Santiago {
 		// l'attribut avecPalmier, c'est pas un booleen ?!
 		// Et je viens de revoir qu'on avait seulement mis un niveau (0 ou 1) pour la source. On met pas un booleen pour savoir si on cache l'argent dans joueur ?
 		Scanner sc = new Scanner(System.in);
-		while (niveau != 1 || niveau != 2 || niveau != 3 || niveau != 4) {
+		int choix = 0;
+		while (choix != 1 || choix != 2 || choix != 3) {
 			System.out.println("\nDifférents niveaux vous sont proposés (entrez le numéro) :");
-			System.out.println("\t1 - Pas de palmiers, argent visible");
-			System.out.println("\t2 - Pas de palmiers, argent caché");
-			System.out.println("\t3 - Avec palmiers, argent caché");
-			System.out.println("\t4 - Avec palmiers, argent caché, source sur un bord");
-		
-			niveau = sc.nextInt();
+			System.out.println("\t1 - Pas de palmiers");
+			System.out.println("\t2 - Avec palmiers");
+			System.out.println("\t3 - Avec palmiers, source sur un bord");
+			choix = sc.nextInt();
+		}
+		switch (choix) {
+			case 1: avecPalmier = false;
+			niveau = 0;
+			break;
+				
+			case 2: avecPalmier = true;
+			niveau = 0;
+			break;
+				
+			case 3: avecPalmier = true;
+			niveau = 1;
+			break;
+				
+			default: avecPalmier = false;
+			niveau = 0;
+			break;
 		}
 	}
 	
@@ -189,7 +206,7 @@ public class Santiago {
 	}
 	
 	public void soudoyerConstructeur(){
-		// tour soudoiement Flo
+		// TEST tour soudoiement Flo
 		
 
 		// pose position canal temp
@@ -197,7 +214,7 @@ public class Santiago {
 		// associer une position à une liste de joueur
 		// proposer montant (mettre à jour Joueur.enchereConstructeur)
 		// prévoir PASSER SON TOUR
-		// trouver un motherfucking compromis Flo
+		// TEST trouver un motherfucking compromis Flo
 		
 		// Sous quelle forme donne-t-on la position du canal temp ? Ac interface graphique, cliquer sur l'endroit ? Dire: l2, case 3 ?
 		// Tour joueurs, à démarrer à la gauche du constructeur !!
@@ -220,6 +237,10 @@ public class Santiago {
 		ArrayList<Joueur> joueursEnch = new ArrayList<Joueur>();
 		String c = "";
 		int montant = 0;
+		int x;
+		int y;
+		int x1;
+		int y1;
 		Joueur j = null;
 		// Boucle sur les joueurs :
 		i = depart;
@@ -231,8 +252,19 @@ public class Santiago {
 				if (c.compareTo("o") == 0) {
 					System.out.println("Indiquez où vous souhaitez poser le canal : ");
 					// récupérer la popsition, I don't know how, in which format
+					System.out.println("1 ère coordonnées: ");
+					System.out.println("x ?");
+					x = sc.nextInt();
+					System.out.println("y ?");
+					y = sc.nextInt();
+					System.out.println("2 ème coordonnées: ");
+					System.out.println("x ?");
+					x1 = sc.nextInt();
+					System.out.println("y ?");
+					y1 = sc.nextInt();
 					// transformer cette position en positionSegment 
-					// canal = ;
+					canal = new PositionSegment(x, y, x1, y1);
+					
 					System.out.println("Combien proposez-vous pour votre canal ?");
 					montant = sc.nextInt();
 					if (montant > 0 && montant < j.getSolde()) {
@@ -270,9 +302,79 @@ public class Santiago {
 		}
 		System.out.println("Voici les propositions de construction des canaux : ");
 		// Indiquez quel joueur a proposé quoi ?
-		i = 0;
 		// itérer sur la map, montrer les propositions
-		//while ()
+		for (Map.Entry<PositionSegment, ArrayList<Joueur>> entry : enchereConstr.entrySet()) {
+			i = 0;
+			System.out.println("Position canal : " + entry.getKey());
+		    joueursEnch = entry.getValue();
+		    while (i < joueursEnch.size()) {
+		    	System.out.println("\tJoueur : " + joueursEnch.get(i).getNom() + "\tMontant : " + joueursEnch.get(i).getEnchereConstructeur());
+		    	i++;
+		    }
+		}
+		System.out.println("Souhaitez-vous une de ces positions ? (o/n)");
+		c = sc.next();
+		if (c.compareTo("o") == 0) {
+			System.out.println("Entrez la position choisie :"); 
+			System.out.println("1 ère coordonnées: ");
+			System.out.println("x ?");
+			x = sc.nextInt();
+			System.out.println("y ?");
+			y = sc.nextInt();
+			System.out.println("2 ème coordonnées: ");
+			System.out.println("x ?");
+			x1 = sc.nextInt();
+			System.out.println("y ?");
+			y1 = sc.nextInt();
+			// vérif, poser canal
+			plateau.placerCanal(x, y);
+			// mettre à jour le solde des joueurs
+			canal = new PositionSegment(x, y, x1, y1);
+			joueursEnch = enchereConstr.get(canal);
+			for (Joueur joueur : joueursEnch) {
+				joueur.setSolde(joueur.getSolde() - joueur.getEnchereConstructeur());
+			}
+			
+		} else {
+			System.out.println("Indiquez votre propre enchère:");
+			montant = 0;
+			int total = 0;
+			int erreur = -1;
+			while (erreur == -1) {
+				montant = sc.nextInt();
+				//vérif
+				for (Map.Entry<PositionSegment, ArrayList<Joueur>> entry : enchereConstr.entrySet()) {
+					i = 0;
+					joueursEnch = entry.getValue();
+					while (i < joueursEnch.size()) {
+						total = total + joueursEnch.get(i).getEnchereConstructeur();
+						i++;
+					}
+					if (montant <= total || montant > listJoueurs.get(constr).getSolde()) {
+						erreur = 0;
+					} else {
+						erreur = 1;
+						listJoueurs.get(constr).setSolde(listJoueurs.get(constr).getSolde() - montant);
+						System.out.println("Indiquez la position du canal : ");
+						System.out.println("1 ère coordonnées: ");
+						System.out.println("x ?");
+						x = sc.nextInt();
+						System.out.println("y ? ");
+						y = sc.nextInt();
+						System.out.println("2 ème coordonnées: ");
+						System.out.println("x ?");
+						x1 = sc.nextInt();
+						System.out.println("y ?");
+						y1 = sc.nextInt();
+						plateau.placerCanal(x, y);
+					}
+				}
+				if (erreur == 0) {
+					System.out.println("Mauvais montant, recommencez :");
+					erreur = -1;
+				}
+			}
+		}
 	}
 	
 	public void irrigationSupplementaire(){
