@@ -136,34 +136,26 @@ public class Santiago {
 		}
 	}
 	
-	public void encherirCarte(){
+	public HashMap<Joueur, Integer> miseAuxEncheres(){
 		/* Enchère carte Anthony
 		appeler une méthode qui va chercher sur le plateau les 4 ou 5 prochaines cartes
 		changer statut du joueur ayant l'enchère la plus basse en constructeur
-		prévoir PASSER SON TOUR
-		mettre à jour possesseur de la carte
-		pose des cartes dans l'ordre décroissant des enchères
-		mettre à jour les marqueurs
-		mettre à jour solde des joueurs 
-		enchère pas les mêmes
-		tour commence à gauche du constructeur
-		marqueurs à mettre à jour pour la personne qui n'a pas enchérit*/
-		boolean constructeur = false;
+		prévoir PASSER SON TOUR */
 		int enchereJoueur;
 		HashMap<Joueur,Integer> tabEnchere = new HashMap<Joueur, Integer>();
 		Scanner sc = new Scanner(System.in);
-		int carteChoisie;
+		boolean constructeur = false;
 		System.out.println("Tirage des cartes :");
-		ArrayList<Carte> cartesDevoilees = this.plateau.tirerCarte();
+		this.plateau.setCartesDevoilees(this.plateau.tirerCarte());
 		System.out.println("Voici les cartes tirées :");
-		System.out.println(cartesDevoilees.toString());
+		System.out.println(this.plateau.getCartesDevoilees().toString());
 		System.out.println("Phase d'enchère");
 		for (int i=0; i < listJoueurs.size(); i++){
 			System.out.println("Joueur :"+(i+1));
 			System.out.println("Veuillez indiquer le montant de votre enchère : (0 pour passer son tour)");
 			enchereJoueur = sc.nextInt();
-			while (enchereJoueur > listJoueurs.get(i).getSolde()){
-				System.out.println("Votre enchère est plus élevée que votre solde! Indiquez une nouvelle enchère.");
+			while (enchereJoueur > listJoueurs.get(i).getSolde() || tabEnchere.containsValue(enchereJoueur)){
+				System.out.println("Erreur. Indiquez une nouvelle enchère.");
 				enchereJoueur = sc.nextInt();
 			}
 			if (enchereJoueur == 0 && constructeur == false){
@@ -172,32 +164,46 @@ public class Santiago {
 			}
 			tabEnchere.put(listJoueurs.get(i), enchereJoueur);
 		}
-		System.out.println("Résultat de la phase d'enchère...");
+		return tabEnchere;
+	}
+
+	
+	public void placementDesPlantations(HashMap<Joueur, Integer> tabEnchere){
+		/* Placement des cartes Anthony
+		mettre à jour possesseur de la carte
+		pose des cartes dans l'ordre décroissant des enchères
+		mettre à jour les marqueurs
+		mettre à jour solde des joueurs */
+		Scanner sc = new Scanner(System.in);
+		int carteChoisie;
 		while (!tabEnchere.isEmpty()){
 			Joueur JoueurGagnant = enchereMax(tabEnchere);
 			System.out.println("Joueur "+JoueurGagnant.getNom()+" avec une enchère de : "+tabEnchere.get(JoueurGagnant).intValue());
 			System.out.println("Liste des cartes : ");
-			System.out.println(cartesDevoilees.toString());
+			System.out.println(this.plateau.getCartesDevoilees().toString());
 			System.out.println("Choisissez une carte : ");
-			while (!cartesDevoilees.isEmpty()){
-				for (int i=0; i<cartesDevoilees.size(); i++){
-					System.out.println(cartesDevoilees.get(i).toString()+ " "+(i+1));
+			while (!this.plateau.getCartesDevoilees().isEmpty()){
+				for (int i=0; i<this.plateau.getCartesDevoilees().size(); i++){
+					System.out.println(this.plateau.getCartesDevoilees().get(i).toString()+ " "+(i+1));
 				}
 				carteChoisie = sc.nextInt();
 				//Maj possesseur
-				cartesDevoilees.get(carteChoisie).setPossesseur(JoueurGagnant);
+				this.plateau.getCartesDevoilees().get(carteChoisie).setPossesseur(JoueurGagnant);
 				//Maj marqueurs
-				JoueurGagnant.setNbMarqueurDispos(JoueurGagnant.getNbMarqueurDispos() - cartesDevoilees.get(carteChoisie).getNbMarqueurMax());
+				JoueurGagnant.setNbMarqueurDispos(JoueurGagnant.getNbMarqueurDispos() - this.plateau.getCartesDevoilees().get(carteChoisie).getNbMarqueurMax());
 				//Maj solde
 				JoueurGagnant.setSolde(JoueurGagnant.getSolde() - tabEnchere.get(JoueurGagnant).intValue());
 				//Pose de la carte
-				this.plateau.poserUneCarte(cartesDevoilees.get(carteChoisie));
-				this.plateau.majIrrigation1Carte(cartesDevoilees.get(carteChoisie));
-				cartesDevoilees.remove(carteChoisie);
+				this.plateau.poserUneCarte(this.plateau.getCartesDevoilees().get(carteChoisie));
+				//MAJ marqueurs de la carte si enchère joueur = 0
+				if (tabEnchere.get(JoueurGagnant).intValue() == 0){
+					this.plateau.getCartesPosees().get(carteChoisie).setNbMarqueurActuel(this.plateau.getCartesPosees().get(carteChoisie).getNbMarqueurActuel() - 1);
+				}
+				this.plateau.majIrrigation1Carte(this.plateau.getCartesDevoilees().get(carteChoisie));
+				this.plateau.getCartesDevoilees().remove(carteChoisie);
 			}
 			tabEnchere.remove(JoueurGagnant);
-		}
-		
+		}	
 	}
 	
 	public Joueur enchereMax(HashMap<Joueur, Integer> tab){
