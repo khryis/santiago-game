@@ -15,9 +15,18 @@ public class Plateau {
     private ArrayList<Carte>           cartesPosees;
     private ArrayList<PositionCase>    palmiers;
     private int                        nbJoueurs;
+    private ArrayList<Carte> cartesDevoilees;
     
     
-    /**
+    public ArrayList<Carte> getCartesDevoilees() {
+		return cartesDevoilees;
+	}
+
+	public void setCartesDevoilees(ArrayList<Carte> cartesDevoilees) {
+		this.cartesDevoilees = cartesDevoilees;
+	}
+
+	/**
      * @param source
      * @param canaux
      * @param cases
