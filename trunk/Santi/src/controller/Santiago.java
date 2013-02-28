@@ -137,9 +137,10 @@ public class Santiago {
 	}
 	
 	public HashMap<Joueur, Integer> miseAuxEncheres(){
-		/* Enchère carte Anthony
+		/* TEST Enchère carte + choix constructeur Anthony
 		appeler une méthode qui va chercher sur le plateau les 4 ou 5 prochaines cartes
 		changer statut du joueur ayant l'enchère la plus basse en constructeur
+		FIXME fucking enchère commence à gauche du constructeur
 		prévoir PASSER SON TOUR */
 		int enchereJoueur;
 		HashMap<Joueur,Integer> tabEnchere = new HashMap<Joueur, Integer>();
@@ -169,7 +170,7 @@ public class Santiago {
 
 	
 	public void placementDesPlantations(HashMap<Joueur, Integer> tabEnchere){
-		/* Placement des cartes Anthony
+		/* TEST Placement des cartes Anthony
 		mettre à jour possesseur de la carte
 		pose des cartes dans l'ordre décroissant des enchères
 		mettre à jour les marqueurs
