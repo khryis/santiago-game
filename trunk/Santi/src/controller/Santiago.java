@@ -144,7 +144,11 @@ public class Santiago {
 		mettre à jour possesseur de la carte
 		pose des cartes dans l'ordre décroissant des enchères
 		mettre à jour les marqueurs
-		mettre à jour solde des joueurs */
+		mettre à jour solde des joueurs 
+		enchère pas les mêmes
+		tour commence à gauche du constructeur
+		marqueurs à mettre à jour pour la personne qui n'a pas enchérit*/
+		boolean constructeur = false;
 		int enchereJoueur;
 		HashMap<Joueur,Integer> tabEnchere = new HashMap<Joueur, Integer>();
 		Scanner sc = new Scanner(System.in);
@@ -162,8 +166,9 @@ public class Santiago {
 				System.out.println("Votre enchère est plus élevée que votre solde! Indiquez une nouvelle enchère.");
 				enchereJoueur = sc.nextInt();
 			}
-			if (enchereJoueur == 0){
-				//passer son tour PREVOIR CONSTRUCTEUR
+			if (enchereJoueur == 0 && constructeur == false){
+				listJoueurs.get(i).setEstConstructeur(true);
+				constructeur = true;
 			}
 			tabEnchere.put(listJoueurs.get(i), enchereJoueur);
 		}
@@ -187,6 +192,7 @@ public class Santiago {
 				JoueurGagnant.setSolde(JoueurGagnant.getSolde() - tabEnchere.get(JoueurGagnant).intValue());
 				//Pose de la carte
 				this.plateau.poserUneCarte(cartesDevoilees.get(carteChoisie));
+				this.plateau.majIrrigation1Carte(cartesDevoilees.get(carteChoisie));
 				cartesDevoilees.remove(carteChoisie);
 			}
 			tabEnchere.remove(JoueurGagnant);
@@ -397,8 +403,11 @@ public class Santiago {
 				}
 				else {
 					System.out.println("Indiquez où placer le canal.");
-					// prévoir placement avec position
-					this.plateau.placerCanalSup();
+					System.out.println("Position x : ");
+					int x = sc.nextInt();
+					System.out.println("Position y : ");
+					int y = sc.nextInt();
+					this.plateau.placerCanalSup(x, y);
 					listJoueurs.get(i).setTuyauSup(false);
 				}
 			}

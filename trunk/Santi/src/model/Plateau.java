@@ -103,9 +103,11 @@ public class Plateau {
     	canaux.add(canal);
     }
     
-    public void placerCanalSup() {
-        // TODO placerCanal Sup Antho
-        // mettre position à jour
+    public void placerCanalSup(int x, int y) {
+        // TEST placerCanal Sup Antho
+    	// méthode = placerCanal ?
+    	PositionSegment canal = new PositionSegment (x,y,true);
+        canaux.add(canal);
     }
     
     public PositionIntersection getSource() {
