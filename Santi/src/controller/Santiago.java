@@ -414,7 +414,7 @@ public class Santiago {
 					int x = sc.nextInt();
 					System.out.println("Position y : ");
 					int y = sc.nextInt();
-					this.plateau.placerCanalSup(x, y);
+					this.plateau.placerCanal(x, y);
 					listJoueurs.get(i).setTuyauSup(false);
 				}
 			}
