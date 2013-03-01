@@ -340,7 +340,7 @@ public class Santiago {
 			System.out.println("y ?");
 			y1 = sc.nextInt();
 			// vérif, poser canal
-			plateau.placerCanal(x, y);
+			plateau.placerCanal(x, y, x1, y1);
 			// mettre à jour le solde des joueurs
 			canal = new PositionSegment(x, y, x1, y1);
 			joueursEnch = enchereConstr.get(canal);
@@ -379,7 +379,7 @@ public class Santiago {
 						x1 = sc.nextInt();
 						System.out.println("y ?");
 						y1 = sc.nextInt();
-						plateau.placerCanal(x, y);
+						plateau.placerCanal(x, y, x1, y1);
 					}
 				}
 				if (erreur == 0) {
@@ -410,11 +410,15 @@ public class Santiago {
 				}
 				else {
 					System.out.println("Indiquez où placer le canal.");
-					System.out.println("Position x : ");
+					System.out.println("Position x1 : ");
 					int x = sc.nextInt();
-					System.out.println("Position y : ");
+					System.out.println("Position y1 : ");
 					int y = sc.nextInt();
-					this.plateau.placerCanal(x, y);
+					System.out.println("Position x2 : ");
+					int x1 = sc.nextInt();
+					System.out.println("Position y2 : ");
+					int y1 = sc.nextInt();
+					this.plateau.placerCanal(x, y, x1, y1);
 					listJoueurs.get(i).setTuyauSup(false);
 				}
 			}
