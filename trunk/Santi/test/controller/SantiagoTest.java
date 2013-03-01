@@ -3,7 +3,8 @@
  */
 package controller;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -11,6 +12,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+// TEST Antho --> Chris ; Flo --> Antho ; Chris --> Flo  
 
 /**
  * @author Chris
@@ -18,6 +20,7 @@ import org.junit.Test;
  */
 public class SantiagoTest {
     
+    private Santiago santiago;
     /**
      * @throws java.lang.Exception
      */
@@ -37,6 +40,7 @@ public class SantiagoTest {
      */
     @Before
     public void setUp() throws Exception {
+        santiago = new Santiago();
     }
     
     /**
@@ -48,6 +52,7 @@ public class SantiagoTest {
     
     /**
      * Test method for {@link controller.Santiago#configurer()}.
+     * 
      */
     @Test
     public void testConfigurer() {
@@ -55,11 +60,19 @@ public class SantiagoTest {
     }
     
     /**
+     * 
+     */
+    
+    
+    /**
      * Test method for {@link controller.Santiago#initJoueur()}.
      */
     @Test
     public void testInitJoueur() {
-        fail("Not yet implemented"); // TODO
+        // TODO
+        santiago.initJoueur();
+        assertNotNull(santiago.getListJoueurs());
+        fail("Not yet implemented");
     }
     
     /**
@@ -67,15 +80,33 @@ public class SantiagoTest {
      */
     @Test
     public void testNiveauPartie() {
-        fail("Not yet implemented"); // TODO
+        // TODO niveau partie
+        // niveau égal à 0 ou 1
+        fail("Not yet implemented"); 
     }
     
     /**
      * Test method for {@link controller.Santiago#encherirCarte()}.
      */
     @Test
-    public void testEncherirCarte() {
-        fail("Not yet implemented"); // TODO
+    public void testMiseAuxEncheres() {
+        // TODO mise au enchère 
+        // HashMap de Joueur pas vide
+        // vérifier qu'il y a toujours un constructeur
+        fail("Not yet implemented"); 
+    }
+    
+    /**
+     * Test method for {@link controller.Santiago#encherirCarte()}.
+     */
+    @Test
+    public void testPlacementDesPlantations() {
+        // TODO placement plantations
+        // HashMap doitêtre vide à la fin
+        // les cartes dévoilés doivent avoir été affectés sur le plateau 
+        // et à des joueurs
+        // plus commentaire méthode
+        fail("Not yet implemented"); 
     }
     
     /**
@@ -83,7 +114,9 @@ public class SantiagoTest {
      */
     @Test
     public void testEnchereMax() {
-        fail("Not yet implemented"); // TODO
+        // TODO enchère MAx Antho Flo
+        // le max de la HashMap
+        fail("Not yet implemented"); 
     }
     
     /**
@@ -91,7 +124,8 @@ public class SantiagoTest {
      */
     @Test
     public void testSoudoyerConstructeur() {
-        fail("Not yet implemented"); // TODO
+        // TODO 
+        fail("Not yet implemented"); 
     }
     
     /**

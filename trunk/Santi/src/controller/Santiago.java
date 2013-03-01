@@ -8,10 +8,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 
-import model.Carte;
 import model.Joueur;
 import model.Plateau;
 import model.PositionSegment;
+import singleton.Saisie;
 
 public class Santiago {
 	private ArrayList<Joueur> listJoueurs;
@@ -44,17 +44,19 @@ public class Santiago {
 		}
 	}
 	
-	public void initJoueur() {
+	
+    public ArrayList<Joueur> getListJoueurs() {
+        return listJoueurs;
+    }
+
+    public void initJoueur() {
 		// TEST init joueur Flo
 		// init couleur et nom pour chaque joueur et remplir la liste
 		// verif nombre joueur
 		// 
 		Scanner sc = new Scanner(System.in);
-		int nbJ = 0;
-		while (nbJ != 3 || nbJ != 4 || nbJ != 5) {
-			System.out.println("\nVeuillez entrer le nombre de joueurs (3, 4 ou 5) pour la partie : ");
-			nbJ = sc.nextInt();
-		}
+		System.out.println("Veuillez entrez le nombre de joueur");
+		int nbJ = Saisie.IN.nextIntWithRange(3, 5);
 		
 		int i = 0;
 		while (i < nbJ) {
