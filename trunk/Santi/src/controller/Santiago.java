@@ -145,6 +145,9 @@ public class Santiago {
 		FIXME fucking enchère commence à gauche du constructeur
 		prévoir PASSER SON TOUR */
 		int enchereJoueur;
+		int depart = -1;
+		int i = 0;
+		boolean premierTour = true;
 		HashMap<Joueur,Integer> tabEnchere = new HashMap<Joueur, Integer>();
 		Scanner sc = new Scanner(System.in);
 		boolean constructeur = false;
@@ -153,20 +156,50 @@ public class Santiago {
 		System.out.println("Voici les cartes tirées :");
 		System.out.println(this.plateau.getCartesDevoilees().toString());
 		System.out.println("Phase d'enchère");
-		for (int i=0; i < listJoueurs.size(); i++){
-			System.out.println("Joueur :"+(i+1));
-			System.out.println("Veuillez indiquer le montant de votre enchère : (0 pour passer son tour)");
-			enchereJoueur = sc.nextInt();
-			while (enchereJoueur > listJoueurs.get(i).getSolde() || tabEnchere.containsValue(enchereJoueur)){
-				System.out.println("Erreur. Indiquez une nouvelle enchère.");
-				enchereJoueur = sc.nextInt();
+		// Constructeur aléatoire pour premier tour
+		if (premierTour){
+			int rdm = (int)Math.random()*listJoueurs.size();
+			listJoueurs.get(rdm).setEstConstructeur(true);
+			premierTour = false;
+		}
+		// Trouver constructeur
+		while (i < listJoueurs.size() && depart == -1) {
+			if (listJoueurs.get(i).isEstConstructeur()) {
+				depart = i+1;
 			}
-			if (enchereJoueur == 0 && constructeur == false){
-				listJoueurs.get(i).setEstConstructeur(true);
+			i++;
+		}
+		if (depart == listJoueurs.size()) {
+			depart = 0;
+		}
+		i = depart;
+		while (!listJoueurs.get(i).isEstConstructeur()) {
+			while (i < listJoueurs.size() && !listJoueurs.get(i).isEstConstructeur()) {
+				System.out.println("Joueur :"+(i+1));
+				System.out.println("Veuillez indiquer le montant de votre enchère : (0 pour passer son tour)");
+				enchereJoueur = sc.nextInt();
+				while (enchereJoueur > listJoueurs.get(i).getSolde() || tabEnchere.containsValue(enchereJoueur)){
+					System.out.println("Erreur. Indiquez une nouvelle enchère.");
+					enchereJoueur = sc.nextInt();
+				}
+				if (enchereJoueur == 0 && constructeur == false){
+					listJoueurs.get(i).setEstConstructeur(true);
+					constructeur = true;
+				}
+				tabEnchere.put(listJoueurs.get(i), enchereJoueur);
+				i++;
+			}
+			// Chercher constructeur si personne n'a passé (=joueur avec plus petite enchère)
+			if (constructeur == false){
+				Joueur JoueurEnchereMin = enchereMin(tabEnchere);
+				JoueurEnchereMin.setEstConstructeur(true);
 				constructeur = true;
 			}
-			tabEnchere.put(listJoueurs.get(i), enchereJoueur);
+			if (i == listJoueurs.size()) {
+				i = 0;
+			}
 		}
+		
 		return tabEnchere;
 	}
 
@@ -214,6 +247,17 @@ public class Santiago {
 		int maxValue=(Collections.max(tab.values()));
 		for (Entry<Joueur, Integer> entry : tab.entrySet()) {
             if (entry.getValue()==maxValue) {
+                 res = entry.getKey();
+            }
+		}
+		return res;
+	}
+	
+	public Joueur enchereMin(HashMap<Joueur, Integer> tab){
+		Joueur res = null;
+		int minValue=(Collections.min(tab.values()));
+		for (Entry<Joueur, Integer> entry : tab.entrySet()) {
+            if (entry.getValue()==minValue) {
                  res = entry.getKey();
             }
 		}
