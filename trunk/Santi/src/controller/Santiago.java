@@ -142,7 +142,6 @@ public class Santiago {
 		/* TEST Enchère carte + choix constructeur Anthony
 		appeler une méthode qui va chercher sur le plateau les 4 ou 5 prochaines cartes
 		changer statut du joueur ayant l'enchère la plus basse en constructeur
-		FIXME fucking enchère commence à gauche du constructeur
 		prévoir PASSER SON TOUR */
 		int enchereJoueur;
 		int depart = -1;
