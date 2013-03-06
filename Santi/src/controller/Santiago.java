@@ -281,7 +281,6 @@ public class Santiago {
 		// associer une position à une liste de joueur
 		// proposer montant (mettre à jour Joueur.enchereConstructeur)
 		// prévoir PASSER SON TOUR
-		// TEST trouver un motherfucking compromis Flo
 		
 		// Sous quelle forme donne-t-on la position du canal temp ? Ac interface graphique, cliquer sur l'endroit ? Dire: l2, case 3 ?
 		// Tour joueurs, à démarrer à la gauche du constructeur !!

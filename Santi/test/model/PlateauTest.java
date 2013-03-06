@@ -1,5 +1,6 @@
 package model;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.util.Arrays;
@@ -64,15 +65,25 @@ public class PlateauTest {
     }
     
     @Test
-    public void testPlacerCanal() {
-        
-        
-        fail("Not yet implemented"); // TODO
+    public void testPlacerCanal1() {
+        // voir si canal pas présent dans la liste tant que l'on ne l'as pas posé
+        int valeurAttendu = -1;
+        int index = this.plateau.getCanaux().indexOf(new PositionSegment(0, 0, 2, 0));
+        assertEquals(valeurAttendu, index);
+    }
+    
+    @Test
+    public void testPlacerCanal2() {
+        // test si place bien le canal dans la liste et a occupé
+        boolean valeurAttenduOccupe = true;
+        this.plateau.placerCanal(0, 0, 2, 0);
+        int index = this.plateau.getCanaux().indexOf(new PositionSegment(0, 0, 2, 0));
+        assertEquals(valeurAttenduOccupe, this.plateau.getCanaux().get(index).isOccupe());
     }
     
     @Test
     public void testPlacerCanalSup() {
-        fail("Not yet implemented"); // TODO
+        fail("Not yet implemented"); // 
     }
     
     @Test

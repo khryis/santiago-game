@@ -106,7 +106,7 @@ public class Plateau {
     }
     
     public void placerCanal(int x, int y, int x1, int y1) {
-        // TEST placerCanal Flo
+        // placerCanal Flo --> Chris
         //  résoudre le motherfucking compromis dans santiago Flo
     	PositionSegment canal = new PositionSegment (x, y, x1, y1, true);
     	canaux.add(canal);
