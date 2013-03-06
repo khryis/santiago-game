@@ -82,7 +82,7 @@ public class SantiagoTest {
         boolean valeurAttenduPalmier = false;
         int valeurAttenduNiveau = 0;
         //BufferedReader bf = Mockito.mock(BufferedReader.class);
-        //when(bf.readLine()).thenReturn("1");
+        //Mockito.when(bf.readLine()).thenReturn("1");
         this.santiago.niveauPartie();
         assertEquals(valeurAttenduPalmier, this.santiago.isAvecPalmier());
         assertEquals(valeurAttenduNiveau, this.santiago.getNiveau());
@@ -166,6 +166,8 @@ public class SantiagoTest {
     @Test
     public void testSoudoyerConstructeur() {
         // TODO soudoyer
+        
+        //this.santiago.soudoyerConstructeur();
         fail("Not yet implemented"); 
     }
     
