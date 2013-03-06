@@ -1,6 +1,6 @@
 package model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -29,12 +29,14 @@ public class PositionSegmentTest {
     
     @Test
     public void testEqualsObject() {
-        fail("Not yet implemented"); // TODO
+        // TODO equals position segment
+        fail("Not yet implemented"); 
     }
     
     @Test
     public void testDetermineAdjacentAPosition() {
-        fail("Not yet implemented"); // TODO
+        // TODO determine si adjacent a position PositionSegment
+        fail("Not yet implemented"); 
     }
     
 }

@@ -1,6 +1,6 @@
 package model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -28,13 +28,9 @@ public class PositionIntersectionTest {
     }
     
     @Test
-    public void testPositionIntersection() {
-        fail("Not yet implemented"); // TODO
-    }
-    
-    @Test
     public void testAleatoire() {
-        fail("Not yet implemented"); // TODO
+        // TODO position intersection aleatoire
+        fail("Not yet implemented"); 
     }
     
 }
