@@ -3,8 +3,11 @@
  */
 package controller;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
+
+import java.io.IOException;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -56,33 +59,71 @@ public class SantiagoTest {
      */
     @Test
     public void testConfigurer() {
-        fail("Not yet implemented"); // TODO
+        fail("Not yet implemented"); // TODO configure
     }
-    
-    /**
-     * 
-     */
-    
     
     /**
      * Test method for {@link controller.Santiago#initJoueur()}.
      */
     @Test
     public void testInitJoueur() {
-        // TODO
         santiago.initJoueur();
         assertNotNull(santiago.getListJoueurs());
-        fail("Not yet implemented");
     }
     
     /**
      * Test method for {@link controller.Santiago#niveauPartie()}.
+     * @throws IOException 
      */
     @Test
-    public void testNiveauPartie() {
-        // TODO niveau partie
-        // niveau égal à 0 ou 1
-        fail("Not yet implemented"); 
+    public void testNiveauPartie1() throws IOException {
+        // FIXME simuler la saisie utilisateur...
+        // niveau égal à 0 et sans Palmier
+        boolean valeurAttenduPalmier = false;
+        int valeurAttenduNiveau = 0;
+        //BufferedReader bf = Mockito.mock(BufferedReader.class);
+        //when(bf.readLine()).thenReturn("1");
+        this.santiago.niveauPartie();
+        assertEquals(valeurAttenduPalmier, this.santiago.isAvecPalmier());
+        assertEquals(valeurAttenduNiveau, this.santiago.getNiveau());
+        //Assert.when(new Client(bufferedReader).parseLine()).thenEquals(IsEqual.equalTo("1"));
+        //fail("Not yet implemented"); 
+    }
+    
+    /**
+     * Test method for {@link controller.Santiago#niveauPartie()}.
+     * @throws IOException 
+     */
+    @Test
+    public void testNiveauPartie2() throws IOException {
+        // niveau égal à 0 et avec Palmier
+        boolean valeurAttenduPalmier = true;
+        int valeurAttenduNiveau = 0;
+        //BufferedReader bf = Mockito.mock(BufferedReader.class);
+        //when(bf.readLine()).thenReturn("2");
+        this.santiago.niveauPartie();
+        assertEquals(valeurAttenduPalmier, this.santiago.isAvecPalmier());
+        assertEquals(valeurAttenduNiveau, this.santiago.getNiveau());
+        //Assert.when(new Client(bufferedReader).parseLine()).thenEquals(IsEqual.equalTo("1"));
+        //fail("Not yet implemented"); 
+    }
+    
+    /**
+     * Test method for {@link controller.Santiago#niveauPartie()}.
+     * @throws IOException 
+     */
+    @Test
+    public void testNiveauPartie3() throws IOException {
+        // niveau égal à 1 et avec Palmier
+        boolean valeurAttenduPalmier = true;
+        int valeurAttenduNiveau = 1;
+        //BufferedReader bf = Mockito.mock(BufferedReader.class);
+        //when(bf.readLine()).thenReturn("3");
+        this.santiago.niveauPartie();
+        assertEquals(valeurAttenduPalmier, this.santiago.isAvecPalmier());
+        assertEquals(valeurAttenduNiveau, this.santiago.getNiveau());
+        //Assert.when(new Client(bufferedReader).parseLine()).thenEquals(IsEqual.equalTo("1"));
+        //fail("Not yet implemented"); 
     }
     
     /**
@@ -124,7 +165,7 @@ public class SantiagoTest {
      */
     @Test
     public void testSoudoyerConstructeur() {
-        // TODO 
+        // TODO soudoyer
         fail("Not yet implemented"); 
     }
     
@@ -133,7 +174,7 @@ public class SantiagoTest {
      */
     @Test
     public void testIrrigationSupplementaire() {
-        fail("Not yet implemented"); // TODO
+        fail("Not yet implemented"); // TODO irrigationSup
     }
     
     /**
@@ -141,7 +182,7 @@ public class SantiagoTest {
      */
     @Test
     public void testSecheresse() {
-        fail("Not yet implemented"); // TODO
+        fail("Not yet implemented"); // TODO secheresse
     }
     
     /**
@@ -149,7 +190,7 @@ public class SantiagoTest {
      */
     @Test
     public void testDiaDePaga() {
-        fail("Not yet implemented"); // TODO
+        fail("Not yet implemented"); // TODO diaDePaga
     }
     
 }
