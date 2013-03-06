@@ -44,13 +44,27 @@ public class Santiago {
 		}
 	}
 	
-	
+	public int getNbCanaux() {
+        return nbCanaux;
+    }
+    public int getNiveau() {
+        return niveau;
+    }
+    public boolean isAvecPalmier() {
+        return avecPalmier;
+    }
+    public Plateau getPlateau() {
+        return plateau;
+    }
+    public int getNbTours() {
+        return nbTours;
+    }
     public ArrayList<Joueur> getListJoueurs() {
         return listJoueurs;
     }
 
     public void initJoueur() {
-		// TEST init joueur Flo
+		// init joueur Flo --> Chris
 		// init couleur et nom pour chaque joueur et remplir la liste
 		// verif nombre joueur
 		// 
@@ -62,6 +76,7 @@ public class Santiago {
 		while (i < nbJ) {
 			Joueur j = null;
 			String n = "";
+			this.listJoueurs = new ArrayList<Joueur>(nbJ);
 			ArrayList<String> couleurs = new ArrayList<String>();
 			couleurs.add("blanc");
 			couleurs.add("noir");
@@ -99,25 +114,19 @@ public class Santiago {
 	}
 	
 	public void niveauPartie(){
-	    // TEST niveau Parti Flo
-//		System.out.println("Choisissez votre niveau : 0 pour normal, 1 pour expérimenté");
-//		int s = Saisie.IN.nextIntBlank();
-//		if (s == 1){
-//			this.niveau = 1;
-//		}else{
-//			this.niveau = 0;
-//		}
-		// J'avais commencé à faire un truc dans configurerPartie() ^^'
-		// l'attribut avecPalmier, c'est pas un booleen ?!
-		// Et je viens de revoir qu'on avait seulement mis un niveau (0 ou 1) pour la source. On met pas un booleen pour savoir si on cache l'argent dans joueur ?
-		Scanner sc = new Scanner(System.in);
+	    // niveau Parti Flo --> Chris
+		//Scanner sc = new Scanner(System.in);
 		int choix = 0;
-		while (choix != 1 || choix != 2 || choix != 3) {
+		// rentre tout le temps dans le while la !!! 
+		// (choix != 1 || choix != 2 || choix != 3)
+		while (choix < 1 || choix > 3) {
 			System.out.println("\nDifférents niveaux vous sont proposés (entrez le numéro) :");
 			System.out.println("\t1 - Pas de palmiers");
 			System.out.println("\t2 - Avec palmiers");
 			System.out.println("\t3 - Avec palmiers, source sur un bord");
-			choix = sc.nextInt();
+			// Changement de la saisie car pour les test, le mock d'un scanner marche pas
+			choix = Saisie.IN.nextIntBlank();
+			System.out.println(choix);
 		}
 		switch (choix) {
 			case 1: avecPalmier = false;
@@ -137,8 +146,8 @@ public class Santiago {
 			break;
 		}
 	}
-	
-	public HashMap<Joueur, Integer> miseAuxEncheres(){
+
+    public HashMap<Joueur, Integer> miseAuxEncheres(){
 		/* TEST Enchère carte + choix constructeur Anthony
 		appeler une méthode qui va chercher sur le plateau les 4 ou 5 prochaines cartes
 		changer statut du joueur ayant l'enchère la plus basse en constructeur
