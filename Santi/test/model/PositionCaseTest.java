@@ -1,6 +1,6 @@
 package model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -29,7 +29,8 @@ public class PositionCaseTest {
     
     @Test
     public void testAleatoire() {
-        fail("Not yet implemented"); // TODO
+        // TODO position case aléatoire
+        fail("Not yet implemented"); 
     }
     
 }

@@ -51,17 +51,20 @@ public class PlateauTest {
     
     @Test
     public void testPlacerPalmier() {
-        fail("Not yet implemented"); // TODO
+        // TODO placer palmier
+        fail("Not yet implemented"); 
     }
     
     @Test
     public void testTirerCarte() {
-        fail("Not yet implemented"); // TODO
+        // TODO tirer carte Chris --> Antho
+        fail("Not yet implemented");
     }
     
     @Test
     public void testPoserUneCarte() {
-        fail("Not yet implemented"); // TODO
+        // TODO poser une carte
+        fail("Not yet implemented"); 
     }
     
     @Test
@@ -83,22 +86,26 @@ public class PlateauTest {
     
     @Test
     public void testPlacerCanalSup() {
-        fail("Not yet implemented"); // 
+        // TODO placer canalSup
+        fail("Not yet implemented"); 
     }
     
     @Test
     public void testSecheresse() {
-        fail("Not yet implemented"); // TODO
+        // TODO secheresse
+        fail("Not yet implemented");
     }
     
     @Test
     public void testMajIrrigationTotale() {
-        fail("Not yet implemented"); // TODO
+        // TODO irrigationTotale
+        fail("Not yet implemented");
     }
     
     @Test
     public void testMajIrrigation1Carte() {
-        fail("Not yet implemented"); // TODO
+        // TODO irrigatin 1 carte
+        fail("Not yet implemented"); 
     }
     
 }

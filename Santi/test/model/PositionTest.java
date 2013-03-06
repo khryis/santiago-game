@@ -1,6 +1,6 @@
 package model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -29,7 +29,8 @@ public class PositionTest {
     
     @Test
     public void testEqualsObject() {
-        fail("Not yet implemented"); // TODO
+        // TODO equals des Positions
+        fail("Not yet implemented");
     }
     
 }
