@@ -170,17 +170,11 @@ public class Santiago {
 			listJoueurs.get(rdm).setEstConstructeur(true);
 			premierTour = false;
 		}
+		
 		// Trouver constructeur
-		while (i < listJoueurs.size() && depart == -1) {
-			if (listJoueurs.get(i).isEstConstructeur()) {
-				depart = i+1;
-			}
-			i++;
-		}
-		if (depart == listJoueurs.size()) {
-			depart = 0;
-		}
-		i = depart;
+		depart = this.trouverConstructeur();
+        i = depart;
+        
 		while (!listJoueurs.get(i).isEstConstructeur()) {
 			while (i < listJoueurs.size() && !listJoueurs.get(i).isEstConstructeur()) {
 				System.out.println("Joueur :"+(i+1));
@@ -282,20 +276,6 @@ public class Santiago {
 		// proposer montant (mettre à jour Joueur.enchereConstructeur)
 		// prévoir PASSER SON TOUR
 		
-		// Sous quelle forme donne-t-on la position du canal temp ? Ac interface graphique, cliquer sur l'endroit ? Dire: l2, case 3 ?
-		// Tour joueurs, à démarrer à la gauche du constructeur !!
-		int depart = -1;
-		int i = 0;
-		while (i < listJoueurs.size() && depart == -1) {	// Trouver la position de départ (après le constructeur)
-			if (listJoueurs.get(i).isEstConstructeur()) {
-				depart = i+1;
-			}
-			i++;
-		}
-		if (depart == listJoueurs.size()) {
-			depart = 0;
-		}
-		
 		// Tour d'enchères :
 		Scanner sc = new Scanner(System.in);
 		HashMap<PositionSegment, ArrayList<Joueur>> enchereConstr = new HashMap<PositionSegment, ArrayList<Joueur>>();
@@ -308,8 +288,13 @@ public class Santiago {
 		int x1;
 		int y1;
 		Joueur j = null;
+		
+		// Sous quelle forme donne-t-on la position du canal temp ? Ac interface graphique, cliquer sur l'endroit ? Dire: l2, case 3 ?
+        // Tour joueurs, à démarrer à la gauche du constructeur !!
+        int depart = this.trouverConstructeur();
+		int i = depart;
+		
 		// Boucle sur les joueurs :
-		i = depart;
 		while (!listJoueurs.get(i).isEstConstructeur()) {
 			while (i < listJoueurs.size() && !listJoueurs.get(i).isEstConstructeur()) {
 				j = listJoueurs.get(i);
@@ -495,6 +480,21 @@ public class Santiago {
 			Joueur j = iterator.next();
 			j.setSolde(j.getSolde()+3);
 		}
+	}
+	
+	private int trouverConstructeur(){
+	    int depart = -1;
+        int i = 0;
+        while (i < listJoueurs.size() && depart == -1) {    // Trouver la position de départ (après le constructeur)
+            if (listJoueurs.get(i).isEstConstructeur()) {
+                depart = i+1;
+            }
+            i++;
+        }
+        if (depart == listJoueurs.size()) {
+            depart = 0;
+        }
+        return depart;
 	}
 	
 }
