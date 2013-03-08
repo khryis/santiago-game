@@ -2,11 +2,12 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Observable;
 
 import singleton.Saisie;
 import vue.AffichageConsole;
 
-public class Plateau {
+public class Plateau extends Observable {
     
     private PositionIntersection       source;
     private ArrayList<PositionSegment> canaux;

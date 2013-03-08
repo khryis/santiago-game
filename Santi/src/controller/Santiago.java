@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Observable;
 import java.util.Scanner;
 
 import model.Joueur;
@@ -13,7 +14,7 @@ import model.Plateau;
 import model.PositionSegment;
 import singleton.Saisie;
 
-public class Santiago {
+public class Santiago extends Observable{
 	private ArrayList<Joueur> listJoueurs;
 	private int nbCanaux;
 	private int niveau;
@@ -495,6 +496,12 @@ public class Santiago {
             depart = 0;
         }
         return depart;
+	}
+	
+	// Execution du programme
+	public static void main(String args[]){
+	    Santiago partie = new Santiago();
+	    
 	}
 	
 }
