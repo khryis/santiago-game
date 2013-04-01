@@ -1,7 +1,6 @@
 package vue;
 
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.util.Observable;
 
@@ -11,8 +10,6 @@ import controller.PanelChoiceListener;
 
 public class PanelChoice extends AbstractPanel {
 	private static final long serialVersionUID = 1L;
-	// Atributs
-	public final static Font POLICE = new Font("Helvetica", Font.TYPE1_FONT, 60);
 
 	// composants du JPanel
 	private JButton boutonDemarrer;
@@ -22,10 +19,10 @@ public class PanelChoice extends AbstractPanel {
 	@Override
 	public void initComponent() {
 		// Initialisation des attributs/composants
+		super.initComponent();
 		if (getParent() != null) {
-			homeDimension = getParent().getSize();
-			santiago = ((PanelHome) getParent()).getSantiago();
 
+			// init composants du panel
 			boutonDemarrer = new BgButton("Demarrer", "transparent.png");
 			boutonConfiguration = new BgButton("Configurer", "transparent.png");
 			boutonReglage = new BgButton("Réglages", "transparent.png");
@@ -38,7 +35,7 @@ public class PanelChoice extends AbstractPanel {
 			boutonReglage
 					.addMouseListener(new PanelChoiceListener(getParent()));
 
-			// attribut du conteneur this (panelChoice
+			// attribut du conteneur this panelChoice
 			setBackground(BG_TRANSPARENT);
 			setOpaque(false);
 			setLayout(new FlowLayout());

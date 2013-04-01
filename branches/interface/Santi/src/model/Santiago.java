@@ -1,4 +1,4 @@
-package controller;
+package model;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,9 +9,6 @@ import java.util.Map.Entry;
 import java.util.Observable;
 import java.util.Scanner;
 
-import model.Joueur;
-import model.Plateau;
-import model.PositionSegment;
 import singleton.Saisie;
 
 public class Santiago extends Observable {
@@ -67,6 +64,10 @@ public class Santiago extends Observable {
 
 	public ArrayList<Joueur> getListJoueurs() {
 		return listJoueurs;
+	}
+
+	public void setListJoueurs(ArrayList<Joueur> listJoueurs) {
+		this.listJoueurs = listJoueurs;
 	}
 
 	public void initJoueur() {
@@ -279,7 +280,7 @@ public class Santiago extends Observable {
 		}
 	}
 
-	public Joueur enchereMax(HashMap<Joueur, Integer> tab) {
+	public static Joueur enchereMax(HashMap<Joueur, Integer> tab) {
 		Joueur res = null;
 		int maxValue = (Collections.max(tab.values()));
 		for (Entry<Joueur, Integer> entry : tab.entrySet()) {
@@ -290,7 +291,7 @@ public class Santiago extends Observable {
 		return res;
 	}
 
-	public Joueur enchereMin(HashMap<Joueur, Integer> tab) {
+	public static Joueur enchereMin(HashMap<Joueur, Integer> tab) {
 		Joueur res = null;
 		int minValue = (Collections.min(tab.values()));
 		for (Entry<Joueur, Integer> entry : tab.entrySet()) {
@@ -496,19 +497,18 @@ public class Santiago extends Observable {
 					System.out
 							.println("Vous n'avez plus de canal supplémentaire!");
 					break;
-				} else {
-					System.out.println("Indiquez où placer le canal.");
-					System.out.println("Position x1 : ");
-					int x = sc.nextInt();
-					System.out.println("Position y1 : ");
-					int y = sc.nextInt();
-					System.out.println("Position x2 : ");
-					int x1 = sc.nextInt();
-					System.out.println("Position y2 : ");
-					int y1 = sc.nextInt();
-					this.plateau.placerCanal(x, y, x1, y1);
-					listJoueurs.get(i).setTuyauSup(false);
 				}
+				System.out.println("Indiquez où placer le canal.");
+				System.out.println("Position x1 : ");
+				int x = sc.nextInt();
+				System.out.println("Position y1 : ");
+				int y = sc.nextInt();
+				System.out.println("Position x2 : ");
+				int x1 = sc.nextInt();
+				System.out.println("Position y2 : ");
+				int y1 = sc.nextInt();
+				this.plateau.placerCanal(x, y, x1, y1);
+				listJoueurs.get(i).setTuyauSup(false);
 			} else if (choix.compareTo("N") == 0 || choix.compareTo("n") == 0)
 				System.out
 						.println("Vous n'avez pas placé de canal pour ce tour.");
@@ -551,6 +551,7 @@ public class Santiago extends Observable {
 	}
 
 	// Execution du programme
+	@SuppressWarnings("unused")
 	public static void main(String args[]) {
 		Santiago s = new Santiago();
 

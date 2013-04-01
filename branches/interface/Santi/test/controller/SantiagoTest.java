@@ -9,6 +9,8 @@ import static org.junit.Assert.fail;
 
 import java.io.IOException;
 
+import model.Santiago;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -54,7 +56,7 @@ public class SantiagoTest {
     }
     
     /**
-     * Test method for {@link controller.Santiago#configurer()}.
+     * Test method for {@link model.Santiago#configurer()}.
      * 
      */
     @Test
@@ -63,7 +65,7 @@ public class SantiagoTest {
     }
     
     /**
-     * Test method for {@link controller.Santiago#initJoueur()}.
+     * Test method for {@link model.Santiago#initJoueur()}.
      */
     @Test
     public void testInitJoueur() {
@@ -72,7 +74,7 @@ public class SantiagoTest {
     }
     
     /**
-     * Test method for {@link controller.Santiago#niveauPartie()}.
+     * Test method for {@link model.Santiago#niveauPartie()}.
      * @throws IOException 
      */
     @Test
@@ -91,7 +93,7 @@ public class SantiagoTest {
     }
     
     /**
-     * Test method for {@link controller.Santiago#niveauPartie()}.
+     * Test method for {@link model.Santiago#niveauPartie()}.
      * @throws IOException 
      */
     @Test
@@ -109,7 +111,7 @@ public class SantiagoTest {
     }
     
     /**
-     * Test method for {@link controller.Santiago#niveauPartie()}.
+     * Test method for {@link model.Santiago#niveauPartie()}.
      * @throws IOException 
      */
     @Test
@@ -127,7 +129,7 @@ public class SantiagoTest {
     }
     
     /**
-     * Test method for {@link controller.Santiago#encherirCarte()}.
+     * Test method for {@link model.Santiago#encherirCarte()}.
      */
     @Test
     public void testMiseAuxEncheres() {
@@ -138,7 +140,7 @@ public class SantiagoTest {
     }
     
     /**
-     * Test method for {@link controller.Santiago#encherirCarte()}.
+     * Test method for {@link model.Santiago#encherirCarte()}.
      */
     @Test
     public void testPlacementDesPlantations() {
@@ -151,7 +153,7 @@ public class SantiagoTest {
     }
     
     /**
-     * Test method for {@link controller.Santiago#enchereMax(java.util.HashMap)}.
+     * Test method for {@link model.Santiago#enchereMax(java.util.HashMap)}.
      */
     @Test
     public void testEnchereMax() {
@@ -161,7 +163,7 @@ public class SantiagoTest {
     }
     
     /**
-     * Test method for {@link controller.Santiago#soudoyerConstructeur()}.
+     * Test method for {@link model.Santiago#soudoyerConstructeur()}.
      */
     @Test
     public void testSoudoyerConstructeur() {
@@ -172,7 +174,7 @@ public class SantiagoTest {
     }
     
     /**
-     * Test method for {@link controller.Santiago#irrigationSupplementaire()}.
+     * Test method for {@link model.Santiago#irrigationSupplementaire()}.
      */
     @Test
     public void testIrrigationSupplementaire() {
@@ -180,7 +182,7 @@ public class SantiagoTest {
     }
     
     /**
-     * Test method for {@link controller.Santiago#secheresse()}.
+     * Test method for {@link model.Santiago#secheresse()}.
      */
     @Test
     public void testSecheresse() {
@@ -188,7 +190,7 @@ public class SantiagoTest {
     }
     
     /**
-     * Test method for {@link controller.Santiago#diaDePaga()}.
+     * Test method for {@link model.Santiago#diaDePaga()}.
      */
     @Test
     public void testDiaDePaga() {

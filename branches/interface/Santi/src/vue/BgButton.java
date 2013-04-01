@@ -1,23 +1,16 @@
 package vue;
 
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.Image;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
-public class BgButton extends JButton {
+public class BgButton extends JButton implements IConstante {
 	private static final long serialVersionUID = 1L;
-	private final Image background;
-	public final static Font POLICE = new Font("Helvetica", Font.TYPE1_FONT, 60);
+	private Image background;
 
-	public final static Color BG_BUTTON = new Color(204, 255, 255, 50);
-	public final static Color FG_BUTTON = new Color(102, 204, 255);
-
-	public BgButton(String pathImage) {
-		super();
-		background = new ImageIcon(pathImage).getImage();
+	public BgButton(String name) {
+		super(name);
 		initComponent();
 	}
 
@@ -33,10 +26,10 @@ public class BgButton extends JButton {
 		} else {
 			setSize(getPreferredSize());
 		}
-		setFont(POLICE);
+		setFont(POLICE_60);
 		setFocusable(false);
 		setRolloverEnabled(false);
-		setBackground(BG_BUTTON);
+		setBackground(NICE_GREY);
 		setForeground(FG_BUTTON);
 	}
 
