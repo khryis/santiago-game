@@ -1,39 +1,25 @@
 package vue;
 
-import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.util.Observable;
-import java.util.Observer;
 
 import javax.swing.JButton;
-import javax.swing.JPanel;
 
 import controller.PanelChoiceListener;
-import controller.Santiago;
 
-public class PanelChoice extends JPanel implements Observer {
-
+public class PanelChoice extends AbstractPanel {
+	private static final long serialVersionUID = 1L;
 	// Atributs
 	public final static Font POLICE = new Font("Helvetica", Font.TYPE1_FONT, 60);
-	private static final long serialVersionUID = 1L;
-	private Santiago santiago;
-	public Dimension homeDimension;
-	private boolean isInit;
 
-	// composants
+	// composants du JPanel
 	private JButton boutonDemarrer;
 	private JButton boutonConfiguration;
 	private JButton boutonReglage;
 
-	public PanelChoice() {
-		super();
-		santiago = null;
-		isInit = false;
-	}
-
+	@Override
 	public void initComponent() {
 		// Initialisation des attributs/composants
 		if (getParent() != null) {
@@ -45,15 +31,15 @@ public class PanelChoice extends JPanel implements Observer {
 			boutonReglage = new BgButton("Réglages", "transparent.png");
 
 			// Listener
-			boutonDemarrer.addMouseListener(new PanelChoiceListener(
-					getParent()));
+			boutonDemarrer
+					.addMouseListener(new PanelChoiceListener(getParent()));
 			boutonConfiguration.addMouseListener(new PanelChoiceListener(
 					getParent()));
-			boutonReglage.addMouseListener(new PanelChoiceListener(
-					getParent()));
+			boutonReglage
+					.addMouseListener(new PanelChoiceListener(getParent()));
 
 			// attribut du conteneur this (panelChoice
-			setBackground(new Color(0, 0, 0, 0));
+			setBackground(BG_TRANSPARENT);
 			setOpaque(false);
 			setLayout(new FlowLayout());
 			setSize(homeDimension.width, homeDimension.height / 2);
@@ -81,13 +67,5 @@ public class PanelChoice extends JPanel implements Observer {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-	}
-
-	public Santiago getSantiago() {
-		return santiago;
-	}
-
-	public boolean isInit() {
-		return isInit;
 	}
 }

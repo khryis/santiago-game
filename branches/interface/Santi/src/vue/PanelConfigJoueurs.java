@@ -1,44 +1,19 @@
 package vue;
 
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
 import java.util.Observable;
-import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
-import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
-import controller.Santiago;
-
-public class PanelConfigJoueurs extends JPanel implements Observer {
+public class PanelConfigJoueurs extends AbstractPanel {
 
 	// Atributs
-	public final static Font POLICE = new Font("Helvetica", Font.TYPE1_FONT, 60);
 	private static final long serialVersionUID = 1L;
-	private Santiago santiago;
-	public Dimension homeDimension;
-	private boolean isInit;
-
-	public final static Color FG_COLOR = new Color(102, 204, 255);
-	public final static Color BG_COLOR = new Color(204, 255, 255, 50);
-
-	public PanelConfigJoueurs() {
-		super();
-		santiago = null;
-		isInit = false;
-		homeDimension = null;
-	}
 
 	@Override
-	public void update(Observable arg0, Object arg1) {
-		// TODO Auto-generated method stub
-
-	}
-
 	public void initComponent() {
 		// Initialisation des attributs/composants
 		if (getParent() != null) {
@@ -54,8 +29,8 @@ public class PanelConfigJoueurs extends JPanel implements Observer {
 			// attribut du conteneur this (panelChoice
 			setBorder(BorderFactory.createTitledBorder(
 					BorderFactory.createLineBorder(Color.GREEN), "Joueurs",
-					TitledBorder.CENTER, TitledBorder.TOP, PanelHome.POLICE,
-					FG_COLOR));
+					TitledBorder.CENTER, TitledBorder.TOP,
+					AbstractPanel.POLICE_30, FG_COLOR));
 			setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 			setSize(homeDimension.width, nbJoueurs.getPreferredSize().height);
 			setOpaque(false);
@@ -66,7 +41,7 @@ public class PanelConfigJoueurs extends JPanel implements Observer {
 			// attributs des composants du conteneur
 			nbJoueurs.setOpaque(false);
 			nbJoueurs.setFocusable(false);
-			nbJoueurs.setBackground(new Color(204, 255, 255, 200));
+			nbJoueurs.setBackground(BG_COLOR);
 			nbJoueurs.setForeground(FG_COLOR);
 
 			// on ajoute les composants au conteneur
@@ -78,5 +53,11 @@ public class PanelConfigJoueurs extends JPanel implements Observer {
 					.println(getClass().toString()
 							+ " Ajouter ce panneau a un conteneur avant de l'initialiser");
 		}
+	}
+
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		// TODO Auto-generated method stub
+
 	}
 }
