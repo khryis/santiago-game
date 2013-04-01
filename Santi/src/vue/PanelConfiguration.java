@@ -4,47 +4,43 @@ import java.util.Observable;
 
 import javax.swing.BoxLayout;
 
-import controller.Santiago;
+import model.Santiago;
 
 public class PanelConfiguration extends AbstractPanel {
 	// Atributs
-
 	private static final long serialVersionUID = 1L;
 
 	// Composants
-
-	public PanelConfiguration() {
-		super();
-		santiago = null;
-		isInit = false;
-	}
-
-	@Override
-	public void update(Observable arg0, Object arg1) {
-		// TODO Auto-generated method stub
-
-	}
+	PanelConfigJoueurs panelJoueurs;
+	PanelConfigPartie panelPartie;
+	PanelConfigRetour panelRetour;
 
 	@Override
 	public void initComponent() {
+		super.initComponent();
 		if (getParent() != null) {
-			homeDimension = getParent().getSize();
-			santiago = ((PanelHome) getParent()).getSantiago();
 
-			PanelConfigJoueurs panelJoueurs = new PanelConfigJoueurs();
+			// init des composants du panneaux
+			panelJoueurs = new PanelConfigJoueurs();
+			panelPartie = new PanelConfigPartie();
+			panelRetour = new PanelConfigRetour();
 
 			// attribut du conteneur this (panelChoice
 			setBackground(BG_TRANSPARENT);
 			setOpaque(false);
-			setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-			setSize(homeDimension.width, (homeDimension.height / 3) * 2);
+			setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+			setSize(homeDimension.width, (homeDimension.height / 5) * 3);
 			setPreferredSize(getSize());
 
 			// on ajoute les composants au conteneur
 			add(panelJoueurs);
+			add(panelPartie);
+			add(panelRetour);
 
 			// attributs des composants
 			panelJoueurs.initComponent();
+			panelPartie.initComponent();
+			panelRetour.initComponent();
 
 			isInit = true;
 		} else {
@@ -55,11 +51,13 @@ public class PanelConfiguration extends AbstractPanel {
 	}
 
 	@Override
-	public Santiago getSantiago() {
-		return santiago;
+	public void update(Observable arg0, Object arg1) {
+		// TODO Auto-generated method stub
+
 	}
 
-	public boolean isInit() {
-		return isInit;
+	@Override
+	public Santiago getSantiago() {
+		return santiago;
 	}
 }
