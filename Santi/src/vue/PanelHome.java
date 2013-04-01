@@ -2,38 +2,23 @@ package vue;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.util.Observable;
-import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
-import javax.swing.JPanel;
 
-import controller.Santiago;
-
-public class PanelHome extends JPanel implements Observer {
-
+public class PanelHome extends AbstractPanel {
 	private static final long serialVersionUID = 1L;
-	private final Santiago santiago;
+	// Attributs de classe
 	private Image background;
-	public final static Font POLICE = new Font("Helvetica", Font.TYPE1_FONT, 30);
-	public Dimension homeDimension;
 
+	// Composant de la vue
 	private PanelChoice panelChoice;
-
 	private PanelConfiguration panelConfiguration;
 
-	// private JPanel panelReglages;
-
-	public PanelHome() {
-		super();
-		santiago = new Santiago();
-	}
-
+	@Override
 	public void initComponent() {
 		// init des composants
 		homeDimension = getParent().getSize();
@@ -71,20 +56,11 @@ public class PanelHome extends JPanel implements Observer {
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		g.drawImage(background, 0, 0, getWidth(), getHeight(), null);
-	}
-
-	public Santiago getSantiago() {
-		return santiago;
-	}
-
-	public Dimension getDimension() {
-		return homeDimension;
 	}
 }
