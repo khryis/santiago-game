@@ -4,11 +4,7 @@
 package model;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import java.io.IOException;
-
-import model.Santiago;
+import static org.junit.Assert.assertFalse;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -56,73 +52,26 @@ public class SantiagoTest {
 	}
 
 	/**
-	 * Test method for {@link model.Santiago#initJoueur()}.
+	 * Test method for {@link model.Santiago#setNiveauPartie()}.
 	 */
 	@Test
-	public void testInitJoueur() {
-		santiago.initJoueur();
-		assertNotNull(santiago.getListJoueurs());
+	public void testSetInitNiveauPartieFacile1() {
+		santiago.setNiveauPartie(Santiago.NiveauPartie.FACILE);
+		assertFalse(santiago.isAvecPalmier());
 	}
 
 	/**
-	 * Test method for {@link model.Santiago#niveauPartie()}.
-	 * 
-	 * @throws IOException
+	 * Test method for {@link model.Santiago#setNiveauPartie()}.
 	 */
 	@Test
-	public void testNiveauPartie1() throws IOException {
-		// FIXME simuler la saisie utilisateur...
-		// niveau égal à 0 et sans Palmier
-		boolean valeurAttenduPalmier = false;
-		int valeurAttenduNiveau = 0;
-		// BufferedReader bf = Mockito.mock(BufferedReader.class);
-		// Mockito.when(bf.readLine()).thenReturn("1");
-		this.santiago.niveauPartie();
-		assertEquals(valeurAttenduPalmier, this.santiago.isAvecPalmier());
-		assertEquals(valeurAttenduNiveau, this.santiago.getNiveau());
-		// Assert.when(new
-		// Client(bufferedReader).parseLine()).thenEquals(IsEqual.equalTo("1"));
-		// fail("Not yet implemented");
+	public void testSetInitNiveauPartieFacile2() {
+		santiago.setNiveauPartie(Santiago.NiveauPartie.FACILE);
+		int attendu = 0;
+		assertEquals(attendu, santiago.getNiveau());
 	}
 
-	/**
-	 * Test method for {@link model.Santiago#niveauPartie()}.
-	 * 
-	 * @throws IOException
+	/*
+	 * ... On peut tester tous les niveaux
 	 */
-	@Test
-	public void testNiveauPartie2() throws IOException {
-		// niveau égal à 0 et avec Palmier
-		boolean valeurAttenduPalmier = true;
-		int valeurAttenduNiveau = 0;
-		// BufferedReader bf = Mockito.mock(BufferedReader.class);
-		// when(bf.readLine()).thenReturn("2");
-		this.santiago.niveauPartie();
-		assertEquals(valeurAttenduPalmier, this.santiago.isAvecPalmier());
-		assertEquals(valeurAttenduNiveau, this.santiago.getNiveau());
-		// Assert.when(new
-		// Client(bufferedReader).parseLine()).thenEquals(IsEqual.equalTo("1"));
-		// fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for {@link model.Santiago#niveauPartie()}.
-	 * 
-	 * @throws IOException
-	 */
-	@Test
-	public void testNiveauPartie3() throws IOException {
-		// niveau égal à 1 et avec Palmier
-		boolean valeurAttenduPalmier = true;
-		int valeurAttenduNiveau = 1;
-		// BufferedReader bf = Mockito.mock(BufferedReader.class);
-		// when(bf.readLine()).thenReturn("3");
-		this.santiago.niveauPartie();
-		assertEquals(valeurAttenduPalmier, this.santiago.isAvecPalmier());
-		assertEquals(valeurAttenduNiveau, this.santiago.getNiveau());
-		// Assert.when(new
-		// Client(bufferedReader).parseLine()).thenEquals(IsEqual.equalTo("1"));
-		// fail("Not yet implemented");
-	}
 
 }

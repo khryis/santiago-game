@@ -1,67 +1,62 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Observable;
 
+import model.Carte.TypeChamp;
 import singleton.Saisie;
 import vue.AffichageConsole;
 
 public class Plateau extends Observable {
-    
-    private PositionIntersection       source;
+
+    private PositionIntersection source;
     private ArrayList<PositionSegment> canaux;
-    private ArrayList<PositionCase>    cases;
-    private ArrayList<Carte>           cartes;
-    private ArrayList<Carte>           cartesPosees;
-    private ArrayList<PositionCase>    palmiers;
-    private int                        nbJoueurs;
+    private ArrayList<PositionCase> cases;
+    private ArrayList<Carte> cartes;
+    private ArrayList<Carte> cartesPosees;
+    private ArrayList<PositionCase> palmiers;
+    private final int nbJoueurs;
     private ArrayList<Carte> cartesDevoilees;
-    
-    
+
     public ArrayList<Carte> getCartesDevoilees() {
-		return cartesDevoilees;
-	}
+        return cartesDevoilees;
+    }
 
-	public void setCartesDevoilees(ArrayList<Carte> cartesDevoilees) {
-		this.cartesDevoilees = cartesDevoilees;
-	}
+    public void setCartesDevoilees(ArrayList<Carte> cartesDevoilees) {
+        this.cartesDevoilees = cartesDevoilees;
+    }
 
-	/**
+    /**
      * @param source
      * @param canaux
      * @param cases
      * @param cartes
      * @param palmiers
      */
-    public Plateau(int niveau, int nbJoueur) {
-        this.source = PositionIntersection.aleatoire(niveau);
-        this.canaux = new ArrayList<PositionSegment>(31);
-        this.cases = new ArrayList<PositionCase>(48);
-        this.palmiers = new ArrayList<PositionCase>(3);
-        this.nbJoueurs = nbJoueur;
-        switch (nbJoueur) {
-            case 3:
-                this.cartes = new ArrayList<Carte>(44);
-                break;
-            case 4:
-                this.cartes = new ArrayList<Carte>(44);
-                break;
-            case 5:
-                this.cartes = new ArrayList<Carte>(45);
-                break;
-            default:
-                this.cartes = new ArrayList<Carte>();
-                break;
+    public Plateau(int niveau, int nbJ) {
+        source = PositionIntersection.aleatoire(niveau);
+        canaux = new ArrayList<PositionSegment>(31);
+        cases = new ArrayList<PositionCase>(48);
+        palmiers = new ArrayList<PositionCase>(3);
+        cartesPosees = new ArrayList<Carte>();
+        cartesDevoilees = new ArrayList<Carte>();
+        nbJoueurs = nbJ;
+        cartes = new ArrayList<Carte>(45);
+        initCartes();
+        if (nbJ == 3 || nbJ == 4) {
+            cartes.remove(cartes.size() - 1);
         }
+        Collections.shuffle(cartes);
     }
-    
+
     public void placerPalmier() {
-        for (int i = 0 ; i < 3 ; i++) {
+        for (int i = 0; i < 3; i++) {
             palmiers.add(PositionCase.aleatoire());
         }
     }
-    
+
     public ArrayList<Carte> tirerCarte() {
         // TEST tirerCarte Chris
         ArrayList<Carte> carteTirage = null;
@@ -72,7 +67,7 @@ public class Plateau extends Observable {
         }
         return carteTirage;
     }
-    
+
     public void poserUneCarte(Carte carteAPoser) {
         // FIXME basculer l'interaction dans le controleur, rien a foutre dans
         // le model (encherir) !! Chris
@@ -82,13 +77,13 @@ public class Plateau extends Observable {
         while (!pose) {
             System.out.println("Voici le plateau, choississez une position pour poser votre carte");
             AffichageConsole.afficheMatrice(8, 6);
-            
+
             System.out.println("Première coordonnée, les abscisse : ");
             int x = Saisie.IN.nextIntWithRangeNotBlank(0, 7);
-            
+
             System.out.println("Deuxième coordonnée, les ordonnées : ");
             int y = Saisie.IN.nextIntWithRangeNotBlank(0, 5);
-            
+
             Position positionChoisie = new PositionCase(x, y);
             if (this.cases.contains(positionChoisie)) {
                 int indexPosition = this.cases.indexOf(positionChoisie);
@@ -105,67 +100,67 @@ public class Plateau extends Observable {
             }
         }
     }
-    
+
     public void placerCanal(int x, int y, int x1, int y1) {
         // placerCanal Flo --> Chris
-        //  résoudre le motherfucking compromis dans santiago Flo
-    	PositionSegment canal = new PositionSegment (x, y, x1, y1, true);
-    	canaux.add(canal);
+        // résoudre le motherfucking compromis dans santiago Flo
+        PositionSegment canal = new PositionSegment(x, y, x1, y1, true);
+        canaux.add(canal);
     }
-    
+
     public PositionIntersection getSource() {
         return source;
     }
-    
+
     public void setSource(PositionIntersection source) {
         this.source = source;
     }
-    
+
     public ArrayList<PositionSegment> getCanaux() {
         return canaux;
     }
-    
+
     public void setCanaux(ArrayList<PositionSegment> canaux) {
         this.canaux = canaux;
     }
-    
+
     public ArrayList<PositionCase> getCases() {
         return cases;
     }
-    
+
     public void setCases(ArrayList<PositionCase> cases) {
         this.cases = cases;
     }
-    
+
     public ArrayList<Carte> getCartes() {
         return cartes;
     }
-    
+
     public void setCartes(ArrayList<Carte> cartes) {
         this.cartes = cartes;
     }
-    
+
     public ArrayList<Carte> getCartesPosees() {
         return cartesPosees;
     }
-    
+
     public void setCartesPosees(ArrayList<Carte> cartesPosees) {
         this.cartesPosees = cartesPosees;
     }
-    
+
     public ArrayList<PositionCase> getPalmiers() {
         return palmiers;
     }
-    
+
     public void setPalmiers(ArrayList<PositionCase> palmiers) {
         this.palmiers = palmiers;
     }
-    
+
     public void secheresse() {
         // TEST secheresse partie 2 Chris
         // décrémenter le nombre de marqueurs des cartes non irriguées
         // mettre en sécheresse les cartes sans marqueurs
-        for (Iterator<Carte> iterator = this.cartesPosees.iterator() ; iterator.hasNext() ;) {
+        for (Iterator<Carte> iterator = this.cartesPosees.iterator(); iterator.hasNext();) {
             Carte carte = iterator.next();
             PositionCase pc = carte.getPositionCase();
             if (!pc.isIrriguee()) {
@@ -179,33 +174,33 @@ public class Plateau extends Observable {
             }
         }
     }
-    
+
     public void majIrrigationTotale() {
         // TEST majIrrigationTotale Chris
         // XXX ajouté cette maj a chaque fois que l'on pose un canal
-        for (Iterator<Carte> iterator = this.cartesPosees.iterator() ; iterator.hasNext() ;) {
+        for (Iterator<Carte> iterator = this.cartesPosees.iterator(); iterator.hasNext();) {
             // on récupère la carte posé de l'itération
             Carte carte = iterator.next();
             this.majIrrigation1Carte(carte);
         }
     }
-    
+
     public void majIrrigation1Carte(Carte carte) {
         // TEST irrigation pour une carte Chris
         // appele ceci quand on pose une carte
-        
+
         // On initialise une position, renseigné par la carte
         Position pc = carte.getPosition();
         // Et seux segments
         PositionSegment ps1 = new PositionSegment();
         PositionSegment ps2 = new PositionSegment();
-        
+
         // On va chercher les deux segments qui sont adjacents à la carte
         // posé qu'on récupère à chaque itération
         // les segments ps1 et ps2 sont modifiés dans la méthodes, on les
         // récupère avec des valeurs valides
         PositionSegment.determineAdjacentAPosition(pc, ps1, ps2);
-        
+
         // On change l'attribut irrguée des cases (PositionCase) à true si
         // on les segments adjacent
         // que l'on a calculé sont occupé (déjà posée)
@@ -221,19 +216,32 @@ public class Plateau extends Observable {
             }
         }
     }
-    
+
     private ArrayList<Carte> popArrayList(int nbCartes) {
         // TEST popArrayList Chris
         ArrayList<Carte> carteTirage = new ArrayList<Carte>(nbCartes);
-        for (int i = 0 ; i < nbCartes ; i++) {
+        for (int i = 0; i < nbCartes; i++) {
             carteTirage.add(this.cartes.get(this.cartes.size() - 1));
             this.cartes.remove(this.cartes.size() - 1);
         }
         return carteTirage;
     }
-    
-    // public static void main(String [] args){
-    // Plateau p = new Plateau(0,4);
-    // p.poserUneCarte(new Carte(2, "banane"));
-    // }
+
+    @Override
+    public String toString() {
+        return "\nPlateau [source=" + source + ", canaux=" + canaux + ", cases=" + cases + ", cartes=\n" + cartes + ", cartesPosees="
+                + cartesPosees + ", palmiers=" + palmiers + ", nbJoueurs=" + nbJoueurs + ", cartesDevoilees=" + cartesDevoilees + "]\n";
+    }
+
+    private void initCartes() {
+        for (TypeChamp type : TypeChamp.values()) {
+            for (int i = 0; i < 9; i++) {
+                if (i < 6) {
+                    cartes.add(new Carte(2, type));
+                } else {
+                    cartes.add(new Carte(1, type));
+                }
+            }
+        }
+    }
 }
