@@ -1,87 +1,96 @@
 package model;
 
 public class Joueur {
-	private String nom;
-	private String couleur;
-	private int nbMarqueurDispos;
-	private boolean tuyauSup;
-	private boolean estConstructeur;
-	private int solde;
-	private int enchereCarte;
-	private int enchereConstructeur;
-	
-	public Joueur(String nom, String couleur) {
-		super();
-		this.nom = nom;
-		this.couleur = couleur;
-		this.nbMarqueurDispos = 22;
-		this.tuyauSup = true;
-		this.estConstructeur = false;
-		this.solde = 10;
-	}
-	
-	public String getNom() {
-		return nom;
-	}
+    private String nom;
+    private String couleur;
+    private int nbMarqueurDispos;
+    private boolean tuyauSup;
+    private boolean estConstructeur;
+    private int solde;
+    private int enchereCarte;
+    private int enchereConstructeur;
 
-	public void setNom(String nom) {
-		this.nom = nom;
-	}
+    public Joueur(String nom, String couleur) {
+        super();
+        this.nom = nom;
+        this.couleur = couleur;
+        this.nbMarqueurDispos = 22;
+        this.tuyauSup = true;
+        this.estConstructeur = false;
+        this.solde = 10;
+    }
 
-	public String getCouleur() {
-		return couleur;
-	}
+    public String getNom() {
+        return nom;
+    }
 
-	public void setCouleur(String couleur) {
-		this.couleur = couleur;
-	}
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
 
-	public int getNbMarqueurDispos() {
-		return nbMarqueurDispos;
-	}
+    public String getCouleur() {
+        return couleur;
+    }
 
-	public void setNbMarqueurDispos(int nbMarqueurDispos) {
-		this.nbMarqueurDispos = nbMarqueurDispos;
-	}
+    public void setCouleur(String couleur) {
+        this.couleur = couleur;
+    }
 
-	public boolean isTuyauSup() {
-		return tuyauSup;
-	}
+    public int getNbMarqueurDispos() {
+        return nbMarqueurDispos;
+    }
 
-	public void setTuyauSup(boolean tuyauSup) {
-		this.tuyauSup = tuyauSup;
-	}
+    public void setNbMarqueurDispos(int nbMarqueurDispos) {
+        this.nbMarqueurDispos = nbMarqueurDispos;
+    }
 
-	public boolean isEstConstructeur() {
-		return estConstructeur;
-	}
+    public boolean isTuyauSup() {
+        return tuyauSup;
+    }
 
-	public void setEstConstructeur(boolean estConstructeur) {
-		this.estConstructeur = estConstructeur;
-	}
+    public void setTuyauSup(boolean tuyauSup) {
+        this.tuyauSup = tuyauSup;
+    }
 
-	public int getSolde() {
-		return solde;
-	}
+    public boolean isEstConstructeur() {
+        return estConstructeur;
+    }
 
-	public void setSolde(int solde) {
-		this.solde = solde;
-	}
+    public void setEstConstructeur(boolean estConstructeur) {
+        this.estConstructeur = estConstructeur;
+    }
 
-	public int getEnchereConstructeur() {
-		return enchereConstructeur;
-	}
+    public int getSolde() {
+        return solde;
+    }
 
-	public void setEnchereConstructeur(int enchereConstructeur) {
-		this.enchereConstructeur = enchereConstructeur;
-	}
+    public void setSolde(int solde) {
+        this.solde = solde;
+    }
 
-	public int getEnchereCarte() {
-		return enchereCarte;
-	}
+    public void majSolde(int somme) {
+        this.solde += somme;
+    }
 
-	public void setEnchereCarte(int enchereCarte) {
-		this.enchereCarte = enchereCarte;
-	}
-	
+    public int getEnchereConstructeur() {
+        return enchereConstructeur;
+    }
+
+    public void setEnchereConstructeur(int enchereConstructeur) {
+        this.enchereConstructeur = enchereConstructeur;
+    }
+
+    public int getEnchereCarte() {
+        return enchereCarte;
+    }
+
+    public void setEnchereCarte(int enchereCarte) {
+        this.enchereCarte = enchereCarte;
+    }
+
+    @Override
+    public String toString() {
+        return "\nJoueur [nom=" + nom + ", couleur=" + couleur + ", estConstructeur=" + estConstructeur + ", solde=" + solde + "]";
+    }
+
 }
