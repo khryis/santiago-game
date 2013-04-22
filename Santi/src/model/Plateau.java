@@ -6,8 +6,6 @@ import java.util.Iterator;
 import java.util.Observable;
 
 import model.Carte.TypeChamp;
-import singleton.Saisie;
-import vue.AffichageConsole;
 
 public class Plateau extends Observable {
 
@@ -16,39 +14,59 @@ public class Plateau extends Observable {
     private ArrayList<PositionCase> cases;
     private ArrayList<Carte> cartes;
     private ArrayList<Carte> cartesPosees;
+    private ArrayList<Carte> cartesDevoilees;
     private ArrayList<PositionCase> palmiers;
     private final int nbJoueurs;
-    private ArrayList<Carte> cartesDevoilees;
+    private final NiveauPartie niveau;
+    private final int niveauSource;
 
-    public ArrayList<Carte> getCartesDevoilees() {
-        return cartesDevoilees;
-    }
-
-    public void setCartesDevoilees(ArrayList<Carte> cartesDevoilees) {
-        this.cartesDevoilees = cartesDevoilees;
-    }
-
-    /**
-     * @param source
-     * @param canaux
-     * @param cases
-     * @param cartes
-     * @param palmiers
-     */
-    public Plateau(int niveau, int nbJ) {
-        source = PositionIntersection.aleatoire(niveau);
-        canaux = new ArrayList<PositionSegment>(31);
-        cases = new ArrayList<PositionCase>(48);
-        palmiers = new ArrayList<PositionCase>(3);
-        cartesPosees = new ArrayList<Carte>();
-        cartesDevoilees = new ArrayList<Carte>();
+    public Plateau(NiveauPartie niveau, int nbJ) {
+        this.niveau = niveau;
+        niveauSource = niveau.getNiveauSource();
+        canaux = new ArrayList<>(31);
+        cases = new ArrayList<>(48);
+        palmiers = new ArrayList<>(3);
+        cartesPosees = new ArrayList<>();
+        cartesDevoilees = new ArrayList<>();
         nbJoueurs = nbJ;
-        cartes = new ArrayList<Carte>(45);
-        initCartes();
-        if (nbJ == 3 || nbJ == 4) {
+        cartes = new ArrayList<>(45);
+        initPlateau();
+    }
+
+    private void initPlateau() {
+        // Avec palmiers
+        if (niveau == NiveauPartie.MOYEN || niveau == NiveauPartie.DIFFICILE) {
+            for (int i = 0; i < palmiers.size(); i++) {
+                palmiers.add(PositionCase.aleatoire());
+            }
+        }
+
+        // Positionnement de la source
+        source = PositionIntersection.aleatoire(niveau.getNiveauSource());
+
+        // la liste des cartes
+        for (TypeChamp type : TypeChamp.values()) {
+            for (int i = 0; i < 9; i++) {
+                if (i < 6) {
+                    cartes.add(new Carte(2, type));
+                } else {
+                    cartes.add(new Carte(1, type));
+                }
+            }
+        }
+        // En fonction du nombres de joueurs, nombre de cartes
+        if (nbJoueurs == 3 || nbJoueurs == 4) {
             cartes.remove(cartes.size() - 1);
         }
+        // On mélange le packet de carte
         Collections.shuffle(cartes);
+
+        // la liste des cases
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 6; j++) {
+                cases.add(new PositionCase(i, j, false));
+            }
+        }
     }
 
     public void placerPalmier() {
@@ -68,48 +86,51 @@ public class Plateau extends Observable {
         return carteTirage;
     }
 
-    public void poserUneCarte(Carte carteAPoser) {
-        // FIXME basculer l'interaction dans le controleur, rien a foutre dans
-        // le model (encherir) !! Chris
+    public boolean poserUneCarte(Carte carteAPoser, int x, int y) {
         // TEST poser une carte Chris
-        // Demander à l'utilisateur de choisir une position pour poser la carte
         boolean pose = false;
-        while (!pose) {
-            System.out.println("Voici le plateau, choississez une position pour poser votre carte");
-            AffichageConsole.afficheMatrice(8, 6);
 
-            System.out.println("Première coordonnée, les abscisse : ");
-            int x = Saisie.IN.nextIntWithRangeNotBlank(0, 7);
-
-            System.out.println("Deuxième coordonnée, les ordonnées : ");
-            int y = Saisie.IN.nextIntWithRangeNotBlank(0, 5);
-
-            Position positionChoisie = new PositionCase(x, y);
-            if (this.cases.contains(positionChoisie)) {
-                int indexPosition = this.cases.indexOf(positionChoisie);
-                positionChoisie = this.cases.get(indexPosition);
-                if (positionChoisie.isOccupe()) {
-                    System.out.println("Cette Case est déjà occupée...");
-                } else {
-                    this.cartesPosees.add(carteAPoser);
-                    PositionCase positionCase = this.cases.get(indexPosition);
-                    positionCase.setOccupe(true);
-                    carteAPoser.setPosition(positionCase);
-                    pose = true;
-                }
+        Position positionChoisie = new PositionCase(x, y, false);
+        if (cases.contains(positionChoisie)) {
+            int indexPosition = cases.indexOf(positionChoisie);
+            positionChoisie = cases.get(indexPosition);
+            if (positionChoisie.isOccupe()) {
+                System.out.println("Cette Case est déjà occupée...");
+            } else {
+                cartesPosees.add(carteAPoser);
+                PositionCase positionCase = cases.get(indexPosition);
+                positionCase.setOccupe(true);
+                carteAPoser.setPosition(positionCase);
+                pose = true;
             }
+        } else {
+            // TODO une exception
+            System.out.println("Cette Position n'existe pas sur le plateau");
+            // pour sortir de la boucle
+            pose = false;
         }
+        return pose;
     }
 
     public void placerCanal(int x, int y, int x1, int y1) {
-        // placerCanal Flo --> Chris
-        // résoudre le motherfucking compromis dans santiago Flo
         PositionSegment canal = new PositionSegment(x, y, x1, y1, true);
+        canaux.add(canal);
+    }
+
+    public void placerCanal(PositionSegment canal) {
         canaux.add(canal);
     }
 
     public PositionIntersection getSource() {
         return source;
+    }
+
+    public ArrayList<Carte> getCartesDevoilees() {
+        return cartesDevoilees;
+    }
+
+    public void setCartesDevoilees(ArrayList<Carte> cartesDevoilees) {
+        this.cartesDevoilees = cartesDevoilees;
     }
 
     public void setSource(PositionIntersection source) {
@@ -146,6 +167,15 @@ public class Plateau extends Observable {
 
     public void setCartesPosees(ArrayList<Carte> cartesPosees) {
         this.cartesPosees = cartesPosees;
+    }
+
+    public int getNiveauSource() {
+        return niveauSource;
+    }
+
+    public void popCarteDevoilees(Carte carteAPoser) {
+        int indexCarteChoisie = getCartesDevoilees().indexOf(carteAPoser);
+        getCartesDevoilees().remove(indexCarteChoisie);
     }
 
     public ArrayList<PositionCase> getPalmiers() {
@@ -219,7 +249,7 @@ public class Plateau extends Observable {
 
     private ArrayList<Carte> popArrayList(int nbCartes) {
         // TEST popArrayList Chris
-        ArrayList<Carte> carteTirage = new ArrayList<Carte>(nbCartes);
+        ArrayList<Carte> carteTirage = new ArrayList<>(nbCartes);
         for (int i = 0; i < nbCartes; i++) {
             carteTirage.add(this.cartes.get(this.cartes.size() - 1));
             this.cartes.remove(this.cartes.size() - 1);
@@ -229,19 +259,8 @@ public class Plateau extends Observable {
 
     @Override
     public String toString() {
-        return "\nPlateau [source=" + source + ", canaux=" + canaux + ", cases=" + cases + ", cartes=\n" + cartes + ", cartesPosees="
-                + cartesPosees + ", palmiers=" + palmiers + ", nbJoueurs=" + nbJoueurs + ", cartesDevoilees=" + cartesDevoilees + "]\n";
-    }
-
-    private void initCartes() {
-        for (TypeChamp type : TypeChamp.values()) {
-            for (int i = 0; i < 9; i++) {
-                if (i < 6) {
-                    cartes.add(new Carte(2, type));
-                } else {
-                    cartes.add(new Carte(1, type));
-                }
-            }
-        }
+        return "Plateau : \nSource : " + source + ",\ncanaux=" + canaux + ",\ncases=" + cases + ",\ncartes=\n" + cartes
+                + ",\ncartesPosees=" + cartesPosees + ",\npalmiers=" + palmiers + ",\nnbJoueurs=" + nbJoueurs + ",\ncartesDevoilees="
+                + cartesDevoilees + "\n]\n";
     }
 }

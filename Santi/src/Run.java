@@ -1,17 +1,17 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Scanner;
 
+import model.Carte;
 import model.Joueur;
+import model.NiveauPartie;
 import model.Plateau;
 import model.PositionSegment;
 import model.Santiago;
-import model.Santiago.NiveauPartie;
+import model.Santiago.TypeEnchere;
 import singleton.Saisie;
+import vue.AffichageConsole;
 
 public class Run {
     private final Santiago santiago;
@@ -64,10 +64,10 @@ public class Run {
         int nbJ = Saisie.IN.nextIntWithRange(3, 5);
 
         // Joueurs crée
-        ArrayList<Joueur> listJoueurs = new ArrayList<Joueur>(nbJ);
+        ArrayList<Joueur> listJoueurs = new ArrayList<>(nbJ);
 
         // Liste des couleurs
-        ArrayList<String> couleurs = new ArrayList<String>();
+        ArrayList<String> couleurs = new ArrayList<>();
         Collections.addAll(couleurs, "blanc", "noir", "violet", "gris", "beige");
 
         int i = 0;
@@ -99,17 +99,13 @@ public class Run {
         santiago.setListJoueurs(listJoueurs);
     }
 
-    public HashMap<Joueur, Integer> miseAuxEncheres() {
-        /*
-         * TEST Enchère carte + choix constructeur Anthony appeler une méthode
-         * qui va chercher sur le plateau les 4 ou 5 prochaines cartes changer
-         * statut du joueur ayant l'enchère la plus basse en constructeur
-         */
-
+    public void miseAuxEncheres() {
         // initialisation pour les enchères
-        int enchereJoueur = 0, positionConstructeurDepart = -1, i = 0;
+        TypeEnchere typeEnchere = TypeEnchere.CARTE;
+        int enchereJoueur = 0, positionConstructeurDepart = -1, indiceJoueurCourant = 0;
         boolean constructeurTrouve = false;
-        HashMap<Joueur, Integer> tabEnchere = new HashMap<Joueur, Integer>();
+        HashMap<Joueur, Integer> tabEnchere = santiago.getTabEnchere();
+        tabEnchere.clear();
         // notre liste des joueurs
         ArrayList<Joueur> listJoueurs = santiago.getListJoueurs();
 
@@ -123,297 +119,306 @@ public class Run {
 
         // Trouver constructeur
         positionConstructeurDepart = santiago.positionConstructeur();
-        i = positionConstructeurDepart + 1;
+        indiceJoueurCourant = santiago.positionApresConstructeur();
 
-        while (i != positionConstructeurDepart) {
-            while (i < listJoueurs.size() && i != positionConstructeurDepart) {
-                enchereJoueur = encherir(i, tabEnchere);
+        while (indiceJoueurCourant != positionConstructeurDepart) {
+            while (indiceJoueurCourant < listJoueurs.size() && indiceJoueurCourant != positionConstructeurDepart) {
+                enchereJoueur = encherir(indiceJoueurCourant);
+                Joueur joueur = santiago.getListJoueurs().get(indiceJoueurCourant);
+
+                switch (typeEnchere) {
+                case CARTE:
+                    joueur.setEnchereCarte(enchereJoueur);
+                    break;
+                case CONSTRUCTEUR:
+                    joueur.setEnchereConstructeur(enchereJoueur);
+                    break;
+                default:
+                    joueur.setEnchereCarte(enchereJoueur);
+                    joueur.setEnchereConstructeur(enchereJoueur);
+                }
+
                 // on regarde si on trouve le nouveau constructeur
-                if (enchereJoueur == 0 && constructeurTrouve == false) {
-                    santiago.setConstructeur(i, true);
+                if (enchereJoueur == 0 && !constructeurTrouve) {
+                    santiago.setConstructeur(indiceJoueurCourant, true);
                     constructeurTrouve = true;
                 }
-                tabEnchere.put(listJoueurs.get(i), enchereJoueur);
-                i++;
+                tabEnchere.put(listJoueurs.get(indiceJoueurCourant), enchereJoueur);
+                listJoueurs.get(indiceJoueurCourant).setEnchereCarte(enchereJoueur);
+                indiceJoueurCourant++;
             }
-
-            if (i == listJoueurs.size()) {
-                i = 0;
+            // On revient à 0 dans la liste si on arrive au bout
+            if (indiceJoueurCourant == listJoueurs.size()) {
+                indiceJoueurCourant = 0;
             }
         }
         // lorsque l'on revient sur constructeur, il faut demander son enchère,
         // donc refaire 1 fois le traitement
-        enchereJoueur = encherir(i, tabEnchere);
-        if (enchereJoueur == 0 && constructeurTrouve == false) {
-            santiago.setConstructeur(i, true);
+        enchereJoueur = encherir(indiceJoueurCourant);
+        if (enchereJoueur == 0 && !constructeurTrouve) {
+            santiago.setConstructeur(indiceJoueurCourant, true);
             constructeurTrouve = true;
         } else {
-            santiago.setConstructeur(i, false);
+            santiago.setConstructeur(indiceJoueurCourant, false);
         }
-        tabEnchere.put(listJoueurs.get(i), enchereJoueur);
+        tabEnchere.put(listJoueurs.get(indiceJoueurCourant), enchereJoueur);
+        listJoueurs.get(indiceJoueurCourant).setEnchereCarte(enchereJoueur);
 
         // Chercher constructeur si personne n'a passé (=joueur avec plus petite
         // enchère)
-        if (constructeurTrouve == false) {
-            Joueur JoueurEnchereMin = enchereMin(tabEnchere);
+        if (!constructeurTrouve) {
+            Joueur JoueurEnchereMin = santiago.enchereMin();
             JoueurEnchereMin.setEstConstructeur(true);
         }
-        for (Iterator<Joueur> iterator = tabEnchere.keySet().iterator(); iterator.hasNext();) {
-            Joueur joueur = iterator.next();
-            Integer enchere = tabEnchere.get(joueur);
-            joueur.majSolde(-enchere);
-        }
-        return tabEnchere;
     }
 
-    private int encherir(int indexJoueur, HashMap<Joueur, Integer> tabEnchere) {
+    private int encherir(int indexJoueur) {
         int enchere = 0;
         int solde = santiago.getListJoueurs().get(indexJoueur).getSolde();
+        Joueur joueur = santiago.getListJoueurs().get(indexJoueur);
+        HashMap<Joueur, Integer> tabEnchere = santiago.getTabEnchere();
         do {
             if (enchere > solde) {
                 System.out.println("Pas assez d'argent pour encherir de la sorte (max " + solde + ")");
             } else if (tabEnchere.containsValue(enchere) && enchere != 0) {
                 System.out.println("Quelqu'un a déjà enchèri par " + enchere + "€");
             }
-            enchere = Saisie.IN.nextIntBlank("Mauvais Format", santiago.getListJoueurs().get(indexJoueur).toString() + "\n"
+            enchere = Saisie.IN.nextIntBlank("Mauvais Format", joueur.toString() + "\n"
                     + "Veuillez indiquer le montant de votre enchère : (rien ou 0 pour passer son tour)");
             if (enchere == -1)
                 enchere = 0;
         } while ((enchere > solde || tabEnchere.containsValue(enchere)) && enchere != 0);
+
         return enchere;
     }
 
-    public void placementDesPlantations(HashMap<Joueur, Integer> tabEnchere) {
+    public void placementDesPlantations() {
         /*
-         * TEST Placement des cartes Anthony mettre à jour possesseur de la
-         * carte pose des cartes dans l'ordre décroissant des enchères mettre à
-         * jour les marqueurs mettre à jour solde des joueurs
+         * Placement des cartes Anthony mettre à jour possesseur de la carte
+         * pose des cartes dans l'ordre décroissant des enchères mettre à jour
+         * les marqueurs mettre à jour solde des joueurs
          */
         // on récupère les objets de santiago et on les modifies
         Plateau plateau = santiago.getPlateau();
-
-        Scanner sc = new Scanner(System.in);
-        int carteChoisie;
-        while (!tabEnchere.isEmpty()) {
-            Joueur JoueurGagnant = enchereMax(tabEnchere);
-            System.out.println("Joueur " + JoueurGagnant.getNom() + " avec une enchère de : " + tabEnchere.get(JoueurGagnant).intValue());
-            System.out.println("Liste des cartes : ");
-            System.out.println(plateau.getCartesDevoilees().toString());
-            System.out.println("Choisissez une carte : ");
-            while (!plateau.getCartesDevoilees().isEmpty()) {
-                for (int i = 0; i < plateau.getCartesDevoilees().size(); i++) {
-                    System.out.println(plateau.getCartesDevoilees().get(i).toString() + " " + (i + 1));
-                }
-                carteChoisie = sc.nextInt();
-                // Maj possesseur
-                plateau.getCartesDevoilees().get(carteChoisie).setPossesseur(JoueurGagnant);
-                // Maj marqueurs
-                JoueurGagnant.setNbMarqueurDispos(JoueurGagnant.getNbMarqueurDispos()
-                        - plateau.getCartesDevoilees().get(carteChoisie).getNbMarqueurMax());
-                // Maj solde
-                JoueurGagnant.setSolde(JoueurGagnant.getSolde() - tabEnchere.get(JoueurGagnant).intValue());
-                // Pose de la carte
-                plateau.poserUneCarte(plateau.getCartesDevoilees().get(carteChoisie));
-                // MAJ marqueurs de la carte si enchère joueur = 0
-                if (tabEnchere.get(JoueurGagnant).intValue() == 0) {
-                    plateau.getCartesPosees().get(carteChoisie)
-                            .setNbMarqueurActuel(plateau.getCartesPosees().get(carteChoisie).getNbMarqueurActuel() - 1);
-                }
-                plateau.majIrrigation1Carte(plateau.getCartesDevoilees().get(carteChoisie));
-                plateau.getCartesDevoilees().remove(carteChoisie);
+        int indexCarteChoisie = 0;
+        Carte carteAPoser = null;
+        Joueur joueur = santiago.enchereMax();
+        // On retient Le joueur qui a le plus encheri
+        santiago.setJoueurGagnant(joueur);
+        ArrayList<Carte> carteDevoilees = plateau.getCartesDevoilees();
+        HashMap<Joueur, Integer> tabEnchere = santiago.getTabEnchere();
+        while (!carteDevoilees.isEmpty()) {
+            // Dans une partie à 3, le meilleur enchérisseur pose 1 carte de
+            // plus
+            if (tabEnchere.isEmpty()) {
+                joueur = santiago.getJoueurGagnant();
+            } else {
+                joueur = santiago.enchereMax();
             }
-            tabEnchere.remove(JoueurGagnant);
+            System.out.println(joueur.toString());
+            System.out.println("Joueur " + joueur.getNom() + " avec une enchère de : " + joueur.getEnchereCarte());
+            if (!tabEnchere.isEmpty()) {
+                System.out.println("Choisissez une carte : ");
+                for (int i = 0; i < carteDevoilees.size(); i++) {
+                    System.out.println(carteDevoilees.get(i).toString() + " " + (i + 1));
+                }
+                indexCarteChoisie = Saisie.IN.nextIntWithRangeNotBlank(1, carteDevoilees.size(), "", "",
+                        "Entrez le numéro de la carte voulu de cette liste");
+
+                // Car indice + 1 dane le menu
+                indexCarteChoisie--;
+            } else {
+                // quand on est au dernier joueur partie à 3
+                indexCarteChoisie = 0;
+            }
+            carteAPoser = carteDevoilees.get(indexCarteChoisie);
+            System.out.println("Carte à poser : " + carteAPoser.toString());
+
+            // Choisir position carte et la poser
+            choisirPositionCarte(carteAPoser, joueur);
+        }
+        for (Joueur j : santiago.getListJoueurs()) {
+            System.out.println(j.toString());
+            System.out.println("Carte possédé");
+            for (Carte carte : plateau.getCartesPosees()) {
+                if (((carte.getPossesseur().getNom()).compareTo((j.getNom()))) == 0) {
+                    System.out.println(carte.toString());
+                }
+            }
         }
     }
 
-    public static Joueur enchereMax(HashMap<Joueur, Integer> tab) {
-        Joueur res = null;
-        int maxValue = (Collections.max(tab.values()));
-        for (Entry<Joueur, Integer> entry : tab.entrySet()) {
-            if (entry.getValue() == maxValue) {
-                res = entry.getKey();
-            }
-        }
-        return res;
-    }
+    public void choisirPositionCarte(Carte carteAPoser, Joueur joueur) {
+        // Demander à l'utilisateur de choisir une position pour poser la carte
+        boolean pose = false;
+        while (!pose) {
+            System.out.println("Voici le plateau, choississez une position pour poser votre carte");
+            AffichageConsole.afficheMatrice(8, 6);
 
-    public static Joueur enchereMin(HashMap<Joueur, Integer> tab) {
-        Joueur res = null;
-        int minValue = (Collections.min(tab.values()));
-        for (Entry<Joueur, Integer> entry : tab.entrySet()) {
-            if (entry.getValue() == minValue) {
-                res = entry.getKey();
+            int x = Saisie.IN.nextIntWithRangeNotBlank(0, 7, "Ne pas laisser blanc", "Erreur", "Première coordonnée, les abscisse : ");
+
+            int y = Saisie.IN.nextIntWithRangeNotBlank(0, 5, "Ne Pas laisser blanc", "Erreur", "Deuxième coordonnée, les abscisse : ");
+
+            if (santiago.poserUneCarte(joueur, carteAPoser, x, y)) {
+                pose = true;
+            } else {
+                System.out.println("Carte non posée..");
             }
         }
-        return res;
     }
 
     public void soudoyerConstructeur() {
-        // TEST tour soudoiement Flo
 
-        // pose position canal temp
-        // stocker la liste des propositions de placement de canal
-        // associer une position à une liste de joueur
-        // proposer montant (mettre à jour Joueur.enchereConstructeur)
-        // prévoir PASSER SON TOUR
-
-        // on récupère les objets de santiago et on les modifies
-        Plateau plateau = santiago.getPlateau();
+        // on récupère les objets de santiago
         ArrayList<Joueur> listJoueurs = santiago.getListJoueurs();
 
         // Tour d'enchères :
-        Scanner sc = new Scanner(System.in);
-        HashMap<PositionSegment, ArrayList<Joueur>> enchereConstr = new HashMap<PositionSegment, ArrayList<Joueur>>();
         PositionSegment canal = null;
-        ArrayList<Joueur> joueursEnch = new ArrayList<Joueur>();
-        String c = "";
+        String c = "", message = "";
         int montant = 0;
-        int x;
-        int y;
-        int x1;
-        int y1;
-        Joueur j = null;
+        int x, y, x1, y1;
+        Joueur joueurCourant = null;
 
-        // Sous quelle forme donne-t-on la position du canal temp ? Ac interface
-        // graphique, cliquer sur l'endroit ? Dire: l2, case 3 ?
         // Tour joueurs, à démarrer à la gauche du constructeur !!
-        int depart = santiago.positionConstructeur();
-        int i = depart;
+        int indiceJoueurCourant = santiago.positionApresConstructeur();
 
         // Boucle sur les joueurs :
-        while (!listJoueurs.get(i).isEstConstructeur()) {
-            while (i < listJoueurs.size() && !listJoueurs.get(i).isEstConstructeur()) {
-                j = listJoueurs.get(i);
-                System.out.println("Voulez-vous soudoyer le constructeur de canal ? (o/n) ");
-                c = sc.next();
-                if (c.compareTo("o") == 0) {
+        while (!listJoueurs.get(indiceJoueurCourant).isEstConstructeur()) {
+            while (indiceJoueurCourant < listJoueurs.size() && !listJoueurs.get(indiceJoueurCourant).isEstConstructeur()) {
+                joueurCourant = listJoueurs.get(indiceJoueurCourant);
+                message = "\nJoueur : " + joueurCourant.getNom();
+                message += "\nVoulez-vous soudoyer le constructeur de canal ? (o/n)";
+                c = Saisie.IN.validStringNotBlank("o|O|n|N", "invalid", "erreur", message);
+                if (c.compareToIgnoreCase("o") == 0) {
                     System.out.println("Indiquez où vous souhaitez poser le canal : ");
-                    // récupérer la popsition, I don't know how, in which format
+
                     System.out.println("1 ère coordonnées: ");
-                    System.out.println("x ?");
-                    x = sc.nextInt();
-                    System.out.println("y ?");
-                    y = sc.nextInt();
+                    x = Saisie.IN.nextIntWithRangeNotBlank(0, 7, "il faut ecrire quelque chose", "erreur", "x ?\n");
+                    y = Saisie.IN.nextIntWithRangeNotBlank(0, 5, "il faut ecrire quelque chose", "erreur", "y ?\n");
+
                     System.out.println("2 ème coordonnées: ");
-                    System.out.println("x ?");
-                    x1 = sc.nextInt();
-                    System.out.println("y ?");
-                    y1 = sc.nextInt();
+                    x1 = Saisie.IN.nextIntWithRangeNotBlank(0, 7, "il faut ecrire quelque chose", "erreur", "x ?\n");
+                    y1 = Saisie.IN.nextIntWithRangeNotBlank(0, 5, "il faut ecrire quelque chose", "erreur", "y ?\n");
+
                     // transformer cette position en positionSegment
                     canal = new PositionSegment(x, y, x1, y1);
 
-                    System.out.println("Combien proposez-vous pour votre canal ?");
-                    montant = sc.nextInt();
-                    if (montant > 0 && montant < j.getSolde()) {
-                        // récupérer enchère
-                        j.setEnchereConstructeur(montant);
-                        if (enchereConstr.containsKey(canal)) {
-                            // ajouter le joueur à l'arrayList si position de
-                            // canal déjà proposée
-                            enchereConstr.get(canal).add(j);
-                        } else { // ajouter dans la hashmap
-                            joueursEnch.add(j);
-                            enchereConstr.put(canal, joueursEnch);
-                        }
-                    } else {
+                    // Prix pour cette position
+                    montant = Saisie.IN.nextIntWithRangeNotBlank(0, joueurCourant.getSolde(), "il faut ecrire quelque chose", "erreur",
+                            "Votre Prix ?\n");
+
+                    if (!santiago.encherePositionCanal(canal, joueurCourant, montant)) {
                         System.out.println("Enchère incorrecte, vous ne pouvez pas poser de canal.");
                     }
 
                 } else {
                     System.out.println("Vous avez passé votre tour.");
                 }
-                i++;
+                indiceJoueurCourant++;
             }
-            if (i == listJoueurs.size()) {
-                i = 0;
+            if (indiceJoueurCourant == listJoueurs.size()) {
+                indiceJoueurCourant = 0;
             }
         }
+    }
 
-        // trouver le constructeur
-        // faire choisir une enchère
-        // placer le canal
-        int constr = -1;
-        if (depart == 0) {
-            constr = listJoueurs.size() - 1;
+    public void choixDuConstructeur() {
+        // Tour joueurs, à démarrer à la gauche du constructeur !!
+        int positionContructeurDepart = santiago.positionConstructeur();
+        int indiceJoueurCourant = santiago.positionApresConstructeur();
+
+        if (!santiago.getEnchereContructeur().isEmpty()) {
+            afficherListPositionCanaux();
+            // vérifie le solde du constructeur avant de lui proposer les canaux
+            // diponible
+            if (santiago.constructeurPeutEncherir()) {
+                String message = "Souhaitez-vous une de ces positions ? (o/n)";
+                String c = Saisie.IN.validStringNotBlank("o|O|n|N", "invalid", "erreur", message);
+                if (c.compareToIgnoreCase("o") == 0) {
+                    choixPositionCanalAConstruire();
+                } else {
+                    int montant = 0, total = 0;
+                    Joueur constructeur = santiago.getListJoueurs().get(positionContructeurDepart);
+                    ArrayList<Joueur> listJoueurs = santiago.getListJoueurs();
+                    HashMap<PositionSegment, ArrayList<Joueur>> enchereConstr = santiago.getEnchereContructeur();
+                    ArrayList<Joueur> joueursEnch;
+                    boolean bonMontant = false;
+
+                    System.out.println("Indiquez votre propre enchère:");
+                    while (!bonMontant) {
+                        montant = Saisie.IN.nextIntWithRangeNotBlank(0, constructeur.getSolde(), "il faut ecrire quelque chose", "erreur",
+                                "Votre prix ?");
+                        // vérif
+                        for (Map.Entry<PositionSegment, ArrayList<Joueur>> entry : enchereConstr.entrySet()) {
+                            indiceJoueurCourant = 0;
+                            joueursEnch = entry.getValue();
+                            while (indiceJoueurCourant < joueursEnch.size()) {
+                                total = total + joueursEnch.get(indiceJoueurCourant).getEnchereConstructeur();
+                                indiceJoueurCourant++;
+                            }
+                            if (montant <= total || montant > listJoueurs.get(positionContructeurDepart).getSolde()) {
+                                bonMontant = false;
+                            } else {
+                                choixPositionCanalAConstruire();
+                                listJoueurs.get(positionContructeurDepart).enleverArgent(montant);
+                                bonMontant = true;
+                            }
+                        }
+                        if (!bonMontant) {
+                            System.out.println("Mauvais montant, recommencez :");
+                        } else {
+                            choixPositionCanalAConstruire();
+                            listJoueurs.get(positionContructeurDepart).enleverArgent(montant);
+                            bonMontant = true;
+                        }
+                    }
+                }
+            } else {
+                System.out.println("Vous êtes obliger de choisir un de ces canaux au vu de votre solde");
+                choixPositionCanalAConstruire();
+            }
         } else {
-            constr = depart - 1;
+            System.out.println("Vous ne pouvez pas surencherir et aucune proposition n'est faire, Ciao !");
         }
+    }
+
+    public void afficherListPositionCanaux() {
+        int indiceJoueurCourant;
+        HashMap<PositionSegment, ArrayList<Joueur>> enchereConstr = santiago.getEnchereContructeur();
+
         System.out.println("Voici les propositions de construction des canaux : ");
+        ArrayList<Joueur> joueursEnch = new ArrayList<>();
         // Indiquez quel joueur a proposé quoi ?
         // itérer sur la map, montrer les propositions
         for (Map.Entry<PositionSegment, ArrayList<Joueur>> entry : enchereConstr.entrySet()) {
-            i = 0;
+            indiceJoueurCourant = 0;
             System.out.println("Position canal : " + entry.getKey());
             joueursEnch = entry.getValue();
-            while (i < joueursEnch.size()) {
-                System.out.println("\tJoueur : " + joueursEnch.get(i).getNom() + "\tMontant : "
-                        + joueursEnch.get(i).getEnchereConstructeur());
-                i++;
+            while (indiceJoueurCourant < joueursEnch.size()) {
+                System.out.println("\tJoueur : " + joueursEnch.get(indiceJoueurCourant).getNom() + "\tMontant : "
+                        + joueursEnch.get(indiceJoueurCourant).getEnchereConstructeur());
+                indiceJoueurCourant++;
             }
         }
-        System.out.println("Souhaitez-vous une de ces positions ? (o/n)");
-        c = sc.next();
-        if (c.compareTo("o") == 0) {
-            System.out.println("Entrez la position choisie :");
-            System.out.println("1 ère coordonnées: ");
-            System.out.println("x ?");
-            x = sc.nextInt();
-            System.out.println("y ?");
-            y = sc.nextInt();
-            System.out.println("2 ème coordonnées: ");
-            System.out.println("x ?");
-            x1 = sc.nextInt();
-            System.out.println("y ?");
-            y1 = sc.nextInt();
-            // vérif, poser canal
-            plateau.placerCanal(x, y, x1, y1);
-            // mettre à jour le solde des joueurs
-            canal = new PositionSegment(x, y, x1, y1);
-            joueursEnch = enchereConstr.get(canal);
-            for (Joueur joueur : joueursEnch) {
-                joueur.setSolde(joueur.getSolde() - joueur.getEnchereConstructeur());
-            }
+    }
 
-        } else {
-            System.out.println("Indiquez votre propre enchère:");
-            montant = 0;
-            int total = 0;
-            int erreur = -1;
-            while (erreur == -1) {
-                montant = sc.nextInt();
-                // vérif
-                for (Map.Entry<PositionSegment, ArrayList<Joueur>> entry : enchereConstr.entrySet()) {
-                    i = 0;
-                    joueursEnch = entry.getValue();
-                    while (i < joueursEnch.size()) {
-                        total = total + joueursEnch.get(i).getEnchereConstructeur();
-                        i++;
-                    }
-                    if (montant <= total || montant > listJoueurs.get(constr).getSolde()) {
-                        erreur = 0;
-                    } else {
-                        erreur = 1;
-                        listJoueurs.get(constr).setSolde(listJoueurs.get(constr).getSolde() - montant);
-                        System.out.println("Indiquez la position du canal : ");
-                        System.out.println("1 ère coordonnées: ");
-                        System.out.println("x ?");
-                        x = sc.nextInt();
-                        System.out.println("y ? ");
-                        y = sc.nextInt();
-                        System.out.println("2 ème coordonnées: ");
-                        System.out.println("x ?");
-                        x1 = sc.nextInt();
-                        System.out.println("y ?");
-                        y1 = sc.nextInt();
-                        plateau.placerCanal(x, y, x1, y1);
-                    }
-                }
-                if (erreur == 0) {
-                    System.out.println("Mauvais montant, recommencez :");
-                    erreur = -1;
-                }
-            }
-        }
+    public void choixPositionCanalAConstruire() {
+        int x, y, x1, y1;
+
+        // vérif, poser canal
+        do {
+            afficherListPositionCanaux();
+            System.out.println("Entrez la position choisie : ");
+
+            System.out.println("1 ère coordonnées: ");
+            x = Saisie.IN.nextIntWithRangeNotBlank(0, 7, "il faut ecrire quelque chose", "erreur", "x ?\n");
+            y = Saisie.IN.nextIntWithRangeNotBlank(0, 5, "il faut ecrire quelque chose", "erreur", "y ?\n");
+
+            System.out.println("2 ème coordonnées: ");
+            x1 = Saisie.IN.nextIntWithRangeNotBlank(0, 7, "il faut ecrire quelque chose", "erreur", "x ?\n");
+            y1 = Saisie.IN.nextIntWithRangeNotBlank(0, 5, "il faut ecrire quelque chose", "erreur", "y ?\n");
+
+        } while (!santiago.placerCanalChoisi(x, y, x1, y1));
     }
 
     public void irrigationSupplementaire() {
@@ -425,49 +430,43 @@ public class Run {
         Plateau plateau = santiago.getPlateau();
         ArrayList<Joueur> listJoueurs = santiago.getListJoueurs();
 
-        Scanner sc = new Scanner(System.in);
-        String choix = "";
+        String choix = "", message = "";
         System.out.println("Phase d'irrigation supplémentaire");
         for (int i = 0; i < listJoueurs.size(); i++) {
-            System.out.println("Joueur " + listJoueurs.get(i).getNom());
-            System.out.println("Voulez vous placer un canal supplémentaire ? O/N");
-            choix = sc.nextLine();
-            if (choix.compareTo("O") == 0 || choix.compareTo("o") == 0) {
-                if (listJoueurs.get(i).isTuyauSup()) {
+            message = "Joueur " + listJoueurs.get(i).getNom();
+            message += "\nVoulez vous placer un canal supplémentaire ? O/N";
+            choix = Saisie.IN.validStringNotBlank("o|O|n|N", "invalid", "erreur", message);
+            if (choix.compareToIgnoreCase("O") == 0) {
+                if (listJoueurs.get(i).hasTuyauSup()) {
                     System.out.println("Vous n'avez plus de canal supplémentaire!");
                     break;
                 }
+                // TODO faire ça correct, tester les positions saisies par
+                // l'utilisateur
                 System.out.println("Indiquez où placer le canal.");
-                System.out.println("Position x1 : ");
-                int x = sc.nextInt();
+                int x = Saisie.IN.nextIntWithRangeNotBlank(0, 7, "il faut ecrire quelque chose", "erreur", "Position x1 : \n");
                 System.out.println("Position y1 : ");
-                int y = sc.nextInt();
+                int y = Saisie.IN.nextIntWithRangeNotBlank(0, 5, "il faut ecrire quelque chose", "erreur", "Position y1 : \n");
                 System.out.println("Position x2 : ");
-                int x1 = sc.nextInt();
+                int x1 = Saisie.IN.nextIntWithRangeNotBlank(0, 7, "il faut ecrire quelque chose", "erreur", "Position x2 : \n");
                 System.out.println("Position y2 : ");
-                int y1 = sc.nextInt();
+                int y1 = Saisie.IN.nextIntWithRangeNotBlank(0, 5, "il faut ecrire quelque chose", "erreur", "Position y2 : \n");
                 plateau.placerCanal(x, y, x1, y1);
                 listJoueurs.get(i).setTuyauSup(false);
-            } else if (choix.compareTo("N") == 0 || choix.compareTo("n") == 0)
+            } else if (choix.compareToIgnoreCase("N") == 0) {
                 System.out.println("Vous n'avez pas placé de canal pour ce tour.");
-            // Prevoir cas de merde si ce n'est ni "O" ni "N"
-            // Vraiment besoin de la méthode passer son tour ici ?
+            }
         }
     }
 
     public void secheresse() {
-        // TEST secheresse partie 1 Chris
-        // check si on est arrivé au dernier tour
         if (santiago.getNbTours() > 1) {
             santiago.getPlateau().secheresse();
         }
     }
 
     public void diaDePaga() {
-        for (Iterator<Joueur> iterator = santiago.getListJoueurs().iterator(); iterator.hasNext();) {
-            Joueur j = iterator.next();
-            j.setSolde(j.getSolde() + 3);
-        }
+        santiago.diaDePaga();
     }
 
     public boolean isFinish() {
@@ -477,25 +476,40 @@ public class Run {
     // Execution du programme
     public static void main(String args[]) {
         Run r = new Run();
-        r.configurer();
-        System.out.println(r.santiago.toString());
+        // r.configurer();
 
+        // Pour tester à la place de configurer
+        r.santiago.setNiveauPartie(NiveauPartie.FACILE);
+        r.santiago.getListJoueurs().add(new Joueur("Jean", "gris"));
+        r.santiago.getListJoueurs().add(new Joueur("Tullandre", "noir"));
+        r.santiago.getListJoueurs().add(new Joueur("Kill", "blanc"));
+        r.santiago.initPartie();
+        // ------------
+
+        // System.out.println(r.santiago.toString());
         while (!r.isFinish()) {
             // Phase 1 : retourner plantation et mettre au enchère
-            HashMap<Joueur, Integer> hm = r.miseAuxEncheres();
-            System.out.println(hm.toString());
+            r.miseAuxEncheres();
 
             // Phase 2 : changement du constructeur de canal
+            // Dans la phase 1
 
             // Phase 3 : choisir plantation et placer
+            r.placementDesPlantations();
 
             // Phase 4 : Soudoyer constructeur de canal
+            r.soudoyerConstructeur();
+            r.choixDuConstructeur();
 
             // Phase 5 : Irrigation complémentaire
+            r.irrigationSupplementaire();
 
             // Phase 6 : régler la sécheresse
+            r.secheresse();
 
             // Phase 7 : Revenu d'aide au dévelloppement
+            r.diaDePaga();
+            System.out.println(r.santiago.getPlateau().getSource().toString());
         }
     }
 }
