@@ -1,6 +1,8 @@
-package vue;
+package vue.reglages;
 
 import java.util.Observable;
+
+import vue.AbstractPanel;
 
 public class PanelReglages extends AbstractPanel {
 	private static final long serialVersionUID = 1L;

@@ -10,6 +10,16 @@ public class Joueur {
     private int enchereCarte;
     private int enchereConstructeur;
 
+    public Joueur() {
+        super();
+        this.nom = "null";
+        this.couleur = "null";
+        this.nbMarqueurDispos = 22;
+        this.tuyauSup = true;
+        this.estConstructeur = false;
+        this.solde = 10;
+    }
+
     public Joueur(String nom, String couleur) {
         super();
         this.nom = nom;
@@ -44,7 +54,7 @@ public class Joueur {
         this.nbMarqueurDispos = nbMarqueurDispos;
     }
 
-    public boolean isTuyauSup() {
+    public boolean hasTuyauSup() {
         return tuyauSup;
     }
 
@@ -68,8 +78,12 @@ public class Joueur {
         this.solde = solde;
     }
 
-    public void majSolde(int somme) {
+    public void ajouterArgent(int somme) {
         this.solde += somme;
+    }
+
+    public void enleverArgent(int somme) {
+        this.solde -= somme;
     }
 
     public int getEnchereConstructeur() {
@@ -90,7 +104,7 @@ public class Joueur {
 
     @Override
     public String toString() {
-        return "\nJoueur [nom=" + nom + ", couleur=" + couleur + ", estConstructeur=" + estConstructeur + ", solde=" + solde + "]";
+        return "Joueur [nom=" + nom + ", couleur=" + couleur + ", estConstructeur=" + estConstructeur + ", solde=" + solde + "]\n";
     }
 
 }

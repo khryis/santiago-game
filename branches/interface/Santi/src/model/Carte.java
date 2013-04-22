@@ -26,7 +26,7 @@ public class Carte {
         this.nbMarqueurActuel = nbMarqueurMax;
         this.deserte = false;
         this.type = type;
-        this.possesseur = null;
+        this.possesseur = new Joueur();
     }
 
     public Joueur getPossesseur() {
@@ -89,6 +89,7 @@ public class Carte {
 
     @Override
     public String toString() {
-        return "\nCarte [position=" + position + ", nbMarqueurActuel=" + nbMarqueurActuel + ", deserte=" + deserte + ", type=" + type + "]";
+        return "Carte [possesseur : " + possesseur.getNom() + " position=" + position + ", nbMarqueurActuel=" + nbMarqueurActuel
+                + ", deserte=" + deserte + ", type=" + type + "]\n";
     }
 }
