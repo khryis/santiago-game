@@ -1,6 +1,10 @@
 package vue;
 
+import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Toolkit;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -12,16 +16,18 @@ public abstract class AbstractPanel extends JPanel implements Observer, IConstan
     private static final long serialVersionUID = 1L;
 
     // Attributs récurrent d'une instance Panel
+    protected Container parent;
     protected Santiago santiago;
     protected Dimension homeDimension;
     protected boolean isInit;
 
     // Contructeur général
-    public AbstractPanel() {
+    public AbstractPanel(Container parent) {
         super();
         santiago = null;
         homeDimension = null;
         isInit = false;
+        this.parent = parent;
     }
 
     public Santiago getSantiago() {
@@ -38,16 +44,22 @@ public abstract class AbstractPanel extends JPanel implements Observer, IConstan
 
     // Méthode dans laquelle on ajoute tout les composants voulu au JPanel
     public void initComponent() {
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        setPreferredSize(new Dimension(toolkit.getScreenSize().width, toolkit.getScreenSize().height));
+        homeDimension = new Dimension(toolkit.getScreenSize().width, toolkit.getScreenSize().height);
         if (getParent() != null) {
             if (getParent() instanceof AbstractPanel) {
-                homeDimension = getParent().getSize();
-                santiago = ((AbstractPanel) getParent()).getSantiago();
+                santiago = Santiago.getSantiago();
+                santiago.addObserver(this);
             } else {
-                homeDimension = getParent().getSize();
-                santiago = new Santiago();
+                // panelHome sera dans cette situation
+                santiago = Santiago.getSantiago();
+                santiago.addObserver(this);
             }
         } else {
             System.out.println(getClass().toString() + " Ajouter ce panneau a un conteneur avant de l'initialiser");
+            santiago = Santiago.getSantiago();
+            santiago.addObserver(this);
         }
     }
 
@@ -55,9 +67,12 @@ public abstract class AbstractPanel extends JPanel implements Observer, IConstan
     @Override
     public abstract void update(Observable arg0, Object arg1);
 
-    // @Override
-    // public void paintComponent(Graphics g) {
-    // super.paintComponent(g);
-    // }
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setColor(BG_TRANSPARENT);
+        g2.fillRect(0, 0, getWidth(), getHeight());
+    }
 
 }

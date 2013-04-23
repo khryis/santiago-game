@@ -12,21 +12,19 @@ public class Carte {
         PATATE, HARICOT, CANNE_A_SUCRE, BANANE, PIMENT
     }
 
-    /**
-     * @param position
-     * @param nbMarqueurMax
-     * @param nbMarqueurActuel
-     * @param deserte
-     * @param type
-     * @param possesseur
-     */
     public Carte(int nbMarqueurMax, TypeChamp type) {
-        this.position = null;
         this.nbMarqueurMax = nbMarqueurMax;
-        this.nbMarqueurActuel = nbMarqueurMax;
-        this.deserte = false;
         this.type = type;
-        this.possesseur = new Joueur();
+        nbMarqueurActuel = nbMarqueurMax;
+        position = null;
+        deserte = false;
+        possesseur = new Joueur();
+    }
+
+    @Override
+    public String toString() {
+        return "Carte [possesseur : " + possesseur.getNom() + " position=" + position + ", nbMarqueurActuel=" + nbMarqueurActuel
+                + ", deserte=" + deserte + ", type=" + type + "]\n";
     }
 
     public Joueur getPossesseur() {
@@ -71,12 +69,12 @@ public class Carte {
         this.nbMarqueurActuel = nbMarqueurActuel;
     }
 
-    public boolean isEstDeserte() {
+    public boolean isDeserte() {
         return deserte;
     }
 
-    public void setEstDeserte(boolean estDeserte) {
-        this.deserte = estDeserte;
+    public void setDeserte(boolean estDeserte) {
+        deserte = estDeserte;
     }
 
     public TypeChamp getType() {
@@ -85,11 +83,5 @@ public class Carte {
 
     public void setType(TypeChamp type) {
         this.type = type;
-    }
-
-    @Override
-    public String toString() {
-        return "Carte [possesseur : " + possesseur.getNom() + " position=" + position + ", nbMarqueurActuel=" + nbMarqueurActuel
-                + ", deserte=" + deserte + ", type=" + type + "]\n";
     }
 }

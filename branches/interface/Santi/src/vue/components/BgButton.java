@@ -1,6 +1,7 @@
 package vue.components;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 
 import javax.swing.ImageIcon;
@@ -25,6 +26,7 @@ public class BgButton extends JButton implements IConstante {
         setFont(POLICE_60);
         setFocusable(false);
         setRolloverEnabled(false);
+        setBorder(new RoundedBorder(FG_BUTTON));
     }
 
     public Image getBG() {
@@ -34,9 +36,14 @@ public class BgButton extends JButton implements IConstante {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponents(g);
-        g.setColor(NICE_GREY);
-        g.fillRect(0, 0, getWidth(), getHeight());
-        g.setColor(FG_BUTTON);
-        g.drawString(getText(), 0, 55);
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setColor(NICE_GREY);
+        g2.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
+        if (isEnabled()) {
+            g.setColor(FG_BUTTON);
+        } else {
+            g.setColor(NICE_GREY_DISABLE);
+        }
+        g.drawString(getText(), 0, 60);
     }
 }

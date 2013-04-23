@@ -6,48 +6,40 @@ public class PositionSegment extends Position {
     private int y2;
 
     public PositionSegment() {
-
         super();
-        this.x2 = 0;
-        this.y2 = 0;
+        x2 = 0;
+        y2 = 0;
     }
 
     public PositionSegment(int x, int y, int x2, int y2) {
-
         super(x, y);
         this.x2 = x2;
         this.y2 = y2;
     }
 
     public PositionSegment(int x, int y, int x2, int y2, boolean occupe) {
-
         super(x, y, occupe);
         this.x2 = x2;
         this.y2 = y2;
     }
 
     public PositionSegment(int x, int y, boolean occupe) {
-
         super(x, y, occupe);
     }
 
     public int getX2() {
-
         return x2;
     }
 
     public void setX2(int x2) {
-
         this.x2 = x2;
     }
 
     public int getY2() {
-
         return y2;
     }
 
     public void setY2(int y2) {
-
         this.y2 = y2;
     }
 
@@ -79,8 +71,7 @@ public class PositionSegment extends Position {
     }
 
     private static boolean isOdd(int x) {
-
-        return (x % 2 == 0 ? true : false);
+        return x % 2 == 0 ? true : false;
     }
 
     @Override
@@ -92,19 +83,18 @@ public class PositionSegment extends Position {
     public boolean equals(Object obj) {
 
         // TEST méthode equals à tester pour les segments
-        if (obj == null)
-            return false;
-        // FIXME intanceof !!!
-        if (!(obj instanceof PositionSegment)) {
+        if (obj == null) {
             return false;
         }
-        if (this == obj)
+        if (this == obj) {
             return true;
+        }
         PositionSegment other = (PositionSegment) obj;
 
-        if ((this.x == other.x && this.y == other.y && this.x2 == other.x2 && this.y2 == other.y2)
-                || (this.x == other.x2 && this.y == other.y2 && this.x2 == other.x && this.y2 == other.y))
+        if (x == other.x && y == other.y && x2 == other.x2 && y2 == other.y2 || x == other.x2 && y == other.y2 && x2 == other.x
+                && y2 == other.y) {
             return true;
+        }
 
         return false;
     }

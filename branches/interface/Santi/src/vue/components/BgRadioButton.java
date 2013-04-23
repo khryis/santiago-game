@@ -22,18 +22,13 @@ public class BgRadioButton extends JRadioButton implements IConstante {
     }
 
     public void initComponent() {
-        // if (getParent() != null) {
-        // setSize(getParent().getPreferredSize());
-        // } else {
-        // setSize(getPreferredSize());
-        // }
         setFont(POLICE_15);
         setFocusable(false);
         setRolloverEnabled(false);
         setBackground(NICE_GREY);
         setForeground(FG_COLOR);
         setEnabled(true);
-        setVisible(true);
+        setSelected(false);
     }
 
     @Override
