@@ -1,7 +1,9 @@
 package vue.home;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
@@ -10,9 +12,11 @@ import java.util.Observable;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.JPanel;
 
 import vue.AbstractPanel;
 import vue.configuration.PanelConfiguration;
+import vue.partie.PanelPartie;
 
 public class PanelHome extends AbstractPanel {
     private static final long serialVersionUID = 1L;
@@ -22,68 +26,47 @@ public class PanelHome extends AbstractPanel {
     // Composant de la vue
     private PanelChoice panelChoice;
     private PanelConfiguration panelConfiguration;
+    // private PanelCharger panelCharger = new PanelCharger();
+    private PanelPartie panelPartie;
+    // private PanelReglages panelReglages = new PanelReglages();
+    public JPanel cards = new JPanel();
+    public CardLayout cardLayout = new CardLayout();
+    public String[] listContent = { "Demarrer", "Configuration", "Reglages", "Choix", "Charger" };
+    int indice = 0;
 
-    public PanelHome() {
-        super();
+    public PanelHome(Container parent) {
+        super(parent);
+        panelChoice = new PanelChoice(this);
+        panelConfiguration = new PanelConfiguration(this);
+        panelPartie = new PanelPartie(this);
     }
 
     @Override
     public void initComponent() {
         // init des composants
         super.initComponent();
-        if (getParent() != null) {
 
-            // init les Composants du panneau
-            panelChoice = new PanelChoice();
-            panelConfiguration = new PanelConfiguration();
+        // attribut du conteneur PanelHome
+        setLayout(new BorderLayout());
+        setPreferredSize(homeDimension);
+        setBorder(BorderFactory.createLineBorder(Color.GREEN));
 
-            // Listener
+        // on ajoute les composant au panel CardLayout
+        cards.setLayout(cardLayout);
+        cards.setPreferredSize(homeDimension);
+        cards.setOpaque(false);
+        cards.add(panelChoice, listContent[3]);
+        cards.add(panelConfiguration, listContent[1]);
+        cards.add(panelPartie, listContent[0]);
 
-            // attribut du conteneur PanelHome
-            setLayout(new BorderLayout());
-            setSize(homeDimension);
-            setPreferredSize(getSize());
-            // setVisible(true);
-            setBorder(BorderFactory.createLineBorder(Color.GREEN));
-            // on ajoute les composant au conteneur
-            add(panelChoice, BorderLayout.SOUTH);
-            // validate();
-            // add(panelConfiguration, BorderLayout.SOUTH);
+        add(cards, BorderLayout.SOUTH);
 
-            panelChoice.initComponent();
+        // init des panels
+        panelChoice.initComponent();
+        panelConfiguration.initComponent();
+        panelPartie.initComponent();
 
-            // panelChoice.setBorder(BorderFactory.createLineBorder(Color.GREEN));
-            // panelConfiguration.setBorder(BorderFactory.createLineBorder(Color.GREEN));
-        } else {
-            System.out.println(getClass().toString() + " Ajouter ce panneau a un conteneur avant de l'initialiser");
-        }
-    }
-
-    public void configurer() {
-        panelChoice.setVisible(false);
-        revalidate();
-        repaint();
-        add(panelConfiguration, BorderLayout.SOUTH);
-        if (!panelConfiguration.isInit()) {
-            panelConfiguration.initComponent();
-        }
-        panelConfiguration.validate();
-        panelConfiguration.setVisible(true);
-    }
-
-    public void retourPanelConfig() {
-        panelConfiguration.setVisible(false);
-        revalidate();
-        repaint();
-        add(panelChoice, BorderLayout.SOUTH);
-        if (!panelChoice.isInit()) {
-            panelChoice.initComponent();
-        }
-        if (santiago.isConfigured()) {
-            panelChoice.boutonDemarrer.setEnabled(true);
-        }
-        panelChoice.validate();
-        panelChoice.setVisible(true);
+        isInit = true;
     }
 
     @Override
@@ -94,12 +77,10 @@ public class PanelHome extends AbstractPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        // g.drawImage(background, 0, 0, getWidth(), getHeight(), null);
         try {
             background = ImageIO.read(new File("img/champsDessin.jpg"));
-            // g.drawImage(img, 0, 0, this);
-            // Pour une image de fond
-            g.drawImage(background, 0, 0, this.getWidth(), this.getHeight(), this);
+            // Pour l'image de fond
+            g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
         } catch (IOException e) {
             e.printStackTrace();
         }

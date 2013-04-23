@@ -11,13 +11,13 @@ import model.PositionSegment;
 import model.Santiago;
 import model.Santiago.TypeEnchere;
 import singleton.Saisie;
-import vue.AffichageConsole;
+import vue.useless.AffichageConsole;
 
 public class Run {
     private final Santiago santiago;
 
     public Run() {
-        santiago = new Santiago();
+        santiago = Santiago.getSantiago();
     }
 
     public void configurer() {
@@ -41,18 +41,18 @@ public class Run {
         choix = Saisie.IN.nextIntWithRangeNotBlank(1, 3, "Entrez quelque chose..", "Entré non valide", message);
 
         switch (choix) {
-        case 1:
-            niveauPartie = NiveauPartie.FACILE;
-            break;
-        case 2:
-            niveauPartie = NiveauPartie.MOYEN;
-            break;
-        case 3:
-            niveauPartie = NiveauPartie.DIFFICILE;
-            break;
-        default:
-            niveauPartie = NiveauPartie.FACILE;
-            break;
+            case 1:
+                niveauPartie = NiveauPartie.FACILE;
+                break;
+            case 2:
+                niveauPartie = NiveauPartie.MOYEN;
+                break;
+            case 3:
+                niveauPartie = NiveauPartie.DIFFICILE;
+                break;
+            default:
+                niveauPartie = NiveauPartie.FACILE;
+                break;
         }
         santiago.setNiveauPartie(niveauPartie);
     }
@@ -84,8 +84,9 @@ public class Run {
                 for (int k = 0; k < couleurs.size(); k++) {
                     message += "\t" + couleurs.get(k) + "\n";
                     regExp += couleurs.get(k);
-                    if (k < couleurs.size())
+                    if (k < couleurs.size()) {
                         regExp += "|";
+                    }
                 }
                 couleur = Saisie.IN.validStringNotBlank(regExp, "Couleur Invalide", "Exception saisie", message);
 
@@ -127,15 +128,15 @@ public class Run {
                 Joueur joueur = santiago.getListJoueurs().get(indiceJoueurCourant);
 
                 switch (typeEnchere) {
-                case CARTE:
-                    joueur.setEnchereCarte(enchereJoueur);
-                    break;
-                case CONSTRUCTEUR:
-                    joueur.setEnchereConstructeur(enchereJoueur);
-                    break;
-                default:
-                    joueur.setEnchereCarte(enchereJoueur);
-                    joueur.setEnchereConstructeur(enchereJoueur);
+                    case CARTE:
+                        joueur.setEnchereCarte(enchereJoueur);
+                        break;
+                    case CONSTRUCTEUR:
+                        joueur.setEnchereConstructeur(enchereJoueur);
+                        break;
+                    default:
+                        joueur.setEnchereCarte(enchereJoueur);
+                        joueur.setEnchereConstructeur(enchereJoueur);
                 }
 
                 // on regarde si on trouve le nouveau constructeur
@@ -168,7 +169,7 @@ public class Run {
         // enchère)
         if (!constructeurTrouve) {
             Joueur JoueurEnchereMin = santiago.enchereMin();
-            JoueurEnchereMin.setEstConstructeur(true);
+            JoueurEnchereMin.setConstructeur(true);
         }
     }
 
@@ -185,8 +186,9 @@ public class Run {
             }
             enchere = Saisie.IN.nextIntBlank("Mauvais Format", joueur.toString() + "\n"
                     + "Veuillez indiquer le montant de votre enchère : (rien ou 0 pour passer son tour)");
-            if (enchere == -1)
+            if (enchere == -1) {
                 enchere = 0;
+            }
         } while ((enchere > solde || tabEnchere.containsValue(enchere)) && enchere != 0);
 
         return enchere;
@@ -241,7 +243,7 @@ public class Run {
             System.out.println(j.toString());
             System.out.println("Carte possédé");
             for (Carte carte : plateau.getCartesPosees()) {
-                if (((carte.getPossesseur().getNom()).compareTo((j.getNom()))) == 0) {
+                if (carte.getPossesseur().getNom().compareTo(j.getNom()) == 0) {
                     System.out.println(carte.toString());
                 }
             }
@@ -283,8 +285,8 @@ public class Run {
         int indiceJoueurCourant = santiago.positionApresConstructeur();
 
         // Boucle sur les joueurs :
-        while (!listJoueurs.get(indiceJoueurCourant).isEstConstructeur()) {
-            while (indiceJoueurCourant < listJoueurs.size() && !listJoueurs.get(indiceJoueurCourant).isEstConstructeur()) {
+        while (!listJoueurs.get(indiceJoueurCourant).isConstructeur()) {
+            while (indiceJoueurCourant < listJoueurs.size() && !listJoueurs.get(indiceJoueurCourant).isConstructeur()) {
                 joueurCourant = listJoueurs.get(indiceJoueurCourant);
                 message = "\nJoueur : " + joueurCourant.getNom();
                 message += "\nVoulez-vous soudoyer le constructeur de canal ? (o/n)";

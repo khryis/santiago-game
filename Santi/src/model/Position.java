@@ -6,26 +6,55 @@ public class Position {
     protected boolean occupe;
 
     public Position() {
-        this.x = 0;
-        this.y = 0;
-        this.occupe = false;
+        x = 0;
+        y = 0;
+        occupe = false;
     }
 
     public Position(int x, int y) {
         this.x = x;
         this.y = y;
-        this.occupe = false;
+        occupe = false;
     }
 
-    /**
-     * @param x
-     * @param y
-     * @param occupe
-     */
     public Position(int x, int y, boolean occupe) {
         this.x = x;
         this.y = y;
         this.occupe = occupe;
+    }
+
+    @Override
+    public String toString() {
+        return "Position [x=" + x + ", y=" + y + ", occupe=" + occupe + "]\n";
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (occupe ? 1231 : 1237);
+        result = prime * result + x;
+        result = prime * result + y;
+        return result;
+    }
+
+    // TODO vérifier que l'objet est de la bonne classe instanceof!!!
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (this == obj) {
+            return true;
+        }
+        Position other = (Position) obj;
+        if (x != other.x) {
+            return false;
+        }
+        if (y != other.y) {
+            return false;
+        }
+        return true;
     }
 
     public int getX() {
@@ -50,39 +79,6 @@ public class Position {
 
     public void setOccupe(boolean occupe) {
         this.occupe = occupe;
-    }
-
-    @Override
-    public String toString() {
-        return "Position [x=" + x + ", y=" + y + ", occupe=" + occupe + "]\n";
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (occupe ? 1231 : 1237);
-        result = prime * result + x;
-        result = prime * result + y;
-        return result;
-    }
-
-    // FIXME intanceof !!!
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null)
-            return false;
-        if (this == obj)
-            return true;
-        if (!(obj instanceof Position)) {
-            return false;
-        }
-        Position other = (Position) obj;
-        if (x != other.x)
-            return false;
-        if (y != other.y)
-            return false;
-        return true;
     }
 
 }

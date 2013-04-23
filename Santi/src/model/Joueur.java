@@ -5,29 +5,42 @@ public class Joueur {
     private String couleur;
     private int nbMarqueurDispos;
     private boolean tuyauSup;
-    private boolean estConstructeur;
+    private boolean constructeur;
     private int solde;
     private int enchereCarte;
     private int enchereConstructeur;
 
     public Joueur() {
         super();
-        this.nom = "null";
-        this.couleur = "null";
-        this.nbMarqueurDispos = 22;
-        this.tuyauSup = true;
-        this.estConstructeur = false;
-        this.solde = 10;
+        nom = "null";
+        couleur = "null";
+        nbMarqueurDispos = 22;
+        tuyauSup = true;
+        constructeur = false;
+        solde = 10;
     }
 
     public Joueur(String nom, String couleur) {
         super();
         this.nom = nom;
         this.couleur = couleur;
-        this.nbMarqueurDispos = 22;
-        this.tuyauSup = true;
-        this.estConstructeur = false;
-        this.solde = 10;
+        nbMarqueurDispos = 22;
+        tuyauSup = true;
+        constructeur = false;
+        solde = 10;
+    }
+
+    public void ajouterArgent(int somme) {
+        solde += somme;
+    }
+
+    public void enleverArgent(int somme) {
+        solde -= somme;
+    }
+
+    @Override
+    public String toString() {
+        return "Joueur [nom=" + nom + ", couleur=" + couleur + ", estConstructeur=" + constructeur + ", solde=" + solde + "]\n";
     }
 
     public String getNom() {
@@ -62,12 +75,12 @@ public class Joueur {
         this.tuyauSup = tuyauSup;
     }
 
-    public boolean isEstConstructeur() {
-        return estConstructeur;
+    public boolean isConstructeur() {
+        return constructeur;
     }
 
-    public void setEstConstructeur(boolean estConstructeur) {
-        this.estConstructeur = estConstructeur;
+    public void setConstructeur(boolean constructeur) {
+        this.constructeur = constructeur;
     }
 
     public int getSolde() {
@@ -76,14 +89,6 @@ public class Joueur {
 
     public void setSolde(int solde) {
         this.solde = solde;
-    }
-
-    public void ajouterArgent(int somme) {
-        this.solde += somme;
-    }
-
-    public void enleverArgent(int somme) {
-        this.solde -= somme;
     }
 
     public int getEnchereConstructeur() {
@@ -100,11 +105,6 @@ public class Joueur {
 
     public void setEnchereCarte(int enchereCarte) {
         this.enchereCarte = enchereCarte;
-    }
-
-    @Override
-    public String toString() {
-        return "Joueur [nom=" + nom + ", couleur=" + couleur + ", estConstructeur=" + estConstructeur + ", solde=" + solde + "]\n";
     }
 
 }

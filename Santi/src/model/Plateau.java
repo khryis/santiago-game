@@ -2,7 +2,6 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.Observable;
 
 import model.Carte.TypeChamp;
@@ -78,10 +77,10 @@ public class Plateau extends Observable {
     public ArrayList<Carte> tirerCarte() {
         // TEST tirerCarte Chris
         ArrayList<Carte> carteTirage = null;
-        if (this.nbJoueurs == 5) {
-            carteTirage = this.popArrayList(5);
+        if (nbJoueurs == 5) {
+            carteTirage = popArrayList(5);
         } else {
-            carteTirage = this.popArrayList(4);
+            carteTirage = popArrayList(4);
         }
         return carteTirage;
     }
@@ -119,6 +118,86 @@ public class Plateau extends Observable {
 
     public void placerCanal(PositionSegment canal) {
         canaux.add(canal);
+    }
+
+    public void popCarteDevoilees(Carte carteAPoser) {
+        int indexCarteChoisie = getCartesDevoilees().indexOf(carteAPoser);
+        getCartesDevoilees().remove(indexCarteChoisie);
+    }
+
+    public void secheresse() {
+        // TEST secheresse partie 2 Chris
+        // décrémenter le nombre de marqueurs des cartes non irriguées
+        // mettre en sécheresse les cartes sans marqueurs
+        for (Carte carte : cartesPosees) {
+            PositionCase pc = carte.getPositionCase();
+            if (!pc.isIrriguee()) {
+                if (!carte.isDeserte()) {
+                    if (carte.getNbMarqueurActuel() > 0) {
+                        carte.setNbMarqueurActuel(carte.getNbMarqueurActuel() - 1);
+                    } else {
+                        carte.setDeserte(true);
+                    }
+                }
+            }
+        }
+    }
+
+    public void majIrrigationTotale() {
+        // TEST majIrrigationTotale Chris
+        // XXX ajouté cette maj a chaque fois que l'on pose un canal
+        for (Carte carte : cartesPosees) {
+            majIrrigation1Carte(carte);
+        }
+    }
+
+    public void majIrrigation1Carte(Carte carte) {
+        // TEST irrigation pour une carte Chris
+        // appele ceci quand on pose une carte
+
+        // On initialise une position, renseigné par la carte
+        Position pc = carte.getPosition();
+        // Et seux segments
+        PositionSegment ps1 = new PositionSegment();
+        PositionSegment ps2 = new PositionSegment();
+
+        // On va chercher les deux segments qui sont adjacents à la carte
+        // posé qu'on récupère à chaque itération
+        // les segments ps1 et ps2 sont modifiés dans la méthodes, on les
+        // récupère avec des valeurs valides
+        PositionSegment.determineAdjacentAPosition(pc, ps1, ps2);
+
+        // On change l'attribut irrguée des cases (PositionCase) à true si
+        // on les segments adjacent
+        // que l'on a calculé sont occupé (déjà posée)
+        PositionCase cas = carte.getPositionCase();
+        int index, index2;
+        if (canaux.contains(ps1) || canaux.contains(ps2)) {
+            index = canaux.indexOf(ps1);
+            index2 = canaux.indexOf(ps2);
+            if (canaux.get(index).isOccupe() || canaux.get(index2).isOccupe()) {
+                cas.setIrriguee(true);
+            } else {
+                cas.setIrriguee(false);
+            }
+        }
+    }
+
+    private ArrayList<Carte> popArrayList(int nbCartes) {
+        // TEST popArrayList Chris
+        ArrayList<Carte> carteTirage = new ArrayList<>(nbCartes);
+        for (int i = 0; i < nbCartes; i++) {
+            carteTirage.add(cartes.get(cartes.size() - 1));
+            cartes.remove(cartes.size() - 1);
+        }
+        return carteTirage;
+    }
+
+    @Override
+    public String toString() {
+        return "Plateau : \nSource : " + source + ",\ncanaux=" + canaux + ",\ncases=" + cases + ",\ncartes=\n" + cartes
+                + ",\ncartesPosees=" + cartesPosees + ",\npalmiers=" + palmiers + ",\nnbJoueurs=" + nbJoueurs + ",\ncartesDevoilees="
+                + cartesDevoilees + "\n]\n";
     }
 
     public PositionIntersection getSource() {
@@ -173,94 +252,11 @@ public class Plateau extends Observable {
         return niveauSource;
     }
 
-    public void popCarteDevoilees(Carte carteAPoser) {
-        int indexCarteChoisie = getCartesDevoilees().indexOf(carteAPoser);
-        getCartesDevoilees().remove(indexCarteChoisie);
-    }
-
     public ArrayList<PositionCase> getPalmiers() {
         return palmiers;
     }
 
     public void setPalmiers(ArrayList<PositionCase> palmiers) {
         this.palmiers = palmiers;
-    }
-
-    public void secheresse() {
-        // TEST secheresse partie 2 Chris
-        // décrémenter le nombre de marqueurs des cartes non irriguées
-        // mettre en sécheresse les cartes sans marqueurs
-        for (Iterator<Carte> iterator = this.cartesPosees.iterator(); iterator.hasNext();) {
-            Carte carte = iterator.next();
-            PositionCase pc = carte.getPositionCase();
-            if (!pc.isIrriguee()) {
-                if (!carte.isEstDeserte()) {
-                    if (carte.getNbMarqueurActuel() > 0) {
-                        carte.setNbMarqueurActuel(carte.getNbMarqueurActuel() - 1);
-                    } else {
-                        carte.setEstDeserte(true);
-                    }
-                }
-            }
-        }
-    }
-
-    public void majIrrigationTotale() {
-        // TEST majIrrigationTotale Chris
-        // XXX ajouté cette maj a chaque fois que l'on pose un canal
-        for (Iterator<Carte> iterator = this.cartesPosees.iterator(); iterator.hasNext();) {
-            // on récupère la carte posé de l'itération
-            Carte carte = iterator.next();
-            this.majIrrigation1Carte(carte);
-        }
-    }
-
-    public void majIrrigation1Carte(Carte carte) {
-        // TEST irrigation pour une carte Chris
-        // appele ceci quand on pose une carte
-
-        // On initialise une position, renseigné par la carte
-        Position pc = carte.getPosition();
-        // Et seux segments
-        PositionSegment ps1 = new PositionSegment();
-        PositionSegment ps2 = new PositionSegment();
-
-        // On va chercher les deux segments qui sont adjacents à la carte
-        // posé qu'on récupère à chaque itération
-        // les segments ps1 et ps2 sont modifiés dans la méthodes, on les
-        // récupère avec des valeurs valides
-        PositionSegment.determineAdjacentAPosition(pc, ps1, ps2);
-
-        // On change l'attribut irrguée des cases (PositionCase) à true si
-        // on les segments adjacent
-        // que l'on a calculé sont occupé (déjà posée)
-        PositionCase cas = carte.getPositionCase();
-        int index, index2;
-        if (this.canaux.contains(ps1) || this.canaux.contains(ps2)) {
-            index = this.canaux.indexOf(ps1);
-            index2 = this.canaux.indexOf(ps2);
-            if (this.canaux.get(index).isOccupe() || this.canaux.get(index2).isOccupe()) {
-                cas.setIrriguee(true);
-            } else {
-                cas.setIrriguee(false);
-            }
-        }
-    }
-
-    private ArrayList<Carte> popArrayList(int nbCartes) {
-        // TEST popArrayList Chris
-        ArrayList<Carte> carteTirage = new ArrayList<>(nbCartes);
-        for (int i = 0; i < nbCartes; i++) {
-            carteTirage.add(this.cartes.get(this.cartes.size() - 1));
-            this.cartes.remove(this.cartes.size() - 1);
-        }
-        return carteTirage;
-    }
-
-    @Override
-    public String toString() {
-        return "Plateau : \nSource : " + source + ",\ncanaux=" + canaux + ",\ncases=" + cases + ",\ncartes=\n" + cartes
-                + ",\ncartesPosees=" + cartesPosees + ",\npalmiers=" + palmiers + ",\nnbJoueurs=" + nbJoueurs + ",\ncartesDevoilees="
-                + cartesDevoilees + "\n]\n";
     }
 }

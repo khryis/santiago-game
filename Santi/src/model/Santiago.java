@@ -3,7 +3,6 @@ package model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Observable;
@@ -12,6 +11,7 @@ import exception.MauvaisePositionCanalException;
 
 public class Santiago extends Observable {
 
+    private static Santiago SANTIAGO;
     private ArrayList<Joueur> listJoueurs;
     private int nbCanaux;
     private NiveauPartie niveau;
@@ -28,22 +28,46 @@ public class Santiago extends Observable {
         CARTE, CONSTRUCTEUR
     }
 
-    public Santiago() {
+    private Santiago() {
         super();
-        this.listJoueurs = new ArrayList<>();
-        this.nbCanaux = 0;
-        this.niveauSource = 0;
-        this.avecPalmier = false;
-        this.plateau = null;
-        this.nbTours = 0;
-        this.tabEnchere = new HashMap<>();
-        this.enchereConstr = new HashMap<>();
-        this.joueurGagnant = null;
-        this.configured = false;
+        listJoueurs = new ArrayList<>();
+        nbCanaux = 0;
+        niveauSource = 0;
+        avecPalmier = false;
+        plateau = null;
+        nbTours = 0;
+        tabEnchere = new HashMap<>();
+        enchereConstr = new HashMap<>();
+        joueurGagnant = null;
+        configured = false;
+    }
+
+    public static Santiago getSantiago() {
+        if (SANTIAGO == null) {
+            SANTIAGO = new Santiago();
+        }
+        return SANTIAGO;
+    }
+
+    public void initPartie() {
+        plateau = new Plateau(niveau, listJoueurs.size());
+
+        // mettre a jour le nbTours de la partie
+        // nbCanaux en fonction nb joueurs
+        if (listJoueurs.size() == 3 || listJoueurs.size() == 4) {
+            nbTours = 11;
+            nbCanaux = 11;
+        } else {
+            nbTours = 9;
+            nbCanaux = 9;
+        }
+        determinerUnConstructeur();
+        configured = true;
+        repercuterModification();
     }
 
     public void setConstructeur(int indexJoueurs, boolean estConstructeur) {
-        listJoueurs.get(indexJoueurs).setEstConstructeur(estConstructeur);
+        listJoueurs.get(indexJoueurs).setConstructeur(estConstructeur);
     }
 
     public boolean devientConstructuerApresEnchere(int indexJoueur, int enchereJoueur, boolean dernier) {
@@ -71,41 +95,25 @@ public class Santiago extends Observable {
         return false;
     }
 
-    public void initPartie() {
-        plateau = new Plateau(niveau, listJoueurs.size());
-
-        // mettre a jour le nbTours de la partie
-        // nbCanaux en fonction nb joueurs
-        if (listJoueurs.size() == 3 || listJoueurs.size() == 4) {
-            nbTours = 11;
-            nbCanaux = 11;
-        } else {
-            nbTours = 9;
-            nbCanaux = 9;
-        }
-        determinerUnConstructeur();
-        configured = true;
-    }
-
     public void setNiveauPartie(NiveauPartie niv) {
-        this.niveau = niv;
+        niveau = niv;
         switch (niveau) {
-        case FACILE:
-            avecPalmier = NiveauPartie.FACILE.withPalmier();
-            niveauSource = NiveauPartie.FACILE.getNiveauSource();
-            break;
-        case MOYEN:
-            avecPalmier = NiveauPartie.MOYEN.withPalmier();
-            niveauSource = NiveauPartie.MOYEN.getNiveauSource();
-            break;
-        case DIFFICILE:
-            avecPalmier = NiveauPartie.DIFFICILE.withPalmier();
-            niveauSource = NiveauPartie.DIFFICILE.getNiveauSource();
-            break;
-        default:
-            avecPalmier = NiveauPartie.FACILE.withPalmier();
-            niveauSource = NiveauPartie.FACILE.getNiveauSource();
-            break;
+            case FACILE:
+                avecPalmier = NiveauPartie.FACILE.withPalmier();
+                niveauSource = NiveauPartie.FACILE.getNiveauSource();
+                break;
+            case MOYEN:
+                avecPalmier = NiveauPartie.MOYEN.withPalmier();
+                niveauSource = NiveauPartie.MOYEN.getNiveauSource();
+                break;
+            case DIFFICILE:
+                avecPalmier = NiveauPartie.DIFFICILE.withPalmier();
+                niveauSource = NiveauPartie.DIFFICILE.getNiveauSource();
+                break;
+            default:
+                avecPalmier = NiveauPartie.FACILE.withPalmier();
+                niveauSource = NiveauPartie.FACILE.getNiveauSource();
+                break;
         }
     }
 
@@ -116,20 +124,19 @@ public class Santiago extends Observable {
     public void determinerUnConstructeur() {
         // Constructeur aléatoire pour premier tour
         int rdm = (int) Math.random() * listJoueurs.size();
-        listJoueurs.get(rdm).setEstConstructeur(true);
+        listJoueurs.get(rdm).setConstructeur(true);
     }
 
     public void secheresse() {
         // TEST secheresse partie 1 Chris
         // check si on est arrivé au dernier tour
-        if (this.nbTours > 1) {
+        if (nbTours > 1) {
             plateau.secheresse();
         }
     }
 
     public void diaDePaga() {
-        for (Iterator<Joueur> iterator = this.listJoueurs.iterator(); iterator.hasNext();) {
-            Joueur j = iterator.next();
+        for (Joueur j : listJoueurs) {
             j.ajouterArgent(3);
         }
         resetEnchereVars();
@@ -140,7 +147,7 @@ public class Santiago extends Observable {
         int i = 0;
         // Trouver la position du constructeur
         while (i < listJoueurs.size() && positionConstructeur == -1) {
-            if (listJoueurs.get(i).isEstConstructeur()) {
+            if (listJoueurs.get(i).isConstructeur()) {
                 positionConstructeur = i;
             }
             i++;
@@ -167,7 +174,7 @@ public class Santiago extends Observable {
             joueur.setNbMarqueurDispos(joueur.getNbMarqueurDispos() - carteAPoser.getNbMarqueurMax());
 
             // Maj solde
-            joueur.enleverArgent((tabEnchere.isEmpty() ? 0 : (tabEnchere.get(joueur))));
+            joueur.enleverArgent(tabEnchere.isEmpty() ? 0 : tabEnchere.get(joueur));
 
             // MAJ marqueurs de la carte si enchère joueur = 0
             if (joueur.getEnchereCarte() == 0) {
@@ -193,7 +200,7 @@ public class Santiago extends Observable {
 
     public Joueur enchereMax() {
         Joueur res = null;
-        int maxValue = (Collections.max(tabEnchere.values()));
+        int maxValue = Collections.max(tabEnchere.values());
         for (Entry<Joueur, Integer> entry : tabEnchere.entrySet()) {
             if (entry.getValue() == maxValue) {
                 res = entry.getKey();
@@ -204,7 +211,7 @@ public class Santiago extends Observable {
 
     public Joueur enchereMin() {
         Joueur res = null;
-        int minValue = (Collections.min(tabEnchere.values()));
+        int minValue = Collections.min(tabEnchere.values());
         for (Entry<Joueur, Integer> entry : tabEnchere.entrySet()) {
             if (entry.getValue() == minValue) {
                 res = entry.getKey();
@@ -302,6 +309,11 @@ public class Santiago extends Observable {
                 + avecPalmier + ",\n" + plateau.toString() + ",\nnbTours=" + nbTours + "]\n";
     }
 
+    public void repercuterModification() {
+        setChanged();
+        notifyObservers();
+    }
+
     // GETs & SETs
     public int getNbCanaux() {
         return nbCanaux;
@@ -328,7 +340,7 @@ public class Santiago extends Observable {
     }
 
     public void setNiveau(int niveauSrc) {
-        this.niveauSource = niveauSrc;
+        niveauSource = niveauSrc;
     }
 
     public void setAvecPalmier(boolean avecPalmier) {

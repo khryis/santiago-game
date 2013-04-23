@@ -1,5 +1,7 @@
 package vue.configuration;
 
+import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,51 +16,37 @@ public class PanelConfigRetour extends AbstractPanel {
     private static final long serialVersionUID = 1L;
 
     private BgButton retourButton;
+    PanelConfiguration panelConfiguration;
+
+    public PanelConfigRetour(Container parent) {
+        super(parent);
+        panelConfiguration = (PanelConfiguration) parent;
+    }
 
     @Override
     public void initComponent() {
         super.initComponent();
-        if (getParent() != null) {
-            // création des composants
-            retourButton = new BgButton("Retour");
+        // attribut du conteneur this (panelChoice
+        setBorder(BorderFactory.createLineBorder(GREEN_BORDER));
+        setLayout(new FlowLayout(FlowLayout.RIGHT));
+        setBackground(BG_COLOR);
+        setForeground(FG_COLOR);
+        setPreferredSize(new Dimension(homeDimension.width, getPreferredSize().height));
 
-            // Listener
-            retourButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if (e.getSource() instanceof BgButton) {
-                        BgButton b = (BgButton) e.getSource();
-                        if (b.getText().compareTo("Retour") == 0) {
-                            retour();
-                        }
-                    }
-                }
-            });
+        // création des composants
+        retourButton = new BgButton("Retour");
+        retourButton.addActionListener(new RetourListener());
+        // on ajoute les composants au conteneur
+        add(retourButton);
 
-            // attribut du conteneur this (panelChoice
-            setBorder(BorderFactory.createLineBorder(GREEN_BORDER));
-            setLayout(new FlowLayout(FlowLayout.RIGHT));
-            setSize(homeDimension.width, getPreferredSize().height);
-            setBackground(BG_COLOR);
-            setForeground(FG_COLOR);
-            setPreferredSize(getSize());
-            setVisible(true);
+        // initialisation des composants
+        retourButton.initComponent();
 
-            // on ajoute les composants au conteneur
-            add(retourButton);
-            validate();
-
-            // initialisation des composantsé
-            retourButton.initComponent();
-
-            isInit = true;
-        } else {
-            System.out.println(getClass().toString() + " Ajouter ce panneau a un conteneur avant de l'initialiser");
-        }
+        isInit = true;
     }
 
     public void retour() {
-        ((PanelConfiguration) getParent()).retourPanelConfig();
+        panelConfiguration.retourAuPanelChoice();
     }
 
     @Override
@@ -67,4 +55,12 @@ public class PanelConfigRetour extends AbstractPanel {
 
     }
 
+    private class RetourListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (e.getSource() instanceof BgButton) {
+                retour();
+            }
+        }
+    }
 }

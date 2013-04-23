@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Frame;
-import java.awt.GraphicsDevice;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -19,19 +18,14 @@ import javax.swing.UIManager;
 import vue.home.PanelHome;
 
 public class SantiagoFrame extends JFrame implements Observer, KeyListener, WindowListener {
-    private PanelHome panelHome;
 
     private static final long serialVersionUID = 1L;
-    GraphicsDevice device;
+    private PanelHome panelHome;
 
     public SantiagoFrame() {
         super();
-        initComponent();
-    }
-
-    private void initComponent() {
         // initialisation des composants
-        panelHome = new PanelHome();
+        panelHome = new PanelHome(this);
 
         // Listener
         addKeyListener(this);
@@ -44,29 +38,19 @@ public class SantiagoFrame extends JFrame implements Observer, KeyListener, Wind
             e.printStackTrace();
         }
         setUndecorated(true);
-        // setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // device =
-        // GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-        // if (device.isFullScreenSupported()) {
-        // device.setFullScreenWindow(this);
-        // } else {
-        // System.err.println("Le mode plein ecran n'est pas disponible");
-        // }
+
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         setPreferredSize(new Dimension(toolkit.getScreenSize().width, toolkit.getScreenSize().height));
-        setSize(new Dimension(toolkit.getScreenSize().width, toolkit.getScreenSize().height));
         setLayout(new BorderLayout());
-
-        setLocationRelativeTo(null);
-        setVisible(true);
+        setLocation(0, 0);
 
         // on ajoute les composants au conteneur principal
         setContentPane(panelHome);
-
         panelHome.initComponent();
 
         // Set visible the Frame
         pack();
+        setVisible(true);
         requestFocus();
     }
 
@@ -88,13 +72,8 @@ public class SantiagoFrame extends JFrame implements Observer, KeyListener, Wind
 
     @Override
     public void keyReleased(KeyEvent e) {
-        // setVisible(false);
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            // if (device.isFullScreenSupported()) {
-            // device.setFullScreenWindow(null);
-            // }
             setState(Frame.ICONIFIED);
-            // System.exit(1);
         }
     }
 
@@ -120,11 +99,6 @@ public class SantiagoFrame extends JFrame implements Observer, KeyListener, Wind
 
     @Override
     public void windowDeiconified(WindowEvent arg0) {
-        if (device.isFullScreenSupported()) {
-            // device.setFullScreenWindow(this);
-        } else {
-            System.err.println("Le mode plein ecran n'est pas disponible");
-        }
         setState(Frame.NORMAL);
         requestFocus();
     }
@@ -139,7 +113,6 @@ public class SantiagoFrame extends JFrame implements Observer, KeyListener, Wind
 
     @Override
     public void update(Observable o, Object arg) {
-
     }
 
 }

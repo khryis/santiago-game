@@ -1,65 +1,99 @@
 package vue.home;
 
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Observable;
 
-import javax.swing.JButton;
+import javax.swing.JPanel;
 
 import vue.AbstractPanel;
 import vue.components.BgButton;
-import controller.PanelChoiceListener;
 
 public class PanelChoice extends AbstractPanel {
     private static final long serialVersionUID = 1L;
 
     // composants du JPanel
-    JButton boutonDemarrer;
-    JButton boutonConfiguration;
-    JButton boutonReglage;
+    BgButton boutonDemarrer;
+    BgButton boutonConfiguration;
+    BgButton boutonReglage;
+    PanelHome panelHome;
+    JPanel cards;
+
+    public PanelChoice(Container parent) {
+        super(parent);
+        panelHome = (PanelHome) parent;
+    }
 
     @Override
     public void initComponent() {
         // Initialisation des attributs/composants
         super.initComponent();
-        if (getParent() != null) {
 
-            // init composants du panel
-            boutonDemarrer = new BgButton("Demarrer", "transparent.png");
-            boutonConfiguration = new BgButton("Configurer", "transparent.png");
-            boutonReglage = new BgButton("Réglages", "transparent.png");
+        // attribut du conteneur this panelChoice
+        setBackground(BG_TRANSPARENT);
+        setOpaque(false);
+        setLayout(new BorderLayout());
+        // setLayout(new FlowLayout());
+        setPreferredSize(new Dimension(homeDimension.width, homeDimension.height / 2));
 
-            // Listener
-            boutonDemarrer.addMouseListener(new PanelChoiceListener(getParent()));
-            boutonConfiguration.addMouseListener(new PanelChoiceListener(getParent()));
-            boutonReglage.addMouseListener(new PanelChoiceListener(getParent()));
+        // init composants du panel
+        boutonDemarrer = new BgButton("Demarrer");
+        boutonConfiguration = new BgButton("Configurer");
+        boutonReglage = new BgButton("Réglages");
+        JPanel intermediaire = new JPanel();
+        intermediaire.setLayout(new FlowLayout());
+        intermediaire.setPreferredSize(new Dimension(homeDimension.width, homeDimension.height / 2));
+        intermediaire.setOpaque(false);
 
-            // attribut du conteneur this panelChoice
-            setBackground(BG_TRANSPARENT);
-            setOpaque(false);
-            setLayout(new FlowLayout());
-            setSize(homeDimension.width, homeDimension.height / 2);
-            setPreferredSize(getSize());
-            setVisible(true);
+        // Listener
+        boutonDemarrer.addActionListener(new BoutonDemarrerListener());
+        boutonConfiguration.addActionListener(new BoutonConfigurationListener());
+        boutonReglage.addActionListener(new BoutonReglageListener());
 
-            // on ajoute les composants au conteneur
-            add(boutonDemarrer);
-            add(boutonConfiguration);
-            add(boutonReglage);
-            validate();
+        // on ajoute les composants au conteneur
+        intermediaire.add(boutonDemarrer);
+        intermediaire.add(boutonConfiguration);
+        intermediaire.add(boutonReglage);
+        add(intermediaire, BorderLayout.SOUTH);
 
-            ((BgButton) boutonDemarrer).initComponent();
-            ((BgButton) boutonConfiguration).initComponent();
-            ((BgButton) boutonReglage).initComponent();
-            boutonDemarrer.setEnabled(false);
+        boutonDemarrer.initComponent();
+        boutonConfiguration.initComponent();
+        boutonReglage.initComponent();
 
-            isInit = true;
-        } else {
-            System.out.println("Ajouter ce panneau a un conteneur avant de l'initialiser");
-        }
+        boutonDemarrer.setEnabled(false);
+
+        isInit = true;
     }
 
     @Override
     public void update(Observable arg0, Object arg1) {
-        // TODO update panelChoice
+        if (santiago.isConfigured()) {
+            boutonDemarrer.setEnabled(true);
+        }
+    }
+
+    private class BoutonDemarrerListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent event) {
+            panelHome.cardLayout.show(panelHome.cards, panelHome.listContent[0]);
+        }
+    }
+
+    private class BoutonConfigurationListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent event) {
+            panelHome.cardLayout.show(panelHome.cards, panelHome.listContent[1]);
+        }
+    }
+
+    private class BoutonReglageListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent event) {
+            // cards.cardLayout.show(cards, cards.listContent[2]);
+        }
     }
 }

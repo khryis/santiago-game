@@ -12,9 +12,12 @@ public interface IConstante {
     public final static Color BG_COLOR = new Color(204, 255, 255, 50);
     public final static Color GREEN_BORDER = new Color(51, 102, 51);
     public final static Color NICE_GREY = new Color(120, 120, 120);
+    public final static Color NICE_GREY_DISABLE = new Color(200, 200, 200);
     public final static Color NICE_GREY_TRANSPARENT = new Color(120, 120, 120, 100);
 
     public final static Color BG_BUTTON = new Color(204, 255, 255, 50);
     public final static Color FG_BUTTON = new Color(102, 204, 255);
     public final static Color FG_BUTTON_FONCE = new Color(50, 150, 200);
+
+    public final static String TEXT_COULEUR = "Couleur..";
 }

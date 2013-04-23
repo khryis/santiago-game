@@ -39,7 +39,7 @@ public class SantiagoTest {
      */
     @Before
     public void setUp() throws Exception {
-        santiago = new Santiago();
+        santiago = Santiago.getSantiago();
     }
 
     /**
