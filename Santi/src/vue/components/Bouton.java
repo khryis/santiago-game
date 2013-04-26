@@ -20,16 +20,36 @@ import vue.IConstante;
 public class Bouton extends JButton implements MouseListener {
     private static final long serialVersionUID = 1L;
     private Image img;
+    private Image imgNormal;
+    private Image imgHover;
+    private Image imgAppuye;
 
     public Bouton(String str) {
         super(str);
         try {
             img = ImageIO.read(new File("img/fondNormal.png"));
+            imgNormal = ImageIO.read(new File("img/fondNormal.png"));
+            imgHover = ImageIO.read(new File("img/fondHover.png"));
+            imgAppuye = ImageIO.read(new File("img/fondAppuye.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         setPreferredSize(new Dimension(100, getPreferredSize().height));
-        this.addMouseListener(this);
+        addMouseListener(this);
+    }
+
+    public Bouton(String str, String pathNormal, String pathHover, String pathAppuye) {
+        super(str);
+        try {
+            img = ImageIO.read(new File(pathNormal));
+            imgNormal = ImageIO.read(new File(pathNormal));
+            imgHover = ImageIO.read(new File(pathHover));
+            imgAppuye = ImageIO.read(new File(pathAppuye));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        setPreferredSize(new Dimension(100, getPreferredSize().height));
+        addMouseListener(this);
     }
 
     @Override
@@ -37,7 +57,7 @@ public class Bouton extends JButton implements MouseListener {
         Graphics2D g2d = (Graphics2D) g;
         GradientPaint gp = new GradientPaint(0, 0, Color.blue, 0, 20, Color.cyan, true);
         g2d.setPaint(gp);
-        g2d.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
+        g2d.drawImage(img, 0, 0, getWidth(), getHeight(), this);
         g2d.setColor(IConstante.FG_BUTTON_FONCE);
 
         // Objet permettant de connaître les propriétés d'une police, dont la
@@ -49,7 +69,7 @@ public class Bouton extends JButton implements MouseListener {
         int width = fm.stringWidth(getText());
 
         // On calcule alors la position du texte, et le tour est joué
-        g2d.drawString(getText(), this.getWidth() / 2 - (width / 2), (this.getHeight() / 2) + (height / 4));
+        g2d.drawString(getText(), getWidth() / 2 - width / 2, getHeight() / 2 + height / 4);
     }
 
     @Override
@@ -59,56 +79,25 @@ public class Bouton extends JButton implements MouseListener {
 
     @Override
     public void mouseEntered(MouseEvent event) {
-        // Nous changeons le fond de notre image pour le jaune lors du survol,
-        // avec le fichier fondBoutonHover.png
-        try {
-            img = ImageIO.read(new File("img/fondHover.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        img = imgHover;
     }
 
     @Override
     public void mouseExited(MouseEvent event) {
-        // Nous changeons le fond de notre image pour le vert lorsque nous
-        // quittons le bouton, avec le fichier fondBouton.png
-        try {
-            img = ImageIO.read(new File("img/fondNormal.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        img = imgNormal;
     }
 
     @Override
     public void mousePressed(MouseEvent event) {
-        // Nous changeons le fond de notre image pour le jaune lors du clic
-        // gauche, avec le fichier fondBoutonClic.png
-        try {
-            img = ImageIO.read(new File("img/fondAppuye.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        img = imgAppuye;
     }
 
     @Override
     public void mouseReleased(MouseEvent event) {
-        // Nous changeons le fond de notre image pour l'orange lorsque nous
-        // relâchons le clic avec le fichier fondBoutonHover.png si la souris
-        // est toujours sur le bouton
-        if ((event.getY() > 0 && event.getY() < this.getHeight()) && (event.getX() > 0 && event.getX() < this.getWidth())) {
-            try {
-                img = ImageIO.read(new File("img/fondHover.png"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        // Si on se trouve à l'extérieur, on dessine le fond par défaut
-        else {
-            try {
-                img = ImageIO.read(new File("img/fondNormal.png"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        if (event.getY() > 0 && event.getY() < getHeight() && event.getX() > 0 && event.getX() < getWidth()) {
+            img = imgHover;
+        } else {
+            img = imgNormal;
         }
     }
 }

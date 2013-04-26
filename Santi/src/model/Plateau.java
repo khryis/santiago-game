@@ -93,9 +93,7 @@ public class Plateau extends Observable {
         if (cases.contains(positionChoisie)) {
             int indexPosition = cases.indexOf(positionChoisie);
             positionChoisie = cases.get(indexPosition);
-            if (positionChoisie.isOccupe()) {
-                System.out.println("Cette Case est déjà occupée...");
-            } else {
+            if (!positionChoisie.isOccupe()) {
                 cartesPosees.add(carteAPoser);
                 PositionCase positionCase = cases.get(indexPosition);
                 positionCase.setOccupe(true);
@@ -117,6 +115,7 @@ public class Plateau extends Observable {
     }
 
     public void placerCanal(PositionSegment canal) {
+        canal.setOccupe(true);
         canaux.add(canal);
     }
 
