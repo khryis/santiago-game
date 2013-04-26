@@ -48,14 +48,8 @@ public abstract class AbstractPanel extends JPanel implements Observer, IConstan
         setPreferredSize(new Dimension(toolkit.getScreenSize().width, toolkit.getScreenSize().height));
         homeDimension = new Dimension(toolkit.getScreenSize().width, toolkit.getScreenSize().height);
         if (getParent() != null) {
-            if (getParent() instanceof AbstractPanel) {
-                santiago = Santiago.getSantiago();
-                santiago.addObserver(this);
-            } else {
-                // panelHome sera dans cette situation
-                santiago = Santiago.getSantiago();
-                santiago.addObserver(this);
-            }
+            santiago = Santiago.getSantiago();
+            santiago.addObserver(this);
         } else {
             System.out.println(getClass().toString() + " Ajouter ce panneau a un conteneur avant de l'initialiser");
             santiago = Santiago.getSantiago();

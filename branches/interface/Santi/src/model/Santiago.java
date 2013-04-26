@@ -49,6 +49,10 @@ public class Santiago extends Observable {
         return SANTIAGO;
     }
 
+    /**
+     * Pour initialiser la partie il faut déjà avoir le niveau et la liste des
+     * joueurs
+     */
     public void initPartie() {
         plateau = new Plateau(niveau, listJoueurs.size());
 
@@ -66,14 +70,28 @@ public class Santiago extends Observable {
         repercuterModification();
     }
 
+    /**
+     * Permet de changer le statu constructeur d'un joueur donnée
+     * 
+     * @param indexJoueurs
+     * @param estConstructeur
+     */
     public void setConstructeur(int indexJoueurs, boolean estConstructeur) {
         listJoueurs.get(indexJoueurs).setConstructeur(estConstructeur);
     }
 
-    public boolean devientConstructuerApresEnchere(int indexJoueur, int enchereJoueur, boolean dernier) {
+    /**
+     * Permet de déterminer si le joueur devient constructeur pendant le tour
+     * d'enchère
+     * 
+     * @param indexJoueur
+     * @param enchereJoueur
+     * @param dernier
+     * @return
+     */
+    public boolean devientConstructeurApresEnchere(int indexJoueur, int enchereJoueur, boolean dernier) {
         boolean constructeurTrouve = false;
 
-        listJoueurs.get(indexJoueur).setEnchereCarte(enchereJoueur);
         // on regarde si on trouve le nouveau constructeur
         if (enchereJoueur == 0 && !constructeurTrouve) {
             setConstructeur(indexJoueur, true);
@@ -88,6 +106,11 @@ public class Santiago extends Observable {
         return constructeurTrouve;
     }
 
+    /**
+     * Tester si la partie est finie
+     * 
+     * @return
+     */
     public boolean isFinish() {
         if (nbTours == 0) {
             return true;
@@ -95,6 +118,11 @@ public class Santiago extends Observable {
         return false;
     }
 
+    /**
+     * Setter le niveau de la partie, les palmiers et la position de la source
+     * 
+     * @param niv
+     */
     public void setNiveauPartie(NiveauPartie niv) {
         niveau = niv;
         switch (niveau) {
@@ -117,16 +145,26 @@ public class Santiago extends Observable {
         }
     }
 
+    /**
+     * On tire nos cartes de la liste de carte et on les dévoile
+     */
     public void devoilerCarte() {
         plateau.setCartesDevoilees(plateau.tirerCarte());
     }
 
+    /**
+     * Permet de déterminer un constructeur au début du jeu
+     */
     public void determinerUnConstructeur() {
         // Constructeur aléatoire pour premier tour
-        int rdm = (int) Math.random() * listJoueurs.size();
+        int rdm = (int) (Math.random() * listJoueurs.size());
         listJoueurs.get(rdm).setConstructeur(true);
     }
 
+    /**
+     * Applique la sécherresse à toute les cartes non irrigué Appel à sécheresse
+     * de plateau si on est pas au dernier tour de la partie
+     */
     public void secheresse() {
         // TEST secheresse partie 1 Chris
         // check si on est arrivé au dernier tour
@@ -135,6 +173,9 @@ public class Santiago extends Observable {
         }
     }
 
+    /**
+     * Distribution de l'argent à la fin de chaque tour
+     */
     public void diaDePaga() {
         for (Joueur j : listJoueurs) {
             j.ajouterArgent(3);
@@ -142,6 +183,9 @@ public class Santiago extends Observable {
         resetEnchereVars();
     }
 
+    /**
+     * Retourne l'index du constructeur dans la liste des joueurs
+     */
     public int positionConstructeur() {
         int positionConstructeur = -1;
         int i = 0;
@@ -155,6 +199,12 @@ public class Santiago extends Observable {
         return positionConstructeur;
     }
 
+    /**
+     * Retourne l'index du joueur après le constructeur dans la liste des
+     * joueurs
+     * 
+     * @return
+     */
     public int positionApresConstructeur() {
         int positionApresContructeur = positionConstructeur() + 1;
         if (positionApresContructeur == listJoueurs.size()) {
@@ -163,6 +213,18 @@ public class Santiago extends Observable {
         return positionApresContructeur;
     }
 
+    /**
+     * Permet à un joueur de poser une carte à une position (x;y) Appel la
+     * fonction poserUneCarte de plateau, si on à réussi à poser la carte sur le
+     * plateau On fait tout les autres traitements, affectation de la carte au
+     * joueur, à la case, etc
+     * 
+     * @param joueur
+     * @param carteAPoser
+     * @param x
+     * @param y
+     * @return
+     */
     public boolean poserUneCarte(Joueur joueur, Carte carteAPoser, int x, int y) {
 
         boolean estPosee = false;
@@ -174,6 +236,8 @@ public class Santiago extends Observable {
             joueur.setNbMarqueurDispos(joueur.getNbMarqueurDispos() - carteAPoser.getNbMarqueurMax());
 
             // Maj solde
+            // FIXME bizarre, pourquoi tabEnchere.isEmpty ? plutot tester la
+            // somme de tabEnchere pour le joueur
             joueur.enleverArgent(tabEnchere.isEmpty() ? 0 : tabEnchere.get(joueur));
 
             // MAJ marqueurs de la carte si enchère joueur = 0
@@ -198,6 +262,12 @@ public class Santiago extends Observable {
         return estPosee;
     }
 
+    /**
+     * Permet de trouver le joueur qui à poser la plus grosse enchère dans
+     * tabEnchère
+     * 
+     * @return
+     */
     public Joueur enchereMax() {
         Joueur res = null;
         int maxValue = Collections.max(tabEnchere.values());
@@ -209,6 +279,11 @@ public class Santiago extends Observable {
         return res;
     }
 
+    /**
+     * Pareil avec l'enchère minimum
+     * 
+     * @return
+     */
     public Joueur enchereMin() {
         Joueur res = null;
         int minValue = Collections.min(tabEnchere.values());
@@ -220,6 +295,16 @@ public class Santiago extends Observable {
         return res;
     }
 
+    /**
+     * Permet à un joueur de soudoyer d'une somme le constructeur à une position
+     * de segment (Ou appuyé une proposition d'un autre joueur si elle est déjà
+     * faite)
+     * 
+     * @param canal
+     * @param joueur
+     * @param montant
+     * @return
+     */
     public boolean encherePositionCanal(PositionSegment canal, Joueur joueur, int montant) {
         boolean reussi;
         if (montant > 0 && montant < joueur.getSolde()) {
@@ -243,6 +328,16 @@ public class Santiago extends Observable {
         return reussi;
     }
 
+    /**
+     * Permet au constructeur de positionner un canal, choisi par lui ou dans
+     * ceux qu'on lui à proposé en renseignant la position
+     * 
+     * @param x
+     * @param y
+     * @param x2
+     * @param y2
+     * @return
+     */
     public boolean placerCanalChoisi(int x, int y, int x2, int y2) {
         // mettre à jour le solde des joueurs
         // Quand le constructeur à choisi un des canal proposé par les joueurs
@@ -256,6 +351,7 @@ public class Santiago extends Observable {
                     joueur.enleverArgent(joueur.getEnchereConstructeur());
                     constructeur.ajouterArgent(joueur.getEnchereConstructeur());
                 }
+                plateau.placerCanal(canal);
                 reussi = true;
             } else {
                 throw new MauvaisePositionCanalException();
@@ -267,6 +363,12 @@ public class Santiago extends Observable {
         return reussi;
     }
 
+    /**
+     * Permet de déterminer si le constructeur à les moyens de surencherir sur
+     * les sudoiements pour placer un canal ailleurs que les porpositions
+     * 
+     * @return
+     */
     public boolean constructeurPeutEncherir() {
         boolean peutEncherir;
         int total = 0, indiceJoueurCourant;
@@ -287,6 +389,9 @@ public class Santiago extends Observable {
         return peutEncherir;
     }
 
+    /**
+     * Permet de réinitialiser les objets stockant les infos sur le enchères
+     */
     public void resetEnchereVars() {
         int indiceJoueurCourant;
         ArrayList<Joueur> joueursEnch = new ArrayList<>();
@@ -309,6 +414,11 @@ public class Santiago extends Observable {
                 + avecPalmier + ",\n" + plateau.toString() + ",\nnbTours=" + nbTours + "]\n";
     }
 
+    /**
+     * Méthode à ajouter à la fin de chaque fonction qui modifie le modèle
+     * Permet de notifier les obsevers (tous le JPANEL) de déclancher leur
+     * méhode update()
+     */
     public void repercuterModification() {
         setChanged();
         notifyObservers();
