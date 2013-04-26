@@ -62,10 +62,10 @@ public class PanelPartieAction extends AbstractPanel {
         phases.add(phaseCanalSup, listPhases[4]);
         phases.add(phaseSecheresse, listPhases[5]);
         phases.add(phaseDiaDePaga, listPhases[6]);
-        phases.add(panelPartie.getParent(), listPhases[7]);
 
         add(phases, BorderLayout.CENTER);
 
+        phaseEnchere.initComponent();
         phaseEnchere.add(phaseEnchere.enchereObjects());
         phaseEnchere.setPreferredSize(homeDimension);
         phaseEnchere.setBorder(BorderFactory.createLineBorder(Color.blue));
