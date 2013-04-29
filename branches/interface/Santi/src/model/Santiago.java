@@ -126,22 +126,22 @@ public class Santiago extends Observable {
     public void setNiveauPartie(NiveauPartie niv) {
         niveau = niv;
         switch (niveau) {
-            case FACILE:
-                avecPalmier = NiveauPartie.FACILE.withPalmier();
-                niveauSource = NiveauPartie.FACILE.getNiveauSource();
-                break;
-            case MOYEN:
-                avecPalmier = NiveauPartie.MOYEN.withPalmier();
-                niveauSource = NiveauPartie.MOYEN.getNiveauSource();
-                break;
-            case DIFFICILE:
-                avecPalmier = NiveauPartie.DIFFICILE.withPalmier();
-                niveauSource = NiveauPartie.DIFFICILE.getNiveauSource();
-                break;
-            default:
-                avecPalmier = NiveauPartie.FACILE.withPalmier();
-                niveauSource = NiveauPartie.FACILE.getNiveauSource();
-                break;
+        case FACILE:
+            avecPalmier = NiveauPartie.FACILE.withPalmier();
+            niveauSource = NiveauPartie.FACILE.getNiveauSource();
+            break;
+        case MOYEN:
+            avecPalmier = NiveauPartie.MOYEN.withPalmier();
+            niveauSource = NiveauPartie.MOYEN.getNiveauSource();
+            break;
+        case DIFFICILE:
+            avecPalmier = NiveauPartie.DIFFICILE.withPalmier();
+            niveauSource = NiveauPartie.DIFFICILE.getNiveauSource();
+            break;
+        default:
+            avecPalmier = NiveauPartie.FACILE.withPalmier();
+            niveauSource = NiveauPartie.FACILE.getNiveauSource();
+            break;
         }
     }
 
@@ -316,7 +316,7 @@ public class Santiago extends Observable {
                 // canal déjà proposée
                 enchereConstr.get(canal).add(joueur);
             } else { // ajouter dans la hashmap
-                System.out.println("Canal n'existe pas, ajoute canal et joueur");
+                System.out.println("proposition n'existe pas, ajoute canal et joueur");
                 ArrayList<Joueur> enchJoueur = new ArrayList<>();
                 enchJoueur.add(joueur);
                 enchereConstr.put(canal, enchJoueur);

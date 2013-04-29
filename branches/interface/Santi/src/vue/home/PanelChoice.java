@@ -64,7 +64,8 @@ public class PanelChoice extends AbstractPanel {
         boutonConfiguration.initComponent();
         boutonReglage.initComponent();
 
-        boutonDemarrer.setEnabled(false);
+        // FIXME rdecommenter quand interface partie sera good
+        // boutonDemarrer.setEnabled(false);
 
         isInit = true;
     }
@@ -73,6 +74,8 @@ public class PanelChoice extends AbstractPanel {
     public void update(Observable arg0, Object arg1) {
         if (santiago.isConfigured()) {
             boutonDemarrer.setEnabled(true);
+        } else {
+            boutonDemarrer.setEnabled(false);
         }
     }
 
