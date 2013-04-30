@@ -69,7 +69,7 @@ public class PanelPartieAction extends AbstractPanel {
         add(phases, BorderLayout.CENTER);
 
         phaseEnchere.initComponent();
-        phaseEnchere.add(phaseEnchere.enchereObjects());
+        phaseEnchere.add(PanelAction.enchereObjects());
 
         // FIXME à enlever, pour test
         // ---------------------------
@@ -100,13 +100,13 @@ public class PanelPartieAction extends AbstractPanel {
         phaseChoixConstruction.add(phaseChoixConstruction.choixPropositions());
 
         phaseCanalSup.initComponent();
-        phaseCanalSup.add(phaseChoixConstruction.positionChoisie());
+        phaseCanalSup.add(PanelAction.positionChoisie());
 
         phaseSecheresse.initComponent();
-        phaseSecheresse.add(phaseSecheresse.secheresseInfo());
+        phaseSecheresse.add(PanelAction.secheresseInfo());
 
         phaseDiaDePaga.initComponent();
-        phaseDiaDePaga.add(phaseDiaDePaga.diaDePaga());
+        phaseDiaDePaga.add(PanelAction.diaDePaga());
 
         cardLayout.show(phases, listPhases[5]);
 
