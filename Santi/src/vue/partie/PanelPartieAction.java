@@ -51,13 +51,14 @@ public class PanelPartieAction extends AbstractPanel {
         phaseCanalSup = new PanelActionCanalSup(this, listPhases[4]);
         phaseSecheresse = new PanelActionSecheresse(this, listPhases[5]);
         phaseDiaDePaga = new PanelActionDiaDePaga(this, listPhases[6]);
+        indice = 0;
     }
 
     @Override
     public void initComponent() {
         super.initComponent();
 
-        setPreferredSize(new Dimension(homeDimension.width / 3 * 2, homeDimension.height / 3));
+        setPreferredSize(new Dimension(homeDimension.width / 3 * 2, homeDimension.height - 600));
         // setBackground(BG_TRANSPARENT);
         setOpaque(false);
         setLayout(new BorderLayout());
@@ -87,10 +88,11 @@ public class PanelPartieAction extends AbstractPanel {
         santiago.initPartie();
         santiago.devoilerCarte();
 
-        santiago.encherePositionCanal(new PositionSegment(0, 0, 0, 1), new Joueur("tull", "bleu"), 3);
-        santiago.encherePositionCanal(new PositionSegment(1, 1, 1, 2), new Joueur("andre", "vert"), 5);
-        santiago.encherePositionCanal(new PositionSegment(3, 4, 4, 4), new Joueur("marc", "gris"), 4);
-
+        santiago.encherePositionCanal(new PositionSegment(0, 0, 0, 1), 3);
+        santiago.encherePositionCanal(new PositionSegment(1, 1, 1, 2), 5);
+        santiago.encherePositionCanal(new PositionSegment(3, 4, 4, 4), 4);
+        santiago.setPhaseFinie(false);
+        indice = 0;
         santiago.setIndiceJoueurCourant(santiago.positionApresConstructeur());
         // ----------------------------
 
@@ -102,7 +104,7 @@ public class PanelPartieAction extends AbstractPanel {
         phaseSecheresse.initComponent();
         phaseDiaDePaga.initComponent();
 
-        cardLayout.show(phases, listPhases[0]);
+        cardLayout.show(phases, listPhases[indice]);
 
         isInit = true;
     }
@@ -110,7 +112,19 @@ public class PanelPartieAction extends AbstractPanel {
     @Override
     public void update(Observable arg0, Object arg1) {
         // TODO Auto-generated method stub
+        if (santiago.isPhaseFinie()) {
+            santiago.setPhaseFinie(false);
+            incrementerCardLayout();
+            cardLayout.show(phases, listPhases[indice]);
+            System.out.println("coucou indice : " + indice);
+        }
+    }
 
+    private void incrementerCardLayout() {
+        indice++;
+        if (indice == listPhases.length) {
+            indice = 0;
+        }
     }
 
     public void cardSelected(Carte carte, Container panel) {
