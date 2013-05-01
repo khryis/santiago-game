@@ -20,7 +20,7 @@ import vue.home.PanelHome;
 public class SantiagoFrame extends JFrame implements Observer, KeyListener, WindowListener {
 
     private static final long serialVersionUID = 1L;
-    private PanelHome panelHome;
+    private final PanelHome panelHome;
 
     public SantiagoFrame() {
         super();
@@ -61,7 +61,6 @@ public class SantiagoFrame extends JFrame implements Observer, KeyListener, Wind
             @Override
             public void run() {
                 new SantiagoFrame();
-
             }
         });
     }

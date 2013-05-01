@@ -9,7 +9,7 @@ import model.Carte.TypeChamp;
 public class Plateau extends Observable {
 
     private PositionIntersection source;
-    private ArrayList<PositionSegment> canaux;
+    private ArrayList<PositionSegment> emplacementCanaux;
     private ArrayList<PositionCase> cases;
     private ArrayList<Carte> cartes;
     private ArrayList<Carte> cartesPosees;
@@ -22,7 +22,7 @@ public class Plateau extends Observable {
     public Plateau(NiveauPartie niveau, int nbJ) {
         this.niveau = niveau;
         niveauSource = niveau.getNiveauSource();
-        canaux = new ArrayList<>(31);
+        emplacementCanaux = new ArrayList<>(31);
         cases = new ArrayList<>(48);
         palmiers = new ArrayList<>(3);
         cartesPosees = new ArrayList<>();
@@ -66,6 +66,27 @@ public class Plateau extends Observable {
                 cases.add(new PositionCase(i, j, false));
             }
         }
+
+        // la liste des canaux horizontaux
+        for (int i = 0; i <= 6; i++) {
+            if (PositionSegment.isEven(i)) {
+                for (int j = 0; j < 8; j++) {
+                    if (PositionSegment.isEven(j)) {
+                        emplacementCanaux.add(new PositionSegment(j, i, j + 2, i, false));
+                    }
+                }
+            }
+        }
+        // la liste des canaux verticaux
+        for (int i = 0; i <= 8; i++) {
+            if (PositionSegment.isEven(i)) {
+                for (int j = 0; j < 6; j++) {
+                    if (PositionSegment.isEven(j)) {
+                        emplacementCanaux.add(new PositionSegment(i, j, i, j + 2, false));
+                    }
+                }
+            }
+        }
     }
 
     public void placerPalmier() {
@@ -86,7 +107,6 @@ public class Plateau extends Observable {
     }
 
     public boolean poserUneCarte(Carte carteAPoser, int x, int y) {
-        // TEST poser une carte Chris
         boolean pose = false;
 
         Position positionChoisie = new PositionCase(x, y, false);
@@ -109,14 +129,20 @@ public class Plateau extends Observable {
         return pose;
     }
 
-    public void placerCanal(int x, int y, int x1, int y1) {
+    public boolean placerCanal(int x, int y, int x1, int y1) {
+        boolean place = false;
         PositionSegment canal = new PositionSegment(x, y, x1, y1, true);
-        canaux.add(canal);
+        if (emplacementCanaux.contains(canal)) {
+            emplacementCanaux.get(emplacementCanaux.indexOf(canal)).setOccupe(true);
+            place = true;
+        }
+        return place;
     }
 
-    public void placerCanal(PositionSegment canal) {
-        canal.setOccupe(true);
-        canaux.add(canal);
+    public boolean placerCanal(PositionSegment canal) {
+        boolean place = false;
+        place = placerCanal(canal.getX(), canal.getY(), canal.getX2(), canal.getY2());
+        return place;
     }
 
     public void popCarteDevoilees(Carte carteAPoser) {
@@ -171,10 +197,10 @@ public class Plateau extends Observable {
         // que l'on a calculé sont occupé (déjà posée)
         PositionCase cas = carte.getPositionCase();
         int index, index2;
-        if (canaux.contains(ps1) || canaux.contains(ps2)) {
-            index = canaux.indexOf(ps1);
-            index2 = canaux.indexOf(ps2);
-            if (canaux.get(index).isOccupe() || canaux.get(index2).isOccupe()) {
+        if (emplacementCanaux.contains(ps1) || emplacementCanaux.contains(ps2)) {
+            index = emplacementCanaux.indexOf(ps1);
+            index2 = emplacementCanaux.indexOf(ps2);
+            if (emplacementCanaux.get(index).isOccupe() || emplacementCanaux.get(index2).isOccupe()) {
                 cas.setIrriguee(true);
             } else {
                 cas.setIrriguee(false);
@@ -194,7 +220,7 @@ public class Plateau extends Observable {
 
     @Override
     public String toString() {
-        return "Plateau : \nSource : " + source + ",\ncanaux=" + canaux + ",\ncases=" + cases + ",\ncartes=\n" + cartes
+        return "Plateau : \nSource : " + source + ",\ncanaux=" + emplacementCanaux + ",\ncases=" + cases + ",\ncartes=\n" + cartes
                 + ",\ncartesPosees=" + cartesPosees + ",\npalmiers=" + palmiers + ",\nnbJoueurs=" + nbJoueurs + ",\ncartesDevoilees="
                 + cartesDevoilees + "\n]\n";
     }
@@ -216,11 +242,11 @@ public class Plateau extends Observable {
     }
 
     public ArrayList<PositionSegment> getCanaux() {
-        return canaux;
+        return emplacementCanaux;
     }
 
     public void setCanaux(ArrayList<PositionSegment> canaux) {
-        this.canaux = canaux;
+        this.emplacementCanaux = canaux;
     }
 
     public ArrayList<PositionCase> getCases() {

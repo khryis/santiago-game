@@ -23,10 +23,6 @@ public class PositionSegment extends Position {
         this.y2 = y2;
     }
 
-    public PositionSegment(int x, int y, boolean occupe) {
-        super(x, y, occupe);
-    }
-
     public int getX2() {
         return x2;
     }
@@ -51,8 +47,8 @@ public class PositionSegment extends Position {
 
         int x = position.getX(), y = position.getY(), x2 = position.getX(), y2 = position.getY();
 
-        if (isOdd(x)) {
-            if (isOdd(y)) {
+        if (isEven(x)) {
+            if (isEven(y)) {
                 segment1 = new PositionSegment(x, y, x2 + 2, y2);
                 segment2 = new PositionSegment(x, y, x2, y2 + 2);
             } else {
@@ -60,7 +56,7 @@ public class PositionSegment extends Position {
                 segment2 = new PositionSegment(x, y + 1, x2 + 2, y2 + 1);
             }
         } else {
-            if (isOdd(y)) {
+            if (isEven(y)) {
                 segment1 = new PositionSegment(x - 1, y, x2 + 1, y2);
                 segment2 = new PositionSegment(x + 1, y, x2 + 1, y2 + 2);
             } else {
@@ -70,13 +66,14 @@ public class PositionSegment extends Position {
         }
     }
 
-    private static boolean isOdd(int x) {
+    // Est-ce que le nombre est impair ?
+    public static boolean isEven(int x) {
         return x % 2 == 0 ? true : false;
     }
 
     @Override
     public String toString() {
-        return "Segment : [ " + x + ", " + y + " ] --> [ " + x2 + ", " + y2 + " ]";
+        return "Segment : [ " + x + ", " + y + " ] --> [ " + x2 + ", " + y2 + " ]\n";
     }
 
     @Override

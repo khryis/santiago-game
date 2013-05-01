@@ -41,18 +41,18 @@ public class Run {
         choix = Saisie.IN.nextIntWithRangeNotBlank(1, 3, "Entrez quelque chose..", "Entré non valide", message);
 
         switch (choix) {
-            case 1:
-                niveauPartie = NiveauPartie.FACILE;
-                break;
-            case 2:
-                niveauPartie = NiveauPartie.MOYEN;
-                break;
-            case 3:
-                niveauPartie = NiveauPartie.DIFFICILE;
-                break;
-            default:
-                niveauPartie = NiveauPartie.FACILE;
-                break;
+        case 1:
+            niveauPartie = NiveauPartie.FACILE;
+            break;
+        case 2:
+            niveauPartie = NiveauPartie.MOYEN;
+            break;
+        case 3:
+            niveauPartie = NiveauPartie.DIFFICILE;
+            break;
+        default:
+            niveauPartie = NiveauPartie.FACILE;
+            break;
         }
         santiago.setNiveauPartie(niveauPartie);
     }
@@ -128,15 +128,15 @@ public class Run {
                 Joueur joueur = santiago.getListJoueurs().get(indiceJoueurCourant);
 
                 switch (typeEnchere) {
-                    case CARTE:
-                        joueur.setEnchereCarte(enchereJoueur);
-                        break;
-                    case CONSTRUCTEUR:
-                        joueur.setEnchereConstructeur(enchereJoueur);
-                        break;
-                    default:
-                        joueur.setEnchereCarte(enchereJoueur);
-                        joueur.setEnchereConstructeur(enchereJoueur);
+                case CARTE:
+                    joueur.setEnchereCarte(enchereJoueur);
+                    break;
+                case CONSTRUCTEUR:
+                    joueur.setEnchereConstructeur(enchereJoueur);
+                    break;
+                default:
+                    joueur.setEnchereCarte(enchereJoueur);
+                    joueur.setEnchereConstructeur(enchereJoueur);
                 }
 
                 // on regarde si on trouve le nouveau constructeur
@@ -175,21 +175,15 @@ public class Run {
 
     private int encherir(int indexJoueur) {
         int enchere = 0;
-        int solde = santiago.getListJoueurs().get(indexJoueur).getSolde();
+        boolean encheri = false;
         Joueur joueur = santiago.getListJoueurs().get(indexJoueur);
-        HashMap<Joueur, Integer> tabEnchere = santiago.getTabEnchere();
         do {
-            if (enchere > solde) {
-                System.out.println("Pas assez d'argent pour encherir de la sorte (max " + solde + ")");
-            } else if (tabEnchere.containsValue(enchere) && enchere != 0) {
-                System.out.println("Quelqu'un a déjà enchèri par " + enchere + "€");
-            }
             enchere = Saisie.IN.nextIntBlank("Mauvais Format", joueur.toString() + "\n"
                     + "Veuillez indiquer le montant de votre enchère : (rien ou 0 pour passer son tour)");
-            if (enchere == -1) {
-                enchere = 0;
+            if (santiago.encherir(enchere)) {
+                encheri = true;
             }
-        } while ((enchere > solde || tabEnchere.containsValue(enchere)) && enchere != 0);
+        } while (!encheri);
 
         return enchere;
     }

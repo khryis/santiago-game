@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Observable;
 
+import exception.AucunJoueurParoleException;
 import exception.MauvaisePositionCanalException;
 
 public class Santiago extends Observable {
@@ -23,6 +24,7 @@ public class Santiago extends Observable {
     private HashMap<PositionSegment, ArrayList<Joueur>> enchereConstr = new HashMap<>();
     private Joueur joueurGagnant;
     private boolean configured;
+    private int indiceJoueurCourant;
 
     public enum TypeEnchere {
         CARTE, CONSTRUCTEUR
@@ -66,6 +68,7 @@ public class Santiago extends Observable {
             nbCanaux = 9;
         }
         determinerUnConstructeur();
+        indiceJoueurCourant = positionApresConstructeur();
         configured = true;
         repercuterModification();
     }
@@ -211,6 +214,50 @@ public class Santiago extends Observable {
             positionApresContructeur = 0;
         }
         return positionApresContructeur;
+    }
+
+    public void incrementerJoueurCourant() {
+        int indice = getIndiceJoueurCourant() + 1;
+        if (indice == listJoueurs.size()) {
+            indice = 0;
+        }
+    }
+
+    public Joueur joueurPlaying() {
+        Joueur joueur = listJoueurs.get(indiceJoueurCourant);
+        if (joueur == null) {
+            try {
+                throw new AucunJoueurParoleException();
+            } catch (AucunJoueurParoleException e) {
+                e.printStackTrace();
+            }
+        }
+        return joueur;
+    }
+
+    public boolean encherir(int value) {
+        boolean reussi = false;
+        int enchere = value <= 0 ? 0 : value;
+        Joueur joueur = getListJoueurs().get(indiceJoueurCourant);
+        int solde = joueur.getSolde();
+
+        if (enchere > solde) {
+            System.out.println("Pas assez d'argent pour encherir de la sorte (max " + solde + ")");
+        } else if (enchere < 0) {
+            System.out.println("Problème, enchère négative");
+        } else if (tabEnchere.containsValue(enchere) && enchere != 0) {
+            System.out.println("Quelqu'un a déjà enchèri par " + enchere + "€");
+        } else {
+            reussi = true;
+            incrementerJoueurCourant();
+            // TODO suite incrémenter joueur courant
+        }
+
+        return reussi;
+    }
+
+    public void passerSonTour() {
+        incrementerJoueurCourant();
     }
 
     /**
@@ -371,14 +418,14 @@ public class Santiago extends Observable {
      */
     public boolean constructeurPeutEncherir() {
         boolean peutEncherir;
-        int total = 0, indiceJoueurCourant;
+        int total = 0, indiceJCourant;
         ArrayList<Joueur> joueursEnch = new ArrayList<>();
         for (Map.Entry<PositionSegment, ArrayList<Joueur>> entry : enchereConstr.entrySet()) {
-            indiceJoueurCourant = 0;
+            indiceJCourant = 0;
             joueursEnch = entry.getValue();
-            while (indiceJoueurCourant < joueursEnch.size()) {
-                total += joueursEnch.get(indiceJoueurCourant).getEnchereConstructeur();
-                indiceJoueurCourant++;
+            while (indiceJCourant < joueursEnch.size()) {
+                total += joueursEnch.get(indiceJCourant).getEnchereConstructeur();
+                indiceJCourant++;
             }
         }
         if (total > listJoueurs.get(positionConstructeur()).getSolde()) {
@@ -393,15 +440,15 @@ public class Santiago extends Observable {
      * Permet de réinitialiser les objets stockant les infos sur le enchères
      */
     public void resetEnchereVars() {
-        int indiceJoueurCourant;
+        int indiceJCourant;
         ArrayList<Joueur> joueursEnch = new ArrayList<>();
         for (Map.Entry<PositionSegment, ArrayList<Joueur>> entry : enchereConstr.entrySet()) {
-            indiceJoueurCourant = 0;
+            indiceJCourant = 0;
             joueursEnch = entry.getValue();
-            while (indiceJoueurCourant < joueursEnch.size()) {
-                joueursEnch.get(indiceJoueurCourant).setEnchereConstructeur(0);
-                joueursEnch.get(indiceJoueurCourant).setEnchereCarte(0);
-                indiceJoueurCourant++;
+            while (indiceJCourant < joueursEnch.size()) {
+                joueursEnch.get(indiceJCourant).setEnchereConstructeur(0);
+                joueursEnch.get(indiceJCourant).setEnchereCarte(0);
+                indiceJCourant++;
             }
         }
         enchereConstr.clear();
@@ -492,4 +539,13 @@ public class Santiago extends Observable {
     public boolean isConfigured() {
         return configured;
     }
+
+    public int getIndiceJoueurCourant() {
+        return indiceJoueurCourant;
+    }
+
+    public void setIndiceJoueurCourant(int joueurCourant) {
+        this.indiceJoueurCourant = joueurCourant;
+    }
+
 }
