@@ -1,9 +1,12 @@
 package vue.partie;
 
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.Observable;
@@ -11,13 +14,17 @@ import java.util.Observable;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
+import javax.swing.plaf.metal.MetalLookAndFeel;
 
 import vue.AbstractPanel;
 
 @SuppressWarnings("serial")
 public class PanelPlateau extends AbstractPanel{
 	private Image background;
+	//TODO actionPerformed d'une case : set la position de panelpartie
 
 	public PanelPlateau(Container parent) {
 		super(parent);
@@ -26,20 +33,60 @@ public class PanelPlateau extends AbstractPanel{
 	@Override
 	public void initComponent() {
 		super.initComponent();
+		try {
+			UIManager.setLookAndFeel(new MetalLookAndFeel());
+		} catch (UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		}
 		setPreferredSize(new Dimension(800, 600));
 		setLayout(null);
-		JButton[] tabSegments = new JButton[31];
+		int posX;
+		int posY;
+		
+		// Création de la source 
+				JButton[] tabSource = new JButton[6];
+				for (int i = 0; i<6; i++) {
+					  final JButton jb = new JButton();
+					  jb.setOpaque(false);
+					  jb.setContentAreaFilled(false);
+					  jb.setBorderPainted(false); //A DECOMMENTER POUR LAPERO
+					 
+					  tabSource[i] = jb;
+					  jb.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent arg0) {
+								jb.setBorderPainted(true);
+								jb.setContentAreaFilled(true);
+								jb.setOpaque(true);
+								jb.setBackground(Color.blue);
+							}
+						});
+					  add(jb);
+				}
+				posX=208;
+				posY=195;
+				for (int i = 0; i<6; i++){
+					if (i%3==0 && i!= 0){
+						posX=208;
+						posY+=180;
+					}
+					else 
+						if (i!=0)
+							posX+=182;
+					tabSource[i].setBounds(posX, posY, 20, 20);
+				}
 		// Création des segments
+		JButton[] tabSegments = new JButton[31];
 		for (int i = 0; i<31; i++) {
 			  JButton jb = new JButton();
 			  jb.setOpaque(false);
 			  jb.setContentAreaFilled(false);
-			  //jb.setBorderPainted(false); A DECOMMENTER POUR LAPERO
+			  jb.setBorderPainted(false); //A DECOMMENTER POUR LAPERO
 			  tabSegments[i] = jb;
 			  add(jb);
 		}
-		int posX = 30;
-		int posY = 23;
+		
+		posX = 30;
+		posY = 23;
 		// Positionnement des segements 
 		// Segments verticaux de 0 à 15 (total de 16)
 		for (int i = 0; i<16; i++){
@@ -68,13 +115,13 @@ public class PanelPlateau extends AbstractPanel{
 			add(tabSegments[i]);
 		}
 		
-		JButton[] tabCases = new JButton[48];
 		// Création des cases
+		JButton[] tabCases = new JButton[48];
 		for (int i = 0; i<48; i++) {
 			  JButton jb = new JButton();
 			  jb.setOpaque(false);
 			  jb.setContentAreaFilled(false);
-			  //jb.setBorderPainted(false); A DECOMMENTER POUR LAPERO
+			  jb.setBorderPainted(false); //A DECOMMENTER POUR LAPERO
 			  tabCases[i] = jb;
 			  add(jb);
 		}
@@ -117,7 +164,8 @@ public class PanelPlateau extends AbstractPanel{
     }
 
 	@Override
-	public void update(Observable arg0, Object arg1) {	
+	public void update(Observable arg0, Object arg1) {
+		
 	}
 
 	public static void main(String[] args) {

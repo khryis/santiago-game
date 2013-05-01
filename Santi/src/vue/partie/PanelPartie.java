@@ -11,6 +11,8 @@ public class PanelPartie extends AbstractPanel {
 
     private static final long serialVersionUID = 1L;
     PanelHome panelHome;
+    //TODO attribut position case à mettre avec get/set
+    //TODO set du canal
 
     public PanelPartie(Container parent) {
         super(parent);

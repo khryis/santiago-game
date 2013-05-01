@@ -13,6 +13,7 @@ public class PositionIntersection extends Position {
     public static PositionIntersection aleatoire(int niveauSource) {
         // TEST source alé Anthony
         // l'aléatoire de la source (niveau 0 = normal, 1 = experimente)
+    	// TODO modif mettre que 6 positions au lieu de 8
         PositionIntersection pi = new PositionIntersection(-1, -1, -1);
         int n = 2;
         ArrayList<PositionIntersection> tabPos = new ArrayList<>();
