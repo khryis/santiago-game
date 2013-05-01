@@ -140,9 +140,7 @@ public class Plateau extends Observable {
     }
 
     public boolean placerCanal(PositionSegment canal) {
-        boolean place = false;
-        place = placerCanal(canal.getX(), canal.getY(), canal.getX2(), canal.getY2());
-        return place;
+        return placerCanal(canal.getX(), canal.getY(), canal.getX2(), canal.getY2());
     }
 
     public void popCarteDevoilees(Carte carteAPoser) {

@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Frame;
+import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -40,9 +41,17 @@ public class SantiagoFrame extends JFrame implements Observer, KeyListener, Wind
         setUndecorated(true);
 
         Toolkit toolkit = Toolkit.getDefaultToolkit();
-        setPreferredSize(new Dimension(toolkit.getScreenSize().width, toolkit.getScreenSize().height));
+        // Screen size
+        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        // Screen insets
+        Insets insets = Toolkit.getDefaultToolkit().getScreenInsets(getGraphicsConfiguration());
+        // Get the real width/height
+        int width = (int) (screen.getWidth() - insets.left - insets.right);
+        int height = (int) (screen.getHeight() - insets.top - insets.bottom);
+
+        setPreferredSize(new Dimension(width, height));
         setLayout(new BorderLayout());
-        setLocation(0, 0);
+        setLocation(insets.left, insets.top);
 
         // on ajoute les composants au conteneur principal
         setContentPane(panelHome);

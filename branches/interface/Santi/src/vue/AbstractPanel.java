@@ -4,6 +4,7 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.Toolkit;
 import java.util.Observable;
 import java.util.Observer;
@@ -45,8 +46,15 @@ public abstract class AbstractPanel extends JPanel implements Observer, IConstan
     // Méthode dans laquelle on ajoute tout les composants voulu au JPanel
     public void initComponent() {
         Toolkit toolkit = Toolkit.getDefaultToolkit();
-        setPreferredSize(new Dimension(toolkit.getScreenSize().width, toolkit.getScreenSize().height));
-        homeDimension = new Dimension(toolkit.getScreenSize().width, toolkit.getScreenSize().height);
+        // Screen size
+        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        // Screen insets
+        Insets insets = Toolkit.getDefaultToolkit().getScreenInsets(getGraphicsConfiguration());
+        // Get the real width/height
+        int width = (int) (screen.getWidth() - insets.left - insets.right);
+        int height = (int) (screen.getHeight() - insets.top - insets.bottom);
+        setPreferredSize(new Dimension(width, height));
+        homeDimension = new Dimension(width, height);
         if (getParent() != null) {
             santiago = Santiago.getSantiago();
             santiago.addObserver(this);

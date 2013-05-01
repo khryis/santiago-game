@@ -33,6 +33,14 @@ public class PanelPartie extends AbstractPanel {
         add(ppa, BorderLayout.SOUTH);
         ppa.initComponent();
 
+        PanelJoueurs pj = new PanelJoueurs(this);
+        add(pj, BorderLayout.EAST);
+        pj.initComponent();
+
+        PanelPlateau pp = new PanelPlateau(this);
+        add(pp, BorderLayout.CENTER);
+        pp.initComponent();
+
         isInit = true;
     }
 
