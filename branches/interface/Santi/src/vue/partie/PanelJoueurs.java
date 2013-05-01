@@ -100,6 +100,8 @@ public class PanelJoueurs extends AbstractPanel {
     @Override
     public void update(Observable arg0, Object arg1) {
         removeAll();
+        // TODO Appeler un paintComponent correct au lieu de refaire un init du
+        // panel, très moche.. mais bon ça marche ^^
         initComponent();
         validate();
     }
