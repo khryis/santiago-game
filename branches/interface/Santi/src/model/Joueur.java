@@ -9,7 +9,6 @@ public class Joueur {
     private int solde;
     private int enchereCarte;
     private int enchereConstructeur;
-    private boolean parole;
 
     public Joueur() {
         super();
@@ -19,7 +18,6 @@ public class Joueur {
         tuyauSup = true;
         constructeur = false;
         solde = 10;
-        parole = false;
     }
 
     public Joueur(String nom, String couleur) {
@@ -30,7 +28,6 @@ public class Joueur {
         tuyauSup = true;
         constructeur = false;
         solde = 10;
-        parole = false;
     }
 
     public void ajouterArgent(int somme) {
@@ -108,14 +105,6 @@ public class Joueur {
 
     public void setEnchereCarte(int enchereCarte) {
         this.enchereCarte = enchereCarte;
-    }
-
-    public boolean hasParole() {
-        return parole;
-    }
-
-    public void setParole(boolean parole) {
-        this.parole = parole;
     }
 
 }

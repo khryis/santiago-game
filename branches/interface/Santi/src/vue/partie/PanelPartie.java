@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.util.Observable;
 
+import model.Carte;
 import vue.AbstractPanel;
 import vue.home.PanelHome;
 
@@ -11,8 +12,9 @@ public class PanelPartie extends AbstractPanel {
 
     private static final long serialVersionUID = 1L;
     PanelHome panelHome;
-    //TODO attribut position case à mettre avec get/set
-    //TODO set du canal
+
+    // TODO attribut position case à mettre avec get/set
+    // TODO set du canal
 
     public PanelPartie(Container parent) {
         super(parent);
@@ -40,25 +42,45 @@ public class PanelPartie extends AbstractPanel {
 
     }
 
-    // public static void main(String[] args) {
-    // JFrame frame = new JFrame();
-    // frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-    // frame.setPreferredSize(new Dimension(500, 600));
-    //
-    // PanelHome ph = new PanelHome(frame);
-    // frame.setContentPane(ph);
-    // ph.initComponent();
-    //
-    // PanelPartie partie = new PanelPartie(ph);
-    // ph.add(partie);
-    // partie.initComponent();
-    //
-    // PanelPartieAction ppa = new PanelPartieAction(partie);
-    // partie.add(ppa);
-    // ppa.initComponent();
-    //
-    // frame.pack();
-    // frame.setVisible(true);
-    // }
+    public static String getPathImage(Carte carte) {
+        StringBuilder path = new StringBuilder("img/cartes/");
+        switch (carte.getType()) {
+        case PATATE:
+            path.append("patate");
+            break;
+        case CANNE_A_SUCRE:
+            path.append("canne");
+            break;
+        case HARICOT:
+            path.append("haricot");
+            break;
+        case BANANE:
+            path.append("banane");
+            break;
+        case PIMENT:
+            path.append("Piment");
+            break;
+        default:
+            break;
+        }
+
+        if (carte.getNbMarqueurMax() == 2) {// 2M, 2MSans et 1M1MSans
+            if (carte.getNbMarqueurActuel() == 0) {
+                path.append("2MSans.jpg");
+            } else if (carte.getNbMarqueurActuel() == 1) {
+                path.append("1M1MSans.jpg");
+            } else if (carte.getNbMarqueurActuel() == 2) {
+                path.append("2M.jpg");
+            }
+
+        } else if (carte.getNbMarqueurMax() == 1) {// 1M, 1MSans
+            if (carte.getNbMarqueurActuel() == 0) {
+                path.append("1MSans.jpg");
+            } else if (carte.getNbMarqueurActuel() == 1) {
+                path.append("1M.jpg");
+            }
+        }
+        return path.toString();
+    }
 
 }

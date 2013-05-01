@@ -9,10 +9,19 @@ import java.util.Observable;
 
 import javax.swing.JPanel;
 
+import model.Carte;
 import model.Joueur;
 import model.NiveauPartie;
 import model.PositionSegment;
 import vue.AbstractPanel;
+import vue.partie.phases.PanelAction;
+import vue.partie.phases.PanelActionCanalSup;
+import vue.partie.phases.PanelActionChoixCarte;
+import vue.partie.phases.PanelActionChoixConstruction;
+import vue.partie.phases.PanelActionDiaDePaga;
+import vue.partie.phases.PanelActionEnchere;
+import vue.partie.phases.PanelActionSecheresse;
+import vue.partie.phases.PanelActionSoudoiement;
 
 public class PanelPartieAction extends AbstractPanel {
     private static final long serialVersionUID = 1L;
@@ -35,14 +44,13 @@ public class PanelPartieAction extends AbstractPanel {
     public PanelPartieAction(Container parent) {
         super(parent);
         panelPartie = (PanelPartie) parent;
-        phaseEnchere = new PanelAction(this, listPhases[0], new String[] { "encherir", "passer son tour" });
-        phaseChoixCarte = new PanelAction(this, listPhases[1], new String[] { "valider" });
-        phaseSoudoiement = new PanelAction(this, listPhases[2], new String[] { "soudoyer", "soutenir soudoyeur", "passer son tour" });
-        phaseChoixConstruction = new PanelAction(this, listPhases[3], new String[] { "choisir proposition",
-                "choisir une autre construction", "passer son tour" });
-        phaseCanalSup = new PanelAction(this, listPhases[4], new String[] { "valider position", "passer son tour" });
-        phaseSecheresse = new PanelAction(this, listPhases[5], new String[] { "Phase suivante" });
-        phaseDiaDePaga = new PanelAction(this, listPhases[6], new String[] { "Phase suivante" });
+        phaseEnchere = new PanelActionEnchere(this, listPhases[0]);
+        phaseChoixCarte = new PanelActionChoixCarte(this, listPhases[1]);
+        phaseSoudoiement = new PanelActionSoudoiement(this, listPhases[2]);
+        phaseChoixConstruction = new PanelActionChoixConstruction(this, listPhases[3]);
+        phaseCanalSup = new PanelActionCanalSup(this, listPhases[4]);
+        phaseSecheresse = new PanelActionSecheresse(this, listPhases[5]);
+        phaseDiaDePaga = new PanelActionDiaDePaga(this, listPhases[6]);
     }
 
     @Override
@@ -68,9 +76,6 @@ public class PanelPartieAction extends AbstractPanel {
 
         add(phases, BorderLayout.CENTER);
 
-        phaseEnchere.initComponent();
-        phaseEnchere.add(PanelAction.enchereObjects());
-
         // FIXME à enlever, pour test
         // ---------------------------
         santiago.setNiveauPartie(NiveauPartie.FACILE);
@@ -81,34 +86,23 @@ public class PanelPartieAction extends AbstractPanel {
         santiago.setListJoueurs(listjoueurs);
         santiago.initPartie();
         santiago.devoilerCarte();
-        // ---------------------------
 
-        phaseChoixCarte.initComponent();
-        phaseChoixCarte.add(phaseChoixCarte.cardChoice());
-
-        // FIXME à enlever, pour test
-        // ----------------------------
         santiago.encherePositionCanal(new PositionSegment(0, 0, 0, 1), new Joueur("tull", "bleu"), 3);
         santiago.encherePositionCanal(new PositionSegment(1, 1, 1, 2), new Joueur("andre", "vert"), 5);
         santiago.encherePositionCanal(new PositionSegment(3, 4, 4, 4), new Joueur("marc", "gris"), 4);
+
+        santiago.setIndiceJoueurCourant(santiago.positionApresConstructeur());
         // ----------------------------
 
+        phaseEnchere.initComponent();
+        phaseChoixCarte.initComponent();
         phaseSoudoiement.initComponent();
-        phaseSoudoiement.add(phaseSoudoiement.soudoiementChoice());
-
         phaseChoixConstruction.initComponent();
-        phaseChoixConstruction.add(phaseChoixConstruction.choixPropositions());
-
         phaseCanalSup.initComponent();
-        phaseCanalSup.add(PanelAction.positionChoisie());
-
         phaseSecheresse.initComponent();
-        phaseSecheresse.add(PanelAction.secheresseInfo());
-
         phaseDiaDePaga.initComponent();
-        phaseDiaDePaga.add(PanelAction.diaDePaga());
 
-        cardLayout.show(phases, listPhases[5]);
+        cardLayout.show(phases, listPhases[0]);
 
         isInit = true;
     }
@@ -117,6 +111,11 @@ public class PanelPartieAction extends AbstractPanel {
     public void update(Observable arg0, Object arg1) {
         // TODO Auto-generated method stub
 
+    }
+
+    public void cardSelected(Carte carte, Container panel) {
+        System.out.println("carte séléctionné : " + carte.toString());
+        ((PanelAction) panel).cardChoisie.setText(carte.toString());
     }
 
 }
