@@ -168,7 +168,6 @@ public class PanelPlateau extends AbstractPanel{
 		int y2 = 0;
 		for(int i=0; i<79; i++){
 			if (i<16){
-				tabCorrespondance.put(new PositionSegment(x1,y1,x2,y2,false), tabSegments[i]);
 				if (i%4 == 0 && i!=0){
 					x1 = 0;
 					x2 = 2;
@@ -181,6 +180,7 @@ public class PanelPlateau extends AbstractPanel{
 						x2 += 2;
 					}
 				}
+				tabCorrespondance.put(new PositionSegment(x1,y1,x2,y2,false), tabSegments[i]);
 				//System.out.println(x1+" "+y1+" "+x2+" "+y2+" ");
 			}
 			
@@ -212,7 +212,6 @@ public class PanelPlateau extends AbstractPanel{
 					x1 = 0;
 					y1 = 0;
 				}
-				tabCorrespondance.put(new PositionCase(x1,y1,false), tabCases[i-31]);
 				if (i == 39 || i == 47 || i == 55 || i == 63 || i == 71){
 					x1=0;
 					y1+=1;
@@ -222,14 +221,16 @@ public class PanelPlateau extends AbstractPanel{
 						x1 += 1;
 					}
 				}
+				tabCorrespondance.put(new PositionCase(x1,y1,false), tabCases[i-31]);
 				//System.out.println("blablablabla "+x1+" "+y1);
 			}
+		}
 		
 			// On gère maintenant le clic sur un bouton en renvoyant la position au PanelPartie
 			Set<Position> parcoursTab = tabCorrespondance.keySet();
 			for (final Position p : parcoursTab){
 				/*if (p instanceof PositionIntersection){
-					if (this.getSantiago().getPlateau().getSource().equals(p)){
+					if (this.getSantiago().getPlateau().getSource() == p){
 						tabCorrespondance.get(p).setBackground(Color.blue);
 					}
 				}*/
@@ -248,7 +249,6 @@ public class PanelPlateau extends AbstractPanel{
 					});
 				}
 			}
-		}
     }
 
     @Override
