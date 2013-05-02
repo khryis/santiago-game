@@ -5,6 +5,8 @@ import java.awt.Container;
 import java.util.Observable;
 
 import model.Carte;
+import model.PositionCase;
+import model.PositionSegment;
 import vue.AbstractPanel;
 import vue.home.PanelHome;
 
@@ -12,16 +14,17 @@ public class PanelPartie extends AbstractPanel {
 
     private static final long serialVersionUID = 1L;
     PanelHome panelHome;
-
-    // TODO attribut position case à mettre avec get/set
-    // TODO set du canal
+    static PositionCase posCaseCourante;
+    static PositionSegment posSegCourant;
 
     public PanelPartie(Container parent) {
         super(parent);
         panelHome = (PanelHome) parent;
+        posCaseCourante = new PositionCase();
+        posSegCourant= new PositionSegment();
     }
 
-    @Override
+	@Override
     public void initComponent() {
         super.initComponent();
 
