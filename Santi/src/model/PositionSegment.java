@@ -75,7 +75,7 @@ public class PositionSegment extends Position {
     public String toString() {
         return "Segment : [ " + x + ", " + y + " ] --> [ " + x2 + ", " + y2 + " ]\n";
     }
-
+    /*
     @Override
     public boolean equals(Object obj) {
 
@@ -94,6 +94,6 @@ public class PositionSegment extends Position {
         }
 
         return false;
-    }
+    }*/
 
 }

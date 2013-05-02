@@ -12,10 +12,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Observable;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -23,6 +25,10 @@ import javax.swing.WindowConstants;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 
 import model.Position;
+import model.PositionCase;
+import model.PositionIntersection;
+import model.PositionSegment;
+import model.Santiago;
 
 import vue.AbstractPanel;
 
@@ -150,8 +156,98 @@ public class PanelPlateau extends AbstractPanel{
 
 		//Création d'une table de correspondance Position->JButton
 		tabCorrespondance = new HashMap<Position, JButton>();
-		for(int i=0; i<85; i++){
+		tabCorrespondance.put(new PositionIntersection(2,2,0), tabSource[0]);
+		tabCorrespondance.put(new PositionIntersection(2,4,0), tabSource[1]);
+		tabCorrespondance.put(new PositionIntersection(2,6,0), tabSource[2]);
+		tabCorrespondance.put(new PositionIntersection(4,2,0), tabSource[3]);
+		tabCorrespondance.put(new PositionIntersection(4,4,0), tabSource[4]);
+		tabCorrespondance.put(new PositionIntersection(4,6,0), tabSource[5]);
+		int x1 = 0;
+		int y1 = 0;
+		int x2 = 2;
+		int y2 = 0;
+		for(int i=0; i<79; i++){
+			if (i<16){
+				tabCorrespondance.put(new PositionSegment(x1,y1,x2,y2,false), tabSegments[i]);
+				if (i%4 == 0 && i!=0){
+					x1 = 0;
+					x2 = 2;
+					y1 += 2;
+					y2 += 2;
+				}
+				else {
+					if (i!=0){
+						x1 += 2;
+						x2 += 2;
+					}
+				}
+				//System.out.println(x1+" "+y1+" "+x2+" "+y2+" ");
+			}
 			
+			// 0 0 0 2 -> 2 0 2 2 -> 4 0 4 2 
+			if (i>15 && i<31){
+				if (i == 16){
+					x1=0;
+					y1=0;
+					x2=0;
+					y2=2;
+				}
+				tabCorrespondance.put(new PositionSegment(x1,y1,x2,y2, false), tabSegments[i]);
+				if (i == 21 || i == 26){
+					x1 = 0;
+					x2 = 0;
+					y1 += 2;
+					y2 += 2;
+				}
+				else {
+					if (i!= 16){
+						x1 += 2;
+						x2 += 2;
+					}
+				}	
+				//System.out.println("blabla "+x1+" "+y1+" "+x2+" "+y2+" ");
+			}
+			if (i>30){
+				if (i == 31){
+					x1 = 0;
+					y1 = 0;
+				}
+				tabCorrespondance.put(new PositionCase(x1,y1,false), tabCases[i-31]);
+				if (i == 39 || i == 47 || i == 55 || i == 63 || i == 71){
+					x1=0;
+					y1+=1;
+				}
+				else {
+					if (i!= 31){
+						x1 += 1;
+					}
+				}
+				//System.out.println("blablablabla "+x1+" "+y1);
+			}
+		
+			// On gère maintenant le clic sur un bouton en renvoyant la position au PanelPartie
+			Set<Position> parcoursTab = tabCorrespondance.keySet();
+			for (final Position p : parcoursTab){
+				/*if (p instanceof PositionIntersection){
+					if (this.getSantiago().getPlateau().getSource().equals(p)){
+						tabCorrespondance.get(p).setBackground(Color.blue);
+					}
+				}*/
+				if (p instanceof PositionSegment){
+					tabCorrespondance.get(p).addActionListener(new ActionListener(){
+						public void actionPerformed(ActionEvent e) {
+							PanelPartie.posSegCourant = (PositionSegment) p;
+						}		
+					});
+				}
+				if (p instanceof PositionCase){
+					tabCorrespondance.get(p).addActionListener(new ActionListener(){
+						public void actionPerformed(ActionEvent e) {
+							PanelPartie.posCaseCourante = (PositionCase) p;
+						}		
+					});
+				}
+			}
 		}
     }
 

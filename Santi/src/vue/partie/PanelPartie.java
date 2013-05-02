@@ -20,8 +20,6 @@ public class PanelPartie extends AbstractPanel {
     public PanelPartie(Container parent) {
         super(parent);
         panelHome = (PanelHome) parent;
-        posCaseCourante = new PositionCase();
-        posSegCourant= new PositionSegment();
     }
 
 	@Override

@@ -35,7 +35,6 @@ public class PositionIntersection extends Position {
         tabPos.add(new PositionIntersection(4, 2, 0));
         tabPos.add(new PositionIntersection(4, 4, 0));
         tabPos.add(new PositionIntersection(4, 6, 0));
-        tabPos.add(new PositionIntersection(6, 8, 0));
         if (niveauSource == 0) {
             while (n != 0) {
                 double rand = Math.random() * tabPos.size();
