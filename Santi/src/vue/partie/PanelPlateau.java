@@ -10,11 +10,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -24,6 +27,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 
+import model.Carte;
 import model.Position;
 import model.PositionCase;
 import model.PositionIntersection;
@@ -229,11 +233,6 @@ public class PanelPlateau extends AbstractPanel{
 			// On gère maintenant le clic sur un bouton en renvoyant la position au PanelPartie
 			Set<Position> parcoursTab = tabCorrespondance.keySet();
 			for (final Position p : parcoursTab){
-				/*if (p instanceof PositionIntersection){
-					if (this.getSantiago().getPlateau().getSource() == p){
-						tabCorrespondance.get(p).setBackground(Color.blue);
-					}
-				}*/
 				if (p instanceof PositionSegment){
 					tabCorrespondance.get(p).addActionListener(new ActionListener(){
 						public void actionPerformed(ActionEvent e) {
@@ -245,6 +244,7 @@ public class PanelPlateau extends AbstractPanel{
 					tabCorrespondance.get(p).addActionListener(new ActionListener(){
 						public void actionPerformed(ActionEvent e) {
 							PanelPartie.posCaseCourante = (PositionCase) p;
+							JOptionPane.showMessageDialog(panelConteneur, p.toString()); // A Commenter pour enlever le popup
 						}		
 					});
 				}
@@ -266,7 +266,22 @@ public class PanelPlateau extends AbstractPanel{
 
     @Override
     public void update(Observable arg0, Object arg1) {
-
+    	tabCorrespondance.get(santiago.getPlateau().getSource()).setBackground(Color.blue);
+    	ArrayList<Carte> listeCartesPosees = this.santiago.getPlateau().getCartesPosees();
+    	ArrayList<PositionSegment> listeSegments = this.santiago.getPlateau().getCanaux();
+    	for (int i = 0; i<listeSegments.size(); i++){
+    		if (listeSegments.get(i).isOccupe()){
+    			tabCorrespondance.get(listeSegments.get(i)).setBackground(Color.blue);
+    		}
+    	}
+    	for (int i = 0; i<listeCartesPosees.size(); i++){
+    		if(listeCartesPosees.get(i).getPosition().isOccupe()){
+    			String imageCarte = PanelPartie.getPathImage(listeCartesPosees.get(i));
+    			Icon tmp = new ImageIcon(imageCarte);
+    			tabCorrespondance.get(listeCartesPosees.get(i).getPositionCase()).setIcon(tmp);
+    		}
+    	}
+    	
     }
 
     public static void main(String[] args) {
