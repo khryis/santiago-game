@@ -19,35 +19,32 @@ import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.WindowConstants;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 
 import model.Carte;
-import model.Position;
 import model.PositionCase;
 import model.PositionIntersection;
 import model.PositionSegment;
-import model.Santiago;
-
 import vue.AbstractPanel;
 
 @SuppressWarnings("serial")
-public class PanelPlateau extends AbstractPanel{
-	private Image background;
-	HashMap<PositionIntersection, JButton> tabCorrespondanceSource;
-	HashMap<PositionSegment, JButton> tabCorrespondanceSegment;
-	HashMap<PositionCase, JButton> tabCorrespondanceCase;
-	JButton[] tabSource;
-	JButton[] tabSegments;
-	JButton[] tabCases;
-	
-	private final JPanel panelConteneur = new JPanel();
-	//TODO structure HashMap<Position, JButton> récupérer listes du modèle plateau
+public class PanelPlateau extends AbstractPanel {
+    private Image background;
+    HashMap<PositionIntersection, JButton> tabCorrespondanceSource;
+    HashMap<PositionSegment, JButton> tabCorrespondanceSegment;
+    HashMap<PositionCase, JButton> tabCorrespondanceCase;
+    JButton[] tabSource;
+    JButton[] tabSegments;
+    JButton[] tabCases;
+
+    private final JPanel panelConteneur = new JPanel();
+
+    // TODO structure HashMap<Position, JButton> récupérer listes du modèle
+    // plateau
 
     public PanelPlateau(Container parent) {
         super(parent);
@@ -77,9 +74,9 @@ public class PanelPlateau extends AbstractPanel{
         JButton[] tabSource = new JButton[6];
         for (int i = 0; i < 6; i++) {
             final JButton jb = new JButton();
-            jb.setOpaque(false);
-            jb.setContentAreaFilled(false);
-            jb.setBorderPainted(false); // A DECOMMENTER POUR LAPERO
+            // jb.setOpaque(false);
+            // jb.setContentAreaFilled(false);
+            // jb.setBorderPainted(false); // A DECOMMENTER POUR LAPERO
             tabSource[i] = jb;
             panelConteneur.add(jb);
         }
@@ -97,9 +94,9 @@ public class PanelPlateau extends AbstractPanel{
         JButton[] tabSegments = new JButton[31];
         for (int i = 0; i < 31; i++) {
             JButton jb = new JButton();
-            //jb.setOpaque(false);
-            //jb.setContentAreaFilled(false);
-            //jb.setBorderPainted(false); // A DECOMMENTER POUR LAPERO
+            // jb.setOpaque(false);
+            // jb.setContentAreaFilled(false);
+            // jb.setBorderPainted(false); // A DECOMMENTER POUR LAPERO
             tabSegments[i] = jb;
             panelConteneur.add(jb);
         }
@@ -134,9 +131,9 @@ public class PanelPlateau extends AbstractPanel{
         JButton[] tabCases = new JButton[48];
         for (int i = 0; i < 48; i++) {
             JButton jb = new JButton();
-            //jb.setOpaque(false);
-            //jb.setContentAreaFilled(false);
-            //jb.setBorderPainted(false); // A DECOMMENTER POUR LAPERO
+            // jb.setOpaque(false);
+            // jb.setContentAreaFilled(false);
+            // jb.setBorderPainted(false); // A DECOMMENTER POUR LAPERO
             tabCases[i] = jb;
             panelConteneur.add(jb);
         }
@@ -160,97 +157,101 @@ public class PanelPlateau extends AbstractPanel{
             tabCases[i].setBounds(posX, posY, 86, 86);
         }
 
-		//Création d'une table de correspondance Position->JButton
+        // Création d'une table de correspondance Position->JButton
         tabCorrespondanceSource = new HashMap<PositionIntersection, JButton>();
         tabCorrespondanceSegment = new HashMap<PositionSegment, JButton>();
         tabCorrespondanceCase = new HashMap<PositionCase, JButton>();
-		tabCorrespondanceSource.put(new PositionIntersection(2,2,0), tabSource[0]);
-		tabCorrespondanceSource.put(new PositionIntersection(2,4,0), tabSource[1]);
-		tabCorrespondanceSource.put(new PositionIntersection(2,6,0), tabSource[2]);
-		tabCorrespondanceSource.put(new PositionIntersection(4,2,0), tabSource[3]);
-		tabCorrespondanceSource.put(new PositionIntersection(4,4,0), tabSource[4]);
-		tabCorrespondanceSource.put(new PositionIntersection(4,6,0), tabSource[5]);
-		int x1 = 0;
-		int y1 = 0;
-		int x2 = 2;
-		int y2 = 0;
-		for(int i=0; i<31; i++){
-			if (i<16){
-				if (i%4 == 0 && i!=0){
-					x1 = 0;
-					x2 = 2;
-					y1 += 2;
-					y2 += 2;
-				}
-				else {
-					if (i!=0){
-						x1 += 2;
-						x2 += 2;
-					}
-				}
-				tabCorrespondanceSegment.put(new PositionSegment(x1,y1,x2,y2,false), tabSegments[i]);
-				//System.out.println(x1+" "+y1+" "+x2+" "+y2+" ");
-			}
-			else{
-				if (i == 16){
-					x1=0;
-					y1=0;
-					x2=0;
-					y2=2;
-				}
-				if (i == 21 || i == 26){
-					x1 = 0;
-					x2 = 0;
-					y1 += 2;
-					y2 += 2;
-				}
-				else {
-					if (i!= 16){
-						x1 += 2;
-						x2 += 2;
-					}
-				}
-				tabCorrespondanceSegment.put(new PositionSegment(x1,y1,x2,y2, false), tabSegments[i]);
-				//System.out.println("blabla "+x1+" "+y1+" "+x2+" "+y2+" ");
-			}
-		}
-			for (int i = 0; i<48; i++){
-				if (i == 0){
-					x1 = 0;
-					y1 = 0;
-				}
-				if (i == 8 || i == 16 || i == 24 || i == 32 || i == 40){
-					x1=0;
-					y1+=1;
-				}
-				else {
-					if (i!= 31){
-						x1 += 1;
-					}
-				}
-				tabCorrespondanceCase.put(new PositionCase(x1,y1,false), tabCases[i]);
-				//System.out.println("blablablabla "+x1+" "+y1);
-			}
-		
-			// On gère maintenant le clic sur un bouton en renvoyant la position au PanelPartie
-			Set<PositionSegment> parcoursTab = tabCorrespondanceSegment.keySet();
-			Set<PositionCase> parcoursTab2 = tabCorrespondanceCase.keySet();
-			for (final PositionSegment p : parcoursTab){
-					tabCorrespondanceSegment.get(p).addActionListener(new ActionListener(){
-						public void actionPerformed(ActionEvent e) {
-							PanelPartie.posSegCourant = p;
-							JOptionPane.showMessageDialog(panelConteneur, p.toString());
-						}		
-					});
-			}
-			for (final PositionCase p1 : parcoursTab2){
-					tabCorrespondanceCase.get(p1).addActionListener(new ActionListener(){
-						public void actionPerformed(ActionEvent e) {
-							PanelPartie.posCaseCourante =p1;
-							JOptionPane.showMessageDialog(panelConteneur, p1.toString()); // A Commenter pour enlever le popup
-						}		
-					});
-			}
+        tabCorrespondanceSource.put(new PositionIntersection(2, 2, 0), tabSource[0]);
+        tabCorrespondanceSource.put(new PositionIntersection(2, 4, 0), tabSource[1]);
+        tabCorrespondanceSource.put(new PositionIntersection(2, 6, 0), tabSource[2]);
+        tabCorrespondanceSource.put(new PositionIntersection(4, 2, 0), tabSource[3]);
+        tabCorrespondanceSource.put(new PositionIntersection(4, 4, 0), tabSource[4]);
+        tabCorrespondanceSource.put(new PositionIntersection(4, 6, 0), tabSource[5]);
+        int x1 = 0;
+        int y1 = 0;
+        int x2 = 2;
+        int y2 = 0;
+        for (int i = 0; i < 31; i++) {
+            if (i < 16) {
+                if (i % 4 == 0 && i != 0) {
+                    x1 = 0;
+                    x2 = 2;
+                    y1 += 2;
+                    y2 += 2;
+                } else {
+                    if (i != 0) {
+                        x1 += 2;
+                        x2 += 2;
+                    }
+                }
+                tabCorrespondanceSegment.put(new PositionSegment(x1, y1, x2, y2, true), tabSegments[i]);
+                // System.out.println(x1 + " " + y1 + " " + x2 + " " + y2 +
+                // " ");
+            } else {
+                if (i == 16) {
+                    x1 = 0;
+                    y1 = 0;
+                    x2 = 0;
+                    y2 = 2;
+                }
+                if (i == 21 || i == 26) {
+                    x1 = 0;
+                    x2 = 0;
+                    y1 += 2;
+                    y2 += 2;
+                } else {
+                    if (i != 16) {
+                        x1 += 2;
+                        x2 += 2;
+                    }
+                }
+                tabCorrespondanceSegment.put(new PositionSegment(x1, y1, x2, y2, true), tabSegments[i]);
+                // System.out.println("blabla " + x1 + " " + y1 + " " + x2 + " "
+                // + y2 + " ");
+            }
+        }
+
+        x1 = 0;
+        y1 = 0;
+        for (int i = 0; i < 48; i++) {
+            int indexPosition = santiago.getPlateau().getCases().indexOf(new PositionCase(x1, y1));
+            PositionCase pc = santiago.getPlateau().getCases().get(indexPosition);
+            tabCorrespondanceCase.put(pc, tabCases[i]);
+            x1 += 1;
+            if (x1 == 8) {
+                x1 = 0;
+                y1 += 1;
+            }
+            // System.out.println("blablablabla " + x1 + " " + y1);
+        }
+
+        // On gère maintenant le clic sur un bouton en renvoyant la position au
+        // PanelPartie
+        Set<PositionSegment> parcoursTab = tabCorrespondanceSegment.keySet();
+        Set<PositionCase> parcoursTab2 = tabCorrespondanceCase.keySet();
+        for (final PositionSegment p : parcoursTab) {
+            tabCorrespondanceSegment.get(p).addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    santiago.setPositionSegmentCourant(p);
+                    JOptionPane.showMessageDialog(panelConteneur, p.toString());
+                }
+            });
+        }
+        for (final PositionCase p1 : parcoursTab2) {
+            tabCorrespondanceCase.get(p1).addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    santiago.setPositionCaseCourante(p1);
+                    JOptionPane.showMessageDialog(panelConteneur, p1.toString()); // A
+                                                                                  // Commenter
+                                                                                  // pour
+                                                                                  // enlever
+                                                                                  // le
+                                                                                  // popup
+                }
+            });
+        }
     }
 
     @Override
@@ -259,8 +260,7 @@ public class PanelPlateau extends AbstractPanel{
         try {
             background = ImageIO.read(new File("img/plateau.jpg"));
             // Pour l'image de fond
-            g.drawImage(background, panelConteneur.getLocation().x, panelConteneur.getLocation().y, panelConteneur.getWidth(),
-                    panelConteneur.getHeight(), this);
+            g.drawImage(background, panelConteneur.getLocation().x, panelConteneur.getLocation().y, panelConteneur.getWidth(), panelConteneur.getHeight(), this);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -268,34 +268,43 @@ public class PanelPlateau extends AbstractPanel{
 
     @Override
     public void update(Observable arg0, Object arg1) {
-    	tabCorrespondanceSource.get(santiago.getPlateau().getSource()).setBackground(Color.blue);
-    	ArrayList<Carte> listeCartesPosees = this.santiago.getPlateau().getCartesPosees();
-    	ArrayList<PositionSegment> listeSegments = this.santiago.getPlateau().getCanaux();
-    	for (int i = 0; i<listeSegments.size(); i++){
-    		if (listeSegments.get(i).isOccupe()){
-    			tabCorrespondanceSegment.get(listeSegments.get(i)).setBackground(Color.blue);
-    		}
-    	}
-    	for (int i = 0; i<listeCartesPosees.size(); i++){
-    		if(listeCartesPosees.get(i).getPosition().isOccupe()){
-    			String imageCarte = PanelPartie.getPathImage(listeCartesPosees.get(i));
-    			Icon tmp = new ImageIcon(imageCarte);
-    			tabCorrespondanceCase.get(listeCartesPosees.get(i).getPositionCase()).setIcon(tmp);
-    		}
-    	}
-    	
+        System.out.println("update PanelPlateau");
+
+        tabCorrespondanceSource.get(santiago.getPlateau().getSource()).setBackground(Color.blue);
+        ArrayList<Carte> listeCartesPosees = this.santiago.getPlateau().getCartesPosees();
+        ArrayList<PositionSegment> listeSegments = this.santiago.getPlateau().getCanaux();
+        for (int i = 0; i < listeSegments.size(); i++) {
+            PositionSegment ps = listeSegments.get(i);
+            if (listeSegments.get(i).isOccupe()) {
+                tabCorrespondanceSegment.get(listeSegments.get(i)).setBackground(Color.blue);
+            }
+        }
+        for (int i = 0; i < listeCartesPosees.size(); i++) {
+            Carte carte = listeCartesPosees.get(i);
+            if (carte.getPosition().isOccupe()) {
+                Image originalImage = getToolkit().getImage(PanelPartie.getPathImage(carte));
+                Image scaledImage = originalImage.getScaledInstance(80, 80, Image.SCALE_AREA_AVERAGING);
+                Icon tmp = new ImageIcon(scaledImage);
+
+                System.out.println("position carte : " + listeCartesPosees.get(i).getPositionCase());
+                JButton b = tabCorrespondanceCase.get(listeCartesPosees.get(i).getPositionCase());
+                System.out.println("bouton : " + b);
+                tabCorrespondanceCase.get(listeCartesPosees.get(i).getPositionCase()).setIcon(tmp);
+            }
+        }
+
     }
-
-    public static void main(String[] args) {
-        JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setPreferredSize(new Dimension(800, 600));
-
-        PanelPlateau pp = new PanelPlateau(frame);
-        frame.setContentPane(pp);
-        pp.initComponent();
-
-        frame.pack();
-        frame.setVisible(true);
-    }
+    //
+    // public static void main(String[] args) {
+    // JFrame frame = new JFrame();
+    // frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    // frame.setPreferredSize(new Dimension(800, 600));
+    //
+    // PanelPlateau pp = new PanelPlateau(frame);
+    // frame.setContentPane(pp);
+    // pp.initComponent();
+    //
+    // frame.pack();
+    // frame.setVisible(true);
+    // }
 }

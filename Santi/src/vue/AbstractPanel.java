@@ -15,7 +15,8 @@ import model.Santiago;
 
 public abstract class AbstractPanel extends JPanel implements Observer, IConstante {
     private static final long serialVersionUID = 1L;
-
+    private static int NBPANEL = 0;
+    private final int id;
     // Attributs récurrent d'une instance Panel
     protected Container parent;
     protected Santiago santiago;
@@ -25,6 +26,8 @@ public abstract class AbstractPanel extends JPanel implements Observer, IConstan
     // Contructeur général
     public AbstractPanel(Container parent) {
         super();
+        id = NBPANEL;
+        NBPANEL++;
         santiago = null;
         homeDimension = null;
         isInit = false;
@@ -75,6 +78,32 @@ public abstract class AbstractPanel extends JPanel implements Observer, IConstan
         Graphics2D g2 = (Graphics2D) g;
         g2.setColor(BG_TRANSPARENT);
         g2.fillRect(0, 0, getWidth(), getHeight());
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((homeDimension == null) ? 0 : homeDimension.hashCode());
+        result = prime * result + (isInit ? 1231 : 1237);
+        result = prime * result + ((parent == null) ? 0 : parent.hashCode());
+        result = prime * result + ((santiago == null) ? 0 : santiago.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        AbstractPanel other = (AbstractPanel) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        return true;
     }
 
 }

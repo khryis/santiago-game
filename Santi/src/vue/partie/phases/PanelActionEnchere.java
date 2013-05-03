@@ -56,7 +56,6 @@ public class PanelActionEnchere extends PanelAction {
     private class EncherirListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            // TODO
             if (!santiago.encherir(Integer.valueOf(betText.getText()))) {
                 JOptionPane.showInputDialog("Mauvaise saisie");
             }

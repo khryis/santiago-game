@@ -73,9 +73,9 @@ public class PositionSegment extends Position {
 
     @Override
     public String toString() {
-        return "Segment : [ " + x + ", " + y + " ] --> [ " + x2 + ", " + y2 + " ]\n";
+        return "Segment : [ " + x + ", " + y + " ] --> [ " + x2 + ", " + y2 + " ] occuper : " + isOccupe() + "\n";
     }
-    
+
     @Override
     public boolean equals(Object obj) {
 
@@ -88,8 +88,7 @@ public class PositionSegment extends Position {
         }
         PositionSegment other = (PositionSegment) obj;
 
-        if (x == other.x && y == other.y && x2 == other.x2 && y2 == other.y2 || x == other.x2 && y == other.y2 && x2 == other.x
-                && y2 == other.y) {
+        if (x == other.x && y == other.y && x2 == other.x2 && y2 == other.y2 || x == other.x2 && y == other.y2 && x2 == other.x && y2 == other.y) {
             return true;
         }
 

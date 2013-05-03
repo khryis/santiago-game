@@ -108,8 +108,8 @@ public class Plateau extends Observable {
 
     public boolean poserUneCarte(Carte carteAPoser, int x, int y) {
         boolean pose = false;
-
         Position positionChoisie = new PositionCase(x, y, false);
+
         if (cases.contains(positionChoisie)) {
             int indexPosition = cases.indexOf(positionChoisie);
             positionChoisie = cases.get(indexPosition);
@@ -119,6 +119,8 @@ public class Plateau extends Observable {
                 positionCase.setOccupe(true);
                 carteAPoser.setPosition(positionCase);
                 pose = true;
+            } else {
+                System.out.println("Position déjà occupé");
             }
         } else {
             // TODO une exception
@@ -133,8 +135,18 @@ public class Plateau extends Observable {
         boolean place = false;
         PositionSegment canal = new PositionSegment(x, y, x1, y1, true);
         if (emplacementCanaux.contains(canal)) {
-            emplacementCanaux.get(emplacementCanaux.indexOf(canal)).setOccupe(true);
-            place = true;
+            int index = emplacementCanaux.indexOf(canal);
+            if (!emplacementCanaux.get(index).isOccupe()) {
+                emplacementCanaux.get(emplacementCanaux.indexOf(canal)).setOccupe(true);
+                place = true;
+            } else {
+                // TODO créer une erreur
+                System.out.println("Canal déja occupe");
+                place = false;
+            }
+
+        } else {
+            System.out.println("Position inexistante");
         }
         return place;
     }
@@ -218,9 +230,8 @@ public class Plateau extends Observable {
 
     @Override
     public String toString() {
-        return "Plateau : \nSource : " + source + ",\ncanaux=" + emplacementCanaux + ",\ncases=" + cases + ",\ncartes=\n" + cartes
-                + ",\ncartesPosees=" + cartesPosees + ",\npalmiers=" + palmiers + ",\nnbJoueurs=" + nbJoueurs + ",\ncartesDevoilees="
-                + cartesDevoilees + "\n]\n";
+        return "Plateau : \nSource : " + source + ",\ncanaux=" + emplacementCanaux + ",\ncases=" + cases + ",\ncartes=\n" + cartes + ",\ncartesPosees=" + cartesPosees + ",\npalmiers=" + palmiers
+                + ",\nnbJoueurs=" + nbJoueurs + ",\ncartesDevoilees=" + cartesDevoilees + "\n]\n";
     }
 
     public PositionIntersection getSource() {

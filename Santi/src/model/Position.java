@@ -44,9 +44,6 @@ public class Position {
         if (obj == null) {
             return false;
         }
-        if (this == obj) {
-            return true;
-        }
         Position other = (Position) obj;
         if (x != other.x) {
             return false;

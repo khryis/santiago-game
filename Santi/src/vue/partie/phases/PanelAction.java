@@ -198,6 +198,15 @@ public class PanelAction extends AbstractPanel {
     public void update(Observable arg0, Object arg1) {
         // TODO Auto-generated method stub
 
+        if (santiago.getPositionCaseCourante() != null) {
+            System.out.println("coucou");
+            positionValeur.setText(santiago.getPositionCaseCourante().toString());
+            repaint();
+        }
+        if (santiago.getPositionSegmentCourant() != null) {
+            positionValeur.setText(santiago.getPositionCaseCourante().toString());
+            repaint();
+        }
     }
 
     private class CliclOnCard implements ActionListener {

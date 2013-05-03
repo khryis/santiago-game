@@ -28,6 +28,8 @@ public class Joueur {
         tuyauSup = true;
         constructeur = false;
         solde = 10;
+        enchereCarte = 0;
+        enchereConstructeur = 0;
     }
 
     public void ajouterArgent(int somme) {

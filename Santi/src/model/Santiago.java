@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Observable;
 
+import exception.AucunConstructeurException;
 import exception.AucunJoueurParoleException;
 import exception.MauvaisePositionCanalException;
 
@@ -22,11 +23,20 @@ public class Santiago extends Observable {
     private int nbTours; // décrémenter à chaque fin de tour
     private final HashMap<Joueur, Integer> tabEnchere;
     private HashMap<PositionSegment, ArrayList<Joueur>> enchereConstr = new HashMap<>();
-    private Joueur joueurGagnant;
+
     private boolean configured;
 
-    private int indiceJoueurCourant;
     private boolean phaseFinie;
+
+    private int indiceJoueurCourant;
+    private boolean trouveConstructeur;
+    private Joueur deviendraConstructeur;
+
+    private Joueur choisiCarte;
+    private Joueur joueurGagnant;
+
+    private PositionCase positionCaseCourante;
+    private PositionSegment positionSegmentCourant;
 
     public enum TypeEnchere {
         CARTE, CONSTRUCTEUR
@@ -42,9 +52,19 @@ public class Santiago extends Observable {
         nbTours = 0;
         tabEnchere = new HashMap<>();
         enchereConstr = new HashMap<>();
-        joueurGagnant = null;
+
         configured = false;
+
         phaseFinie = false;
+
+        trouveConstructeur = false;
+        deviendraConstructeur = null;
+
+        choisiCarte = null;
+        joueurGagnant = null;
+
+        positionCaseCourante = null;
+        positionSegmentCourant = null;
     }
 
     public static Santiago getSantiago() {
@@ -72,46 +92,21 @@ public class Santiago extends Observable {
         }
         determinerUnConstructeur();
         indiceJoueurCourant = positionApresConstructeur();
+        phaseFinie = false;
         configured = true;
         repercuterModification();
     }
 
     /**
-     * Permet de changer le statu constructeur d'un joueur donnée
+     * Permet de setter un joueur en constructeur et d'enlever l'ancien
      * 
      * @param indexJoueurs
      * @param estConstructeur
      */
-    public void setConstructeur(int indexJoueurs, boolean estConstructeur) {
-        listJoueurs.get(indexJoueurs).setConstructeur(estConstructeur);
+    public void changerConstructeur(Joueur joueur) {
+        listJoueurs.get(positionConstructeur()).setConstructeur(false);
+        joueur.setConstructeur(true);
         repercuterModification();
-    }
-
-    /**
-     * Permet de déterminer si le joueur devient constructeur pendant le tour
-     * d'enchère
-     * 
-     * @param indexJoueur
-     * @param enchereJoueur
-     * @param dernier
-     * @return
-     */
-    public boolean devientConstructeurApresEnchere(int indexJoueur, int enchereJoueur, boolean dernier) {
-        boolean constructeurTrouve = false;
-
-        // on regarde si on trouve le nouveau constructeur
-        if (enchereJoueur == 0 && !constructeurTrouve) {
-            setConstructeur(indexJoueur, true);
-            constructeurTrouve = true;
-        }
-        tabEnchere.put(listJoueurs.get(indexJoueur), enchereJoueur);
-        listJoueurs.get(indexJoueur).setEnchereCarte(enchereJoueur);
-
-        if (!dernier) {
-            // TODO
-        }
-        repercuterModification();
-        return constructeurTrouve;
     }
 
     /**
@@ -131,26 +126,10 @@ public class Santiago extends Observable {
      * 
      * @param niv
      */
-    public void setNiveauPartie(NiveauPartie niv) {
-        niveau = niv;
-        switch (niveau) {
-        case FACILE:
-            avecPalmier = NiveauPartie.FACILE.withPalmier();
-            niveauSource = NiveauPartie.FACILE.getNiveauSource();
-            break;
-        case MOYEN:
-            avecPalmier = NiveauPartie.MOYEN.withPalmier();
-            niveauSource = NiveauPartie.MOYEN.getNiveauSource();
-            break;
-        case DIFFICILE:
-            avecPalmier = NiveauPartie.DIFFICILE.withPalmier();
-            niveauSource = NiveauPartie.DIFFICILE.getNiveauSource();
-            break;
-        default:
-            avecPalmier = NiveauPartie.FACILE.withPalmier();
-            niveauSource = NiveauPartie.FACILE.getNiveauSource();
-            break;
-        }
+    public void setNiveauPartie(NiveauPartie level) {
+        this.niveau = level;
+        avecPalmier = niveau.withPalmier();
+        niveauSource = niveau.getNiveauSource();
     }
 
     /**
@@ -189,6 +168,7 @@ public class Santiago extends Observable {
         for (Joueur j : listJoueurs) {
             j.ajouterArgent(3);
         }
+        // TODO tour - 1
         resetEnchereVars();
         repercuterModification();
     }
@@ -223,6 +203,40 @@ public class Santiago extends Observable {
         return positionApresContructeur;
     }
 
+    public void incrementerJoueurCourantEnchere() {
+        indiceJoueurCourant++;
+        if (indiceJoueurCourant == listJoueurs.size()) {
+            indiceJoueurCourant = 0;
+        }
+        if (indiceJoueurCourant == positionApresConstructeur()) {
+            setPhaseFinie(true);
+            if (trouveConstructeur) {
+                changerConstructeur(deviendraConstructeur);
+                deviendraConstructeur = null;
+            } else if (!trouveConstructeur) {
+                changerConstructeur(enchereMin());
+            } else {
+                try {
+                    throw new AucunConstructeurException();
+                } catch (AucunConstructeurException e) {
+                    e.printStackTrace();
+                }
+            }
+            choisiCarte = enchereMax();
+            indiceJoueurCourant = listJoueurs.indexOf(choisiCarte);
+        }
+    }
+
+    public void incrementerJoueurCourantSoudoiement() {
+        indiceJoueurCourant++;
+        if (indiceJoueurCourant == listJoueurs.size()) {
+            indiceJoueurCourant = 0;
+        }
+        if (indiceJoueurCourant == positionConstructeur()) {
+            setPhaseFinie(true);
+        }
+    }
+
     public void incrementerJoueurCourant() {
         indiceJoueurCourant++;
         if (indiceJoueurCourant == listJoueurs.size()) {
@@ -246,16 +260,37 @@ public class Santiago extends Observable {
         return joueur;
     }
 
-    public boolean encherir(int value) {
+    /**
+     * Permet de déterminer si le joueur devient constructeur pendant le tour
+     * d'enchère
+     * 
+     * @param indexJoueur
+     * @param enchere
+     * @param dernier
+     * @return
+     */
+    public boolean deviendraConstructeur(int enchere) {
+        boolean deviendra = false;
+        // on regarde si on trouve le nouveau constructeur
+        if (enchere == 0 && !trouveConstructeur) {
+            deviendraConstructeur = joueurPlaying();
+            trouveConstructeur = true;
+            deviendra = true;
+        }
+        return deviendra;
+    }
+
+    public boolean encherir(int enchere) {
         boolean reussi = false;
-        int enchere = value <= 0 ? 0 : value;
         Joueur joueur = getListJoueurs().get(indiceJoueurCourant);
         int solde = joueur.getSolde();
+        enchere = (enchere < 0 ? 0 : enchere);
 
         if (enchere > solde) {
             System.out.println("Pas assez d'argent pour encherir de la sorte (max " + solde + ")");
             reussi = false;
         } else if (enchere < 0) {
+            // Jamais dans ce cas avec le ternaire au dessus
             System.out.println("Problème, enchère négative");
             reussi = false;
         } else if (tabEnchere.containsValue(enchere) && enchere != 0) {
@@ -264,8 +299,13 @@ public class Santiago extends Observable {
         } else {
             reussi = true;
             tabEnchere.put(joueur, enchere);
-            System.out.println("joueur : " + joueur + ", enchere " + tabEnchere.get(joueur));
-            incrementerJoueurCourant();
+            joueur.setEnchereCarte(enchere);
+            if (deviendraConstructeur(enchere)) {
+                System.out.println("joueur : " + joueur + ", enchere " + tabEnchere.get(joueur) + " deviendra constructeur");
+            } else {
+                System.out.println("joueur : " + joueur + ", enchere " + tabEnchere.get(joueur));
+            }
+            incrementerJoueurCourantEnchere();
             repercuterModification();
         }
 
@@ -288,9 +328,25 @@ public class Santiago extends Observable {
      * @param y
      * @return
      */
-    public boolean poserUneCarte(Joueur joueur, Carte carteAPoser, int x, int y) {
+    public boolean poserUneCarte(int indexCarteAPoser, int x, int y) {
+        // on récupère le joueur entrain de poser une carte
+        Joueur joueur;
+        if (!tabEnchere.isEmpty()) {
+            joueur = enchereMax();
+            // Dans le cas du premier joueur et quans on est a trois, dernière
+            // carte
+            // placé par la meilleur enchere
+            if (listJoueurs.size() == tabEnchere.size()) {
+                joueurGagnant = joueur;
+            }
+        } else {
+            joueur = joueurGagnant;
+        }
 
+        Carte carteAPoser = plateau.getCartesDevoilees().get(indexCarteAPoser);
         boolean estPosee = false;
+        // on esseye de poser la carte et après on set tous les attributs
+        // qui vont biens
         if (plateau.poserUneCarte(carteAPoser, x, y)) {
             // Maj possesseur
             carteAPoser.setPossesseur(joueur);
@@ -299,8 +355,7 @@ public class Santiago extends Observable {
             joueur.setNbMarqueurDispos(joueur.getNbMarqueurDispos() - carteAPoser.getNbMarqueurMax());
 
             // Maj solde
-            // FIXME bizarre, pourquoi tabEnchere.isEmpty ? plutot tester la
-            // somme de tabEnchere pour le joueur
+            // somme de tabEnchere pour le joueur gagnant
             joueur.enleverArgent(tabEnchere.isEmpty() ? 0 : tabEnchere.get(joueur));
 
             // MAJ marqueurs de la carte si enchère joueur = 0
@@ -311,18 +366,25 @@ public class Santiago extends Observable {
             // verifie si la carte est irrigué
             plateau.majIrrigation1Carte(carteAPoser);
 
-            // plateau.getCartesPosees().add(carte);
+            // On enlève la carte des cartes dévoilées
             plateau.popCarteDevoilees(carteAPoser);
 
-            // On enlève la carte des cartes dévoilées
+            // réinitialise l'attribut enchère du joueur
+            joueur.setEnchereCarte(0);
+            // on retire de tabEnchere les joueur et son enchère
             if (!tabEnchere.isEmpty()) {
                 tabEnchere.remove(joueur);
+            }
+            if (plateau.getCartesDevoilees().isEmpty()) {
+                phaseFinie = true;
+                indiceJoueurCourant = positionApresConstructeur();
             }
             estPosee = true;
             repercuterModification();
         } else {
             estPosee = false;
         }
+
         return estPosee;
     }
 
@@ -371,7 +433,8 @@ public class Santiago extends Observable {
      */
     public boolean encherePositionCanal(PositionSegment canal, int montant) {
         boolean reussi;
-        Joueur joueur = listJoueurs.get(indiceJoueurCourant);
+        Joueur joueur = joueurPlaying();
+
         if (montant > 0 && montant < joueur.getSolde()) {
             // seter enchère
             joueur.setEnchereConstructeur(montant);
@@ -381,12 +444,12 @@ public class Santiago extends Observable {
                 // canal déjà proposée
                 enchereConstr.get(canal).add(joueur);
             } else { // ajouter dans la hashmap
-                System.out.println("proposition n'existe pas, ajoute canal et joueur");
+                System.out.println("proposition n'existe pas, ajoute canal et joueur au tabConstruction");
                 ArrayList<Joueur> enchJoueur = new ArrayList<>();
                 enchJoueur.add(joueur);
                 enchereConstr.put(canal, enchJoueur);
             }
-            incrementerJoueurCourant();
+            incrementerJoueurCourantSoudoiement();
             repercuterModification();
             reussi = true;
         } else {
@@ -396,8 +459,8 @@ public class Santiago extends Observable {
     }
 
     /**
-     * Permet au constructeur de positionner un canal, choisi par lui ou dans
-     * ceux qu'on lui à proposé en renseignant la position
+     * Permet au constructeur de positionner un canal dans ceux qu'on lui à
+     * proposé en renseignant la position
      * 
      * @param x
      * @param y
@@ -417,8 +480,10 @@ public class Santiago extends Observable {
                     for (Joueur joueur : joueursEnch) {
                         joueur.enleverArgent(joueur.getEnchereConstructeur());
                         constructeur.ajouterArgent(joueur.getEnchereConstructeur());
+                        joueur.setEnchereConstructeur(0);
                     }
                     reussi = true;
+                    phaseFinie = true;
                 } else {
                     reussi = false;
                 }
@@ -428,6 +493,25 @@ public class Santiago extends Observable {
         } catch (MauvaisePositionCanalException e) {
             e.printStackTrace();
             reussi = false;
+        }
+        return reussi;
+    }
+
+    /**
+     * Permet au constructeur de canal de poser le canal de son choix
+     * 
+     * @param canal
+     * @return
+     */
+    public boolean placerCanalDeSonChoix(PositionSegment canal) {
+        boolean reussi = false;
+        Joueur constructeur = getListJoueurs().get(positionConstructeur());
+        if (constructeurPeutEncherir()) {
+            if (plateau.placerCanal(canal)) {
+                constructeur.enleverArgent(plusGrossePropositionCanal() + 1);
+                reussi = true;
+                phaseFinie = true;
+            }
         }
         return reussi;
     }
@@ -455,23 +539,25 @@ public class Santiago extends Observable {
      * @return
      */
     public boolean constructeurPeutEncherir() {
-        boolean peutEncherir;
-        int total = 0, indiceJCourant;
+        return (plusGrossePropositionCanal() < listJoueurs.get(positionConstructeur()).getSolde());
+    }
+
+    public int plusGrossePropositionCanal() {
+        int total = 0, totalTmp = 0, indiceJCourant;
         ArrayList<Joueur> joueursEnch = new ArrayList<>();
         for (Map.Entry<PositionSegment, ArrayList<Joueur>> entry : enchereConstr.entrySet()) {
             indiceJCourant = 0;
+            totalTmp = 0;
             joueursEnch = entry.getValue();
             while (indiceJCourant < joueursEnch.size()) {
-                total += joueursEnch.get(indiceJCourant).getEnchereConstructeur();
+                totalTmp += joueursEnch.get(indiceJCourant).getEnchereConstructeur();
                 indiceJCourant++;
             }
+            if (totalTmp > total) {
+                total = totalTmp;
+            }
         }
-        if (total > listJoueurs.get(positionConstructeur()).getSolde()) {
-            peutEncherir = false;
-        } else {
-            peutEncherir = true;
-        }
-        return peutEncherir;
+        return total;
     }
 
     /**
@@ -495,8 +581,8 @@ public class Santiago extends Observable {
 
     @Override
     public String toString() {
-        return "Santiago : \n" + listJoueurs.toString() + ",\nnbCanaux=" + nbCanaux + ",\nniveau=" + niveau + ",\navecPalmier="
-                + avecPalmier + ",\n" + plateau.toString() + ",\nnbTours=" + nbTours + "]\n";
+        return "Santiago : \n" + listJoueurs.toString() + ",\nnbCanaux=" + nbCanaux + ",\nniveau=" + niveau + ",\navecPalmier=" + avecPalmier + ",\n" + plateau.toString() + ",\nnbTours=" + nbTours
+                + "]\n";
     }
 
     /**
@@ -560,7 +646,6 @@ public class Santiago extends Observable {
 
     public void setListJoueurs(ArrayList<Joueur> listJoueurs) {
         this.listJoueurs = listJoueurs;
-        repercuterModification();
     }
 
     public Joueur getJoueurGagnant() {
@@ -595,4 +680,35 @@ public class Santiago extends Observable {
         this.phaseFinie = phaseFinie;
     }
 
+    public boolean hasTrouveConstructeur() {
+        return trouveConstructeur;
+    }
+
+    public void setTrouveConstructeur(boolean trouveConstructeur) {
+        this.trouveConstructeur = trouveConstructeur;
+    }
+
+    public Joueur getDeviendraConstructeur() {
+        return deviendraConstructeur;
+    }
+
+    public Joueur getChoisiCarte() {
+        return choisiCarte;
+    }
+
+    public PositionCase getPositionCaseCourante() {
+        return positionCaseCourante;
+    }
+
+    public PositionSegment getPositionSegmentCourant() {
+        return positionSegmentCourant;
+    }
+
+    public void setPositionCaseCourante(PositionCase pc) {
+        this.positionCaseCourante = pc;
+    }
+
+    public void setPositionSegmentCourant(PositionSegment ps) {
+        this.positionSegmentCourant = ps;
+    }
 }

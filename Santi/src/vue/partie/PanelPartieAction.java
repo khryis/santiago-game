@@ -4,15 +4,11 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.util.ArrayList;
 import java.util.Observable;
 
 import javax.swing.JPanel;
 
 import model.Carte;
-import model.Joueur;
-import model.NiveauPartie;
-import model.PositionSegment;
 import vue.AbstractPanel;
 import vue.partie.phases.PanelAction;
 import vue.partie.phases.PanelActionCanalSup;
@@ -37,8 +33,8 @@ public class PanelPartieAction extends AbstractPanel {
 
     public JPanel phases = new JPanel();
     public CardLayout cardLayout = new CardLayout();
-    public String[] listPhases = { "PHASE D'ENCHERE", "PHASE DE CHOIX DES CARTES", "PHASE DE SOUDOIEMENT",
-            "PHASE DE CHOIX D'UNE CONSTRUCTION", "PHASE DE CANAL SUPPLEMENTAIRE", "PHASE DE SECHERESSE", "DIA_DE_PAGA" };
+    public String[] listPhases = { "PHASE D'ENCHERE", "PHASE DE CHOIX DES CARTES", "PHASE DE SOUDOIEMENT", "PHASE DE CHOIX D'UNE CONSTRUCTION", "PHASE DE CANAL SUPPLEMENTAIRE", "PHASE DE SECHERESSE",
+            "DIA_DE_PAGA" };
     int indice = 0;
 
     public PanelPartieAction(Container parent) {
@@ -77,25 +73,6 @@ public class PanelPartieAction extends AbstractPanel {
 
         add(phases, BorderLayout.CENTER);
 
-        // FIXME à enlever, pour test
-        // ---------------------------
-        santiago.setNiveauPartie(NiveauPartie.FACILE);
-        ArrayList<Joueur> listjoueurs = new ArrayList<>();
-        listjoueurs.add(new Joueur("tull", "bleu"));
-        listjoueurs.add(new Joueur("andre", "vert"));
-        listjoueurs.add(new Joueur("marc", "gris"));
-        santiago.setListJoueurs(listjoueurs);
-        santiago.initPartie();
-        santiago.devoilerCarte();
-
-        santiago.encherePositionCanal(new PositionSegment(0, 0, 0, 1), 3);
-        santiago.encherePositionCanal(new PositionSegment(1, 1, 1, 2), 5);
-        santiago.encherePositionCanal(new PositionSegment(3, 4, 4, 4), 4);
-        santiago.setPhaseFinie(false);
-        indice = 0;
-        santiago.setIndiceJoueurCourant(santiago.positionApresConstructeur());
-        // ----------------------------
-
         phaseEnchere.initComponent();
         phaseChoixCarte.initComponent();
         phaseSoudoiement.initComponent();
@@ -103,6 +80,11 @@ public class PanelPartieAction extends AbstractPanel {
         phaseCanalSup.initComponent();
         phaseSecheresse.initComponent();
         phaseDiaDePaga.initComponent();
+
+        // FIXME a enlever après les test
+        indice = 0;
+        santiago.repercuterModification();
+        //
 
         cardLayout.show(phases, listPhases[indice]);
 
@@ -112,11 +94,11 @@ public class PanelPartieAction extends AbstractPanel {
     @Override
     public void update(Observable arg0, Object arg1) {
         // TODO Auto-generated method stub
+        System.out.println("update PanelPartieAction");
         if (santiago.isPhaseFinie()) {
             santiago.setPhaseFinie(false);
             incrementerCardLayout();
             cardLayout.show(phases, listPhases[indice]);
-            System.out.println("coucou indice : " + indice);
         }
     }
 
