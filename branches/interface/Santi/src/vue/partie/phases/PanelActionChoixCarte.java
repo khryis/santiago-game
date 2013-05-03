@@ -2,11 +2,15 @@ package vue.partie.phases;
 
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Observable;
 
 import javax.swing.BoxLayout;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import model.PositionCase;
 import vue.components.Bouton;
 
 public class PanelActionChoixCarte extends PanelAction {
@@ -26,6 +30,7 @@ public class PanelActionChoixCarte extends PanelAction {
         super(parent, name);
         valider.setPreferredSize(new Dimension(300, 50));
         boutons.add(valider);
+        valider.addActionListener(new ValiderCarteChoisieListener());
     }
 
     public PanelActionChoixCarte(Container parent, String name, String[] actions) {
@@ -54,6 +59,50 @@ public class PanelActionChoixCarte extends PanelAction {
 
     @Override
     public void update(Observable arg0, Object arg1) {
+        System.out.println("update panelAction");
+        if (!santiago.getPlateau().getCartesDevoilees().isEmpty()) {
+            System.out.println("coucou");
+            removeAll();
+            initComponent();
+            validate();
+        }
+        if (santiago.getPositionCaseCourante() != null) {
+            positionValeur.setText(santiago.getPositionCaseCourante().toString());
+        }
+        if (santiago.getCarteChoisie() != null) {
+            cardChoisie.setText(santiago.getCarteChoisie().toString());
+        }
+        // if (santiago.getPositionSegmentCourant() != null) {
+        // System.out.println("coucou");
+        // positionValeur.setText(santiago.getPositionCaseCourante().toString());
+        // positionValeur.validate();
+        // System.out.println(positionValeur.getText());
+        // }
+    }
 
+    private class ValiderCarteChoisieListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // TODO Auto-generated method stub
+            int index = santiago.getPlateau().getCartesDevoilees().indexOf(santiago.getCarteChoisie());
+            if (index != -1) {
+                PositionCase positionCase = santiago.getPositionCaseCourante();
+                if (positionCase != null) {
+                    if (santiago.poserUneCarte(index, positionCase.getX(), positionCase.getY())) {
+                        System.out.println("coucou");
+                        JOptionPane.showMessageDialog(parent, "Carte posée !!");
+                    } else {
+                        JOptionPane.showMessageDialog(parent, "Carte non posée !!");
+                    }
+                } else {
+                    // JOptionPane.showInputDialog("Choisissez une position sur le plateau !");
+                    JOptionPane.showMessageDialog(parent, "bbordel");
+                }
+            } else {
+                // JOptionPane.showInputDialog("Choisissez une carte a placer !");
+                JOptionPane.showMessageDialog(parent, "bbordel carte");
+            }
+        }
     }
 }

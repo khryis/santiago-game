@@ -58,13 +58,4 @@ public class PositionCase extends Position {
         return result;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (!super.equals(obj))
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        return true;
-    }
-
 }

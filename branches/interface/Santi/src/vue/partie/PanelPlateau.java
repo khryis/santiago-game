@@ -19,7 +19,6 @@ import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -234,7 +233,8 @@ public class PanelPlateau extends AbstractPanel {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     santiago.setPositionSegmentCourant(p);
-                    JOptionPane.showMessageDialog(panelConteneur, p.toString());
+                    // JOptionPane.showMessageDialog(panelConteneur,
+                    // p.toString());
                 }
             });
         }
@@ -243,12 +243,13 @@ public class PanelPlateau extends AbstractPanel {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     santiago.setPositionCaseCourante(p1);
-                    JOptionPane.showMessageDialog(panelConteneur, p1.toString()); // A
-                                                                                  // Commenter
-                                                                                  // pour
-                                                                                  // enlever
-                                                                                  // le
-                                                                                  // popup
+                    // JOptionPane.showMessageDialog(panelConteneur,
+                    // p1.toString()); // A
+                    // Commenter
+                    // pour
+                    // enlever
+                    // le
+                    // popup
                 }
             });
         }
@@ -270,13 +271,19 @@ public class PanelPlateau extends AbstractPanel {
     public void update(Observable arg0, Object arg1) {
         System.out.println("update PanelPlateau");
 
+        // Set<PositionCase> set = tabCorrespondanceCase.keySet();
+        // System.out.println(set.toString());
+        //
+        // Collection<JButton> collection = tabCorrespondanceCase.values();
+        // System.out.println(collection.toString());
+
         tabCorrespondanceSource.get(santiago.getPlateau().getSource()).setBackground(Color.blue);
         ArrayList<Carte> listeCartesPosees = this.santiago.getPlateau().getCartesPosees();
         ArrayList<PositionSegment> listeSegments = this.santiago.getPlateau().getCanaux();
         for (int i = 0; i < listeSegments.size(); i++) {
             PositionSegment ps = listeSegments.get(i);
-            if (listeSegments.get(i).isOccupe()) {
-                tabCorrespondanceSegment.get(listeSegments.get(i)).setBackground(Color.blue);
+            if (ps.isOccupe()) {
+                tabCorrespondanceSegment.get(ps).setBackground(Color.blue);
             }
         }
         for (int i = 0; i < listeCartesPosees.size(); i++) {
@@ -285,11 +292,16 @@ public class PanelPlateau extends AbstractPanel {
                 Image originalImage = getToolkit().getImage(PanelPartie.getPathImage(carte));
                 Image scaledImage = originalImage.getScaledInstance(80, 80, Image.SCALE_AREA_AVERAGING);
                 Icon tmp = new ImageIcon(scaledImage);
-
-                System.out.println("position carte : " + listeCartesPosees.get(i).getPositionCase());
-                JButton b = tabCorrespondanceCase.get(listeCartesPosees.get(i).getPositionCase());
+                // System.out.println("position carte : " +
+                // listeCartesPosees.get(i).getPositionCase());
+                System.out.println(tabCorrespondanceCase.containsKey(carte.getPosition()));
+                System.out.println(tabCorrespondanceCase.keySet().toString());
+                System.out.println(carte.getPosition());
+                JButton b = tabCorrespondanceCase.get(carte.getPositionCase());
                 System.out.println("bouton : " + b);
-                tabCorrespondanceCase.get(listeCartesPosees.get(i).getPositionCase()).setIcon(tmp);
+                if (b != null) {
+                    b.setIcon(tmp);
+                }
             }
         }
 

@@ -8,7 +8,6 @@ import java.util.Observable;
 
 import javax.swing.JPanel;
 
-import model.Carte;
 import vue.AbstractPanel;
 import vue.partie.phases.PanelAction;
 import vue.partie.phases.PanelActionCanalSup;
@@ -107,11 +106,6 @@ public class PanelPartieAction extends AbstractPanel {
         if (indice == listPhases.length) {
             indice = 0;
         }
-    }
-
-    public void cardSelected(Carte carte, Container panel) {
-        System.out.println("carte séléctionné : " + carte.toString());
-        ((PanelAction) panel).cardChoisie.setText(carte.toString());
     }
 
 }

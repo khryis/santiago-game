@@ -108,6 +108,7 @@ public class Plateau extends Observable {
 
     public boolean poserUneCarte(Carte carteAPoser, int x, int y) {
         boolean pose = false;
+
         Position positionChoisie = new PositionCase(x, y, false);
 
         if (cases.contains(positionChoisie)) {

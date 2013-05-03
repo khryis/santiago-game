@@ -44,7 +44,7 @@ public class Position {
         if (obj == null) {
             return false;
         }
-        Position other = (Position) obj;
+        final Position other = (Position) obj;
         if (x != other.x) {
             return false;
         }

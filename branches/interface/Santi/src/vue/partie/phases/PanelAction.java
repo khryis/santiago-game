@@ -37,15 +37,15 @@ public class PanelAction extends AbstractPanel {
     public final JPanel boutons = new JPanel();
     private String nameAction;
 
-    public JPanel positionChoisiePanel;
-    public JLabel positionValeur;
+    public JPanel positionChoisiePanel = new JPanel();
+    public JLabel positionValeur = new JLabel();
 
-    public JPanel betPanel;
-    public JTextField betText;
-    public JSlider betSlider;
+    public JPanel betPanel = new JPanel();
+    public JTextField betText = new JTextField();
+    public JSlider betSlider = new JSlider();
 
-    public JPanel cardChoisiePanel;
-    public JLabel cardChoisie;
+    public JPanel cardChoisiePanel = new JPanel();
+    public JLabel cardChoisie = new JLabel();
 
     // private final JPanel soudoiement = new JPanel();
     //
@@ -196,17 +196,7 @@ public class PanelAction extends AbstractPanel {
 
     @Override
     public void update(Observable arg0, Object arg1) {
-        // TODO Auto-generated method stub
-
-        if (santiago.getPositionCaseCourante() != null) {
-            System.out.println("coucou");
-            positionValeur.setText(santiago.getPositionCaseCourante().toString());
-            repaint();
-        }
-        if (santiago.getPositionSegmentCourant() != null) {
-            positionValeur.setText(santiago.getPositionCaseCourante().toString());
-            repaint();
-        }
+        // TODO
     }
 
     private class CliclOnCard implements ActionListener {
@@ -216,7 +206,7 @@ public class PanelAction extends AbstractPanel {
             if (e.getSource() instanceof CardButton) {
                 if (((CardButton) e.getSource()).getParent().getParent().getParent() instanceof PanelActionChoixCarte) {
                     Carte carte = ((CardButton) e.getSource()).getCarte();
-                    panelPartieAction.cardSelected(carte, ((CardButton) e.getSource()).getParent().getParent().getParent());
+                    santiago.setCarteChoisie(carte);
                 }
             }
         }
