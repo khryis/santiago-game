@@ -40,8 +40,6 @@ public class PanelPartie extends AbstractPanel {
         santiago.setListJoueurs(listjoueurs);
         santiago.initPartie();
 
-        // santiago.devoilerCarte();
-
         // santiago.encherePositionCanal(new PositionSegment(0, 0, 0, 1), 3);
         // santiago.encherePositionCanal(new PositionSegment(1, 1, 1, 2), 5);
         // santiago.encherePositionCanal(new PositionSegment(3, 4, 4, 4), 4);
@@ -57,9 +55,6 @@ public class PanelPartie extends AbstractPanel {
         // santiago.poserUneCarte(0, 5, 1);
         // santiago.poserUneCarte(0, 4, 1);
         // santiago.poserUneCarte(0, 3, 3);
-
-        // santiago.setIndiceJoueurCourant(santiago.positionApresConstructeur());
-        // ----------------------------
 
         PanelPlateau pp = new PanelPlateau(this);
         add(pp, BorderLayout.CENTER);
