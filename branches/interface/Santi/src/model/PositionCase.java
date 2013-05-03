@@ -51,6 +51,21 @@ public class PositionCase extends Position {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        final Position other = (Position) obj;
+        if (x != other.x) {
+            return false;
+        }
+        if (y != other.y) {
+            return false;
+        }
+        return true;
+    }
+    
+    @Override
     public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
