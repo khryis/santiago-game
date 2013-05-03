@@ -25,7 +25,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 
 import model.Carte;
-import model.Position;
 import model.PositionCase;
 import model.PositionIntersection;
 import model.PositionSegment;
@@ -272,11 +271,6 @@ public class PanelPlateau extends AbstractPanel {
     public void update(Observable arg0, Object arg1) {
         System.out.println("update PanelPlateau");
 
-        // Set<PositionCase> set = tabCorrespondanceCase.keySet();
-        // System.out.println(set.toString());
-        //
-        // Collection<JButton> collection = tabCorrespondanceCase.values();
-        // System.out.println(collection.toString());
         tabCorrespondanceSource.get(santiago.getPlateau().getSource()).setOpaque(true);
         tabCorrespondanceSource.get(santiago.getPlateau().getSource()).setContentAreaFilled(true);
         tabCorrespondanceSource.get(santiago.getPlateau().getSource()).setBorderPainted(true);
@@ -286,8 +280,8 @@ public class PanelPlateau extends AbstractPanel {
         for (int i = 0; i < listeSegments.size(); i++) {
             PositionSegment ps = listeSegments.get(i);
             if (ps.isOccupe()) {
-            	tabCorrespondanceSegment.get(ps).setContentAreaFilled(true);
-            	tabCorrespondanceSegment.get(ps).setBorderPainted(true);
+                tabCorrespondanceSegment.get(ps).setContentAreaFilled(true);
+                tabCorrespondanceSegment.get(ps).setBorderPainted(true);
                 tabCorrespondanceSegment.get(ps).setBackground(Color.blue);
             }
         }
@@ -297,35 +291,16 @@ public class PanelPlateau extends AbstractPanel {
                 Image originalImage = getToolkit().getImage(PanelPartie.getPathImage(carte));
                 Image scaledImage = originalImage.getScaledInstance(80, 80, Image.SCALE_AREA_AVERAGING);
                 Icon tmp = new ImageIcon(scaledImage);
-                //System.out.println("position carte : " +
-                //listeCartesPosees.get(i).getPositionCase());
-                //System.out.println("Eh "+tabCorrespondanceCase.containsKey(new PositionCase(carte.getPositionCase().getX(), carte.getPositionCase().getY(), false)));
-                //System.out.println(tabCorrespondanceCase.containsKey(carte.getPositionCase()));
-                //System.out.println(tabCorrespondanceCase.keySet().toString());
-                //System.out.println(carte.getPositionCase());
-                JButton b = tabCorrespondanceCase.get(new PositionCase(carte.getPositionCase().getX(), carte.getPositionCase().getY(), false));
-                //System.out.println("bouton : " + b);
+                JButton b = tabCorrespondanceCase.get(carte.getPositionCase());
+                System.out.println("bouton : " + b);
                 if (b != null) {
-                	b.setOpaque(true);
-                	b.setContentAreaFilled(true);
-                	b.setBorderPainted(true);
+                    b.setOpaque(true);
+                    b.setContentAreaFilled(true);
+                    b.setBorderPainted(true);
                     b.setIcon(tmp);
                 }
             }
         }
 
     }
-    //
-    // public static void main(String[] args) {
-    // JFrame frame = new JFrame();
-    // frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-    // frame.setPreferredSize(new Dimension(800, 600));
-    //
-    // PanelPlateau pp = new PanelPlateau(frame);
-    // frame.setContentPane(pp);
-    // pp.initComponent();
-    //
-    // frame.pack();
-    // frame.setVisible(true);
-    // }
 }
