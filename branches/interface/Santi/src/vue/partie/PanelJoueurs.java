@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
+import model.Joueur;
 import vue.AbstractPanel;
 
 public class PanelJoueurs extends AbstractPanel {
@@ -27,8 +28,7 @@ public class PanelJoueurs extends AbstractPanel {
         // init des composants
         super.initComponent();
 
-        setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(GREEN_BORDER), "Liste des joueurs", TitledBorder.CENTER,
-                TitledBorder.TOP, POLICE_30, NICE_GREY));
+        setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(GREEN_BORDER), "Liste des joueurs", TitledBorder.CENTER, TitledBorder.TOP, POLICE_30, NICE_GREY));
         // attribut du conteneur PanelJoueurs
         Dimension dim = new Dimension(homeDimension.width - 800, (homeDimension.height / 3) * 2);
         setPreferredSize(dim);
@@ -36,35 +36,51 @@ public class PanelJoueurs extends AbstractPanel {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         int nbJoueurs = santiago.getListJoueurs().size();
         for (int i = 0; i < nbJoueurs; i++) {
-            JPanel joueur = new JPanel();
-            joueur.setLayout(new BoxLayout(joueur, BoxLayout.X_AXIS));
-            joueur.setMaximumSize(new Dimension(dim.width, dim.height / nbJoueurs));
-            joueur.setMinimumSize(new Dimension(dim.width, dim.height / nbJoueurs));
+            JPanel panelJoueur = new JPanel();
+            panelJoueur.setLayout(new BoxLayout(panelJoueur, BoxLayout.X_AXIS));
+            panelJoueur.setMaximumSize(new Dimension(dim.width, dim.height / nbJoueurs));
+            panelJoueur.setMinimumSize(new Dimension(dim.width, dim.height / nbJoueurs));
 
             JPanel info = new JPanel();
-            info.setMaximumSize(new Dimension(300, 70));
+            info.setMaximumSize(new Dimension(300, 100));
             info.setMinimumSize(new Dimension(50, 0));
             info.setLayout(new BoxLayout(info, BoxLayout.Y_AXIS));
 
-            JLabel nom = new JLabel("Nom : " + santiago.getListJoueurs().get(i).getNom());
-            JLabel solde = new JLabel("Solde : " + Integer.toString(santiago.getListJoueurs().get(i).getSolde()) + " pesos");
+            Joueur joueur = santiago.getListJoueurs().get(i);
+            JLabel nom = new JLabel("Nom : " + joueur.getNom());
+            JLabel solde = new JLabel("Solde : " + Integer.toString(joueur.getSolde()) + " pesos");
+            JLabel nbMarqueurs = new JLabel("Marqueurs Dipos : " + joueur.getNbMarqueurDispos());
+            JLabel tuyauSup = new JLabel("Tuyau Sup : " + (joueur.hasTuyauSup() ? "Disponible" : "Plus Dispos"));
+
+            JLabel enchereCarte = new JLabel();
+            JLabel enchereConstructeur = new JLabel();
             JLabel constructeur = new JLabel();
             JLabel parole = new JLabel();
-            if (santiago.getListJoueurs().get(i).isConstructeur()) {
+            if (joueur.getEnchereCarte() > 0) {
+                constructeur = new JLabel("Enchere : " + joueur.getEnchereCarte());
+            }
+            if (joueur.getEnchereConstructeur() > 0) {
+                constructeur = new JLabel("Soudoiement : " + joueur.getEnchereConstructeur());
+            }
+            if (joueur.isConstructeur()) {
                 constructeur = new JLabel("Il est le constructeur de canal");
             }
             if (i == santiago.getIndiceJoueurCourant()) {
                 parole = new JLabel("Il a la parole");
-                joueur.setBorder(BorderFactory.createLineBorder(Color.orange));
+                panelJoueur.setBorder(BorderFactory.createLineBorder(Color.orange));
             }
 
             info.add(nom);
             info.add(solde);
+            info.add(nbMarqueurs);
+            info.add(tuyauSup);
+            info.add(enchereCarte);
+            info.add(enchereConstructeur);
             info.add(constructeur);
             info.add(parole);
 
             JPanel couleur = new JPanel();
-            couleur.setMaximumSize(new Dimension(50, 70));
+            couleur.setMaximumSize(new Dimension(50, 100));
             couleur.setMinimumSize(new Dimension(20, 20));
             Color c = Color.DARK_GRAY;
             switch ((santiago.getListJoueurs().get(i).getCouleur())) {
@@ -89,11 +105,11 @@ public class PanelJoueurs extends AbstractPanel {
             }
             couleur.setBackground(c);
 
-            joueur.add(couleur);
-            joueur.add(Box.createRigidArea(new Dimension(10, 0)));
-            joueur.add(info);
+            panelJoueur.add(couleur);
+            panelJoueur.add(Box.createRigidArea(new Dimension(10, 0)));
+            panelJoueur.add(info);
 
-            add(joueur);
+            add(panelJoueur);
         }
     }
 

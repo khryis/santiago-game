@@ -25,6 +25,7 @@ public class SantiagoFrame extends JFrame implements Observer, KeyListener, Wind
 
     public SantiagoFrame() {
         super();
+
         // initialisation des composants
         panelHome = new PanelHome(this);
 

@@ -2,6 +2,7 @@ package vue.partie.phases;
 
 import java.awt.Container;
 import java.awt.Dimension;
+import java.util.Observable;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
@@ -21,7 +22,6 @@ public class PanelActionChoixCarte extends PanelAction {
         super(parent);
     }
 
-    // new String[] { "valider" }
     public PanelActionChoixCarte(Container parent, String name) {
         super(parent, name);
         valider.setPreferredSize(new Dimension(300, 50));
@@ -50,5 +50,10 @@ public class PanelActionChoixCarte extends PanelAction {
         cardChoice.add(cardPanel);
 
         add(cardChoice);
+    }
+
+    @Override
+    public void update(Observable arg0, Object arg1) {
+
     }
 }
