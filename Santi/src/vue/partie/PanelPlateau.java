@@ -25,6 +25,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 
 import model.Carte;
+import model.Position;
 import model.PositionCase;
 import model.PositionIntersection;
 import model.PositionSegment;
@@ -73,9 +74,9 @@ public class PanelPlateau extends AbstractPanel {
         JButton[] tabSource = new JButton[6];
         for (int i = 0; i < 6; i++) {
             final JButton jb = new JButton();
-            // jb.setOpaque(false);
-            // jb.setContentAreaFilled(false);
-            // jb.setBorderPainted(false); // A DECOMMENTER POUR LAPERO
+            jb.setOpaque(false);
+            jb.setContentAreaFilled(false);
+            jb.setBorderPainted(false); // A DECOMMENTER POUR LAPERO
             tabSource[i] = jb;
             panelConteneur.add(jb);
         }
@@ -93,9 +94,9 @@ public class PanelPlateau extends AbstractPanel {
         JButton[] tabSegments = new JButton[31];
         for (int i = 0; i < 31; i++) {
             JButton jb = new JButton();
-            // jb.setOpaque(false);
-            // jb.setContentAreaFilled(false);
-            // jb.setBorderPainted(false); // A DECOMMENTER POUR LAPERO
+            jb.setOpaque(false);
+            jb.setContentAreaFilled(false);
+            jb.setBorderPainted(false); // A DECOMMENTER POUR LAPERO
             tabSegments[i] = jb;
             panelConteneur.add(jb);
         }
@@ -130,9 +131,9 @@ public class PanelPlateau extends AbstractPanel {
         JButton[] tabCases = new JButton[48];
         for (int i = 0; i < 48; i++) {
             JButton jb = new JButton();
-            // jb.setOpaque(false);
-            // jb.setContentAreaFilled(false);
-            // jb.setBorderPainted(false); // A DECOMMENTER POUR LAPERO
+            jb.setOpaque(false);
+            jb.setContentAreaFilled(false);
+            jb.setBorderPainted(false); // A DECOMMENTER POUR LAPERO
             tabCases[i] = jb;
             panelConteneur.add(jb);
         }
@@ -276,13 +277,17 @@ public class PanelPlateau extends AbstractPanel {
         //
         // Collection<JButton> collection = tabCorrespondanceCase.values();
         // System.out.println(collection.toString());
-
+        tabCorrespondanceSource.get(santiago.getPlateau().getSource()).setOpaque(true);
+        tabCorrespondanceSource.get(santiago.getPlateau().getSource()).setContentAreaFilled(true);
+        tabCorrespondanceSource.get(santiago.getPlateau().getSource()).setBorderPainted(true);
         tabCorrespondanceSource.get(santiago.getPlateau().getSource()).setBackground(Color.blue);
         ArrayList<Carte> listeCartesPosees = this.santiago.getPlateau().getCartesPosees();
         ArrayList<PositionSegment> listeSegments = this.santiago.getPlateau().getCanaux();
         for (int i = 0; i < listeSegments.size(); i++) {
             PositionSegment ps = listeSegments.get(i);
             if (ps.isOccupe()) {
+            	tabCorrespondanceSegment.get(ps).setContentAreaFilled(true);
+            	tabCorrespondanceSegment.get(ps).setBorderPainted(true);
                 tabCorrespondanceSegment.get(ps).setBackground(Color.blue);
             }
         }
@@ -292,14 +297,18 @@ public class PanelPlateau extends AbstractPanel {
                 Image originalImage = getToolkit().getImage(PanelPartie.getPathImage(carte));
                 Image scaledImage = originalImage.getScaledInstance(80, 80, Image.SCALE_AREA_AVERAGING);
                 Icon tmp = new ImageIcon(scaledImage);
-                // System.out.println("position carte : " +
-                // listeCartesPosees.get(i).getPositionCase());
-                System.out.println(tabCorrespondanceCase.containsKey(carte.getPosition()));
-                System.out.println(tabCorrespondanceCase.keySet().toString());
-                System.out.println(carte.getPosition());
-                JButton b = tabCorrespondanceCase.get(carte.getPositionCase());
-                System.out.println("bouton : " + b);
+                //System.out.println("position carte : " +
+                //listeCartesPosees.get(i).getPositionCase());
+                //System.out.println("Eh "+tabCorrespondanceCase.containsKey(new PositionCase(carte.getPositionCase().getX(), carte.getPositionCase().getY(), false)));
+                //System.out.println(tabCorrespondanceCase.containsKey(carte.getPositionCase()));
+                //System.out.println(tabCorrespondanceCase.keySet().toString());
+                //System.out.println(carte.getPositionCase());
+                JButton b = tabCorrespondanceCase.get(new PositionCase(carte.getPositionCase().getX(), carte.getPositionCase().getY(), false));
+                //System.out.println("bouton : " + b);
                 if (b != null) {
+                	b.setOpaque(true);
+                	b.setContentAreaFilled(true);
+                	b.setBorderPainted(true);
                     b.setIcon(tmp);
                 }
             }
