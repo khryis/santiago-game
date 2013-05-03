@@ -25,14 +25,13 @@ public class Position {
 
     @Override
     public String toString() {
-        return "Position [x=" + x + ", y=" + y + ", occupe=" + occupe + "]\n";
+        return "Position [x=" + x + ", y=" + y + ", occupe=" + occupe + "] Ref: " + getClass().getName() + "@" + Integer.toHexString(hashCode()) + "\n";
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (occupe ? 1231 : 1237);
         result = prime * result + x;
         result = prime * result + y;
         return result;
@@ -43,6 +42,9 @@ public class Position {
     public boolean equals(Object obj) {
         if (obj == null) {
             return false;
+        }
+        if (this == obj) {
+            return true;
         }
         final Position other = (Position) obj;
         if (x != other.x) {
