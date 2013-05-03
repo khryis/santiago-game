@@ -39,7 +39,9 @@ import vue.AbstractPanel;
 @SuppressWarnings("serial")
 public class PanelPlateau extends AbstractPanel{
 	private Image background;
-	HashMap<Position, JButton> tabCorrespondance;
+	HashMap<PositionIntersection, JButton> tabCorrespondanceSource;
+	HashMap<PositionSegment, JButton> tabCorrespondanceSegment;
+	HashMap<PositionCase, JButton> tabCorrespondanceCase;
 	JButton[] tabSource;
 	JButton[] tabSegments;
 	JButton[] tabCases;
@@ -95,9 +97,9 @@ public class PanelPlateau extends AbstractPanel{
         JButton[] tabSegments = new JButton[31];
         for (int i = 0; i < 31; i++) {
             JButton jb = new JButton();
-            jb.setOpaque(false);
-            jb.setContentAreaFilled(false);
-            jb.setBorderPainted(false); // A DECOMMENTER POUR LAPERO
+            //jb.setOpaque(false);
+            //jb.setContentAreaFilled(false);
+            //jb.setBorderPainted(false); // A DECOMMENTER POUR LAPERO
             tabSegments[i] = jb;
             panelConteneur.add(jb);
         }
@@ -132,9 +134,9 @@ public class PanelPlateau extends AbstractPanel{
         JButton[] tabCases = new JButton[48];
         for (int i = 0; i < 48; i++) {
             JButton jb = new JButton();
-            jb.setOpaque(false);
-            jb.setContentAreaFilled(false);
-            jb.setBorderPainted(false); // A DECOMMENTER POUR LAPERO
+            //jb.setOpaque(false);
+            //jb.setContentAreaFilled(false);
+            //jb.setBorderPainted(false); // A DECOMMENTER POUR LAPERO
             tabCases[i] = jb;
             panelConteneur.add(jb);
         }
@@ -159,18 +161,20 @@ public class PanelPlateau extends AbstractPanel{
         }
 
 		//Création d'une table de correspondance Position->JButton
-		tabCorrespondance = new HashMap<Position, JButton>();
-		tabCorrespondance.put(new PositionIntersection(2,2,0), tabSource[0]);
-		tabCorrespondance.put(new PositionIntersection(2,4,0), tabSource[1]);
-		tabCorrespondance.put(new PositionIntersection(2,6,0), tabSource[2]);
-		tabCorrespondance.put(new PositionIntersection(4,2,0), tabSource[3]);
-		tabCorrespondance.put(new PositionIntersection(4,4,0), tabSource[4]);
-		tabCorrespondance.put(new PositionIntersection(4,6,0), tabSource[5]);
+        tabCorrespondanceSource = new HashMap<PositionIntersection, JButton>();
+        tabCorrespondanceSegment = new HashMap<PositionSegment, JButton>();
+        tabCorrespondanceCase = new HashMap<PositionCase, JButton>();
+		tabCorrespondanceSource.put(new PositionIntersection(2,2,0), tabSource[0]);
+		tabCorrespondanceSource.put(new PositionIntersection(2,4,0), tabSource[1]);
+		tabCorrespondanceSource.put(new PositionIntersection(2,6,0), tabSource[2]);
+		tabCorrespondanceSource.put(new PositionIntersection(4,2,0), tabSource[3]);
+		tabCorrespondanceSource.put(new PositionIntersection(4,4,0), tabSource[4]);
+		tabCorrespondanceSource.put(new PositionIntersection(4,6,0), tabSource[5]);
 		int x1 = 0;
 		int y1 = 0;
 		int x2 = 2;
 		int y2 = 0;
-		for(int i=0; i<79; i++){
+		for(int i=0; i<31; i++){
 			if (i<16){
 				if (i%4 == 0 && i!=0){
 					x1 = 0;
@@ -184,19 +188,16 @@ public class PanelPlateau extends AbstractPanel{
 						x2 += 2;
 					}
 				}
-				tabCorrespondance.put(new PositionSegment(x1,y1,x2,y2,false), tabSegments[i]);
+				tabCorrespondanceSegment.put(new PositionSegment(x1,y1,x2,y2,false), tabSegments[i]);
 				//System.out.println(x1+" "+y1+" "+x2+" "+y2+" ");
 			}
-			
-			// 0 0 0 2 -> 2 0 2 2 -> 4 0 4 2 
-			if (i>15 && i<31){
+			else{
 				if (i == 16){
 					x1=0;
 					y1=0;
 					x2=0;
 					y2=2;
 				}
-				tabCorrespondance.put(new PositionSegment(x1,y1,x2,y2, false), tabSegments[i]);
 				if (i == 21 || i == 26){
 					x1 = 0;
 					x2 = 0;
@@ -208,15 +209,17 @@ public class PanelPlateau extends AbstractPanel{
 						x1 += 2;
 						x2 += 2;
 					}
-				}	
+				}
+				tabCorrespondanceSegment.put(new PositionSegment(x1,y1,x2,y2, false), tabSegments[i]);
 				//System.out.println("blabla "+x1+" "+y1+" "+x2+" "+y2+" ");
 			}
-			if (i>30){
-				if (i == 31){
+		}
+			for (int i = 0; i<48; i++){
+				if (i == 0){
 					x1 = 0;
 					y1 = 0;
 				}
-				if (i == 39 || i == 47 || i == 55 || i == 63 || i == 71){
+				if (i == 8 || i == 16 || i == 24 || i == 32 || i == 40){
 					x1=0;
 					y1+=1;
 				}
@@ -225,29 +228,28 @@ public class PanelPlateau extends AbstractPanel{
 						x1 += 1;
 					}
 				}
-				tabCorrespondance.put(new PositionCase(x1,y1,false), tabCases[i-31]);
+				tabCorrespondanceCase.put(new PositionCase(x1,y1,false), tabCases[i]);
 				//System.out.println("blablablabla "+x1+" "+y1);
 			}
-		}
 		
 			// On gère maintenant le clic sur un bouton en renvoyant la position au PanelPartie
-			Set<Position> parcoursTab = tabCorrespondance.keySet();
-			for (final Position p : parcoursTab){
-				if (p instanceof PositionSegment){
-					tabCorrespondance.get(p).addActionListener(new ActionListener(){
+			Set<PositionSegment> parcoursTab = tabCorrespondanceSegment.keySet();
+			Set<PositionCase> parcoursTab2 = tabCorrespondanceCase.keySet();
+			for (final PositionSegment p : parcoursTab){
+					tabCorrespondanceSegment.get(p).addActionListener(new ActionListener(){
 						public void actionPerformed(ActionEvent e) {
-							PanelPartie.posSegCourant = (PositionSegment) p;
+							PanelPartie.posSegCourant = p;
+							JOptionPane.showMessageDialog(panelConteneur, p.toString());
 						}		
 					});
-				}
-				if (p instanceof PositionCase){
-					tabCorrespondance.get(p).addActionListener(new ActionListener(){
+			}
+			for (final PositionCase p1 : parcoursTab2){
+					tabCorrespondanceCase.get(p1).addActionListener(new ActionListener(){
 						public void actionPerformed(ActionEvent e) {
-							PanelPartie.posCaseCourante = (PositionCase) p;
-							JOptionPane.showMessageDialog(panelConteneur, p.toString()); // A Commenter pour enlever le popup
+							PanelPartie.posCaseCourante =p1;
+							JOptionPane.showMessageDialog(panelConteneur, p1.toString()); // A Commenter pour enlever le popup
 						}		
 					});
-				}
 			}
     }
 
@@ -266,19 +268,19 @@ public class PanelPlateau extends AbstractPanel{
 
     @Override
     public void update(Observable arg0, Object arg1) {
-    	tabCorrespondance.get(santiago.getPlateau().getSource()).setBackground(Color.blue);
+    	tabCorrespondanceSource.get(santiago.getPlateau().getSource()).setBackground(Color.blue);
     	ArrayList<Carte> listeCartesPosees = this.santiago.getPlateau().getCartesPosees();
     	ArrayList<PositionSegment> listeSegments = this.santiago.getPlateau().getCanaux();
     	for (int i = 0; i<listeSegments.size(); i++){
     		if (listeSegments.get(i).isOccupe()){
-    			tabCorrespondance.get(listeSegments.get(i)).setBackground(Color.blue);
+    			tabCorrespondanceSegment.get(listeSegments.get(i)).setBackground(Color.blue);
     		}
     	}
     	for (int i = 0; i<listeCartesPosees.size(); i++){
     		if(listeCartesPosees.get(i).getPosition().isOccupe()){
     			String imageCarte = PanelPartie.getPathImage(listeCartesPosees.get(i));
     			Icon tmp = new ImageIcon(imageCarte);
-    			tabCorrespondance.get(listeCartesPosees.get(i).getPositionCase()).setIcon(tmp);
+    			tabCorrespondanceCase.get(listeCartesPosees.get(i).getPositionCase()).setIcon(tmp);
     		}
     	}
     	
