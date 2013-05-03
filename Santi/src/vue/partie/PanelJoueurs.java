@@ -69,6 +69,14 @@ public class PanelJoueurs extends AbstractPanel {
                 parole = new JLabel("Il a la parole");
                 panelJoueur.setBorder(BorderFactory.createLineBorder(Color.orange));
             }
+            //
+            // if (!santiago.getTabEnchere().isEmpty()) {
+            // if (joueur.equals(santiago.enchereMax())) {
+            // parole = new JLabel("Il a la parole");
+            // panelJoueur.setBorder(BorderFactory.createLineBorder(Color.orange));
+            // santiago.setIndiceJoueurCourant(i);
+            // }
+            // }
 
             info.add(nom);
             info.add(solde);
@@ -115,6 +123,7 @@ public class PanelJoueurs extends AbstractPanel {
 
     @Override
     public void update(Observable arg0, Object arg1) {
+        System.out.println("update panelJoueur");
         removeAll();
         // TODO Appeler un paintComponent correct au lieu de refaire un init du
         // panel, très moche.. mais bon ça marche ^^

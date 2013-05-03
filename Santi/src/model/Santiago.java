@@ -37,6 +37,7 @@ public class Santiago extends Observable {
 
     private PositionCase positionCaseCourante;
     private PositionSegment positionSegmentCourant;
+    private Carte carteChoisie;
 
     public enum TypeEnchere {
         CARTE, CONSTRUCTEUR
@@ -65,6 +66,7 @@ public class Santiago extends Observable {
 
         positionCaseCourante = null;
         positionSegmentCourant = null;
+        carteChoisie = null;
     }
 
     public static Santiago getSantiago() {
@@ -94,6 +96,7 @@ public class Santiago extends Observable {
         indiceJoueurCourant = positionApresConstructeur();
         phaseFinie = false;
         configured = true;
+        devoilerCarte();
         repercuterModification();
     }
 
@@ -371,13 +374,22 @@ public class Santiago extends Observable {
 
             // réinitialise l'attribut enchère du joueur
             joueur.setEnchereCarte(0);
+
+            System.out.println("ancien :" + joueur.toString());
+            tabEnchere.remove(joueur);
             // on retire de tabEnchere les joueur et son enchère
             if (!tabEnchere.isEmpty()) {
-                tabEnchere.remove(joueur);
-            }
-            if (plateau.getCartesDevoilees().isEmpty()) {
-                phaseFinie = true;
-                indiceJoueurCourant = positionApresConstructeur();
+                choisiCarte = enchereMax();
+                System.out.println("nouveau :" + choisiCarte.toString());
+                indiceJoueurCourant = getListJoueurs().indexOf(choisiCarte);
+            } else {
+                if (plateau.getCartesDevoilees().isEmpty()) {
+                    phaseFinie = true;
+                    indiceJoueurCourant = positionApresConstructeur();
+                } else {
+                    choisiCarte = joueurGagnant;
+                    indiceJoueurCourant = getListJoueurs().indexOf(choisiCarte);
+                }
             }
             estPosee = true;
             repercuterModification();
@@ -706,9 +718,21 @@ public class Santiago extends Observable {
 
     public void setPositionCaseCourante(PositionCase pc) {
         this.positionCaseCourante = pc;
+        repercuterModification();
     }
 
     public void setPositionSegmentCourant(PositionSegment ps) {
         this.positionSegmentCourant = ps;
+        repercuterModification();
     }
+
+    public Carte getCarteChoisie() {
+        return carteChoisie;
+    }
+
+    public void setCarteChoisie(Carte carteChoisie) {
+        this.carteChoisie = carteChoisie;
+        repercuterModification();
+    }
+
 }
