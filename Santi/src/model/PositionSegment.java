@@ -23,6 +23,10 @@ public class PositionSegment extends Position {
         this.y2 = y2;
     }
 
+    public boolean possedeExtremite(Position position) {
+        return (position.getX() == x && position.getY() == y) || (position.getX() == x2 && position.getY() == y2);
+    }
+
     public int getX2() {
         return x2;
     }

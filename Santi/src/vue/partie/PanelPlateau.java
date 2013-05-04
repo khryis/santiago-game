@@ -292,6 +292,9 @@ public class PanelPlateau extends AbstractPanel {
             caseSelected.setBorder(BorderFactory.createLineBorder(Color.red, 3));
         }
 
+        System.out.println(tabCorrespondanceSource.keySet().toString());
+        System.out.println(santiago.getPlateau().getSource().toString());
+
         tabCorrespondanceSource.get(santiago.getPlateau().getSource()).setOpaque(true);
         tabCorrespondanceSource.get(santiago.getPlateau().getSource()).setContentAreaFilled(true);
         tabCorrespondanceSource.get(santiago.getPlateau().getSource()).setBorderPainted(true);
@@ -309,9 +312,12 @@ public class PanelPlateau extends AbstractPanel {
         for (int i = 0; i < listeCartesPosees.size(); i++) {
             Carte carte = listeCartesPosees.get(i);
             if (carte.getPosition().isOccupe()) {
-                Image originalImage = getToolkit().getImage(PanelPartie.getPathImage(carte));
-                Image scaledImage = originalImage.getScaledInstance(80, 80, Image.SCALE_AREA_AVERAGING);
-                Icon tmp = new ImageIcon(scaledImage);
+                // Image originalImage =
+                // getToolkit().getImage(PanelPartie.getPathImage(carte));
+                // Image scaledImage = originalImage.getScaledInstance(80, 80,
+                // Image.SCALE_AREA_AVERAGING);
+                // Icon tmp = new ImageIcon(scaledImage);
+                Icon tmp = new ImageIcon(PanelPartie.getPathImage(carte));
                 JButton b = tabCorrespondanceCase.get(carte.getPositionCase());
                 if (b != null) {
                     b.setOpaque(true);
