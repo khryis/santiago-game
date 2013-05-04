@@ -20,21 +20,23 @@ public class PositionIntersection extends Position {
         tabPos.add(new PositionIntersection(0, 2, 1));
         tabPos.add(new PositionIntersection(0, 4, 1));
         tabPos.add(new PositionIntersection(0, 6, 1));
-        tabPos.add(new PositionIntersection(0, 8, 1));
         tabPos.add(new PositionIntersection(2, 0, 1));
-        tabPos.add(new PositionIntersection(2, 8, 1));
+        tabPos.add(new PositionIntersection(2, 6, 1));
         tabPos.add(new PositionIntersection(4, 0, 1));
+        tabPos.add(new PositionIntersection(4, 6, 1));
         tabPos.add(new PositionIntersection(4, 8, 1));
         tabPos.add(new PositionIntersection(6, 0, 1));
-        tabPos.add(new PositionIntersection(6, 2, 1));
-        tabPos.add(new PositionIntersection(6, 4, 1));
-        tabPos.add(new PositionIntersection(6, 8, 1));
+        tabPos.add(new PositionIntersection(6, 6, 1));
+        tabPos.add(new PositionIntersection(8, 0, 1));
+        tabPos.add(new PositionIntersection(8, 2, 1));
+        tabPos.add(new PositionIntersection(8, 4, 1));
+        tabPos.add(new PositionIntersection(8, 6, 1));
         tabPos.add(new PositionIntersection(2, 2, 0));
         tabPos.add(new PositionIntersection(2, 4, 0));
-        tabPos.add(new PositionIntersection(2, 6, 0));
         tabPos.add(new PositionIntersection(4, 2, 0));
         tabPos.add(new PositionIntersection(4, 4, 0));
-        tabPos.add(new PositionIntersection(4, 6, 0));
+        tabPos.add(new PositionIntersection(6, 2, 0));
+        tabPos.add(new PositionIntersection(6, 4, 0));
         if (niveauSource == 0) {
             while (n != 0) {
                 double rand = Math.random() * tabPos.size();
