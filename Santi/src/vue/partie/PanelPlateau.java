@@ -162,11 +162,11 @@ public class PanelPlateau extends AbstractPanel {
         tabCorrespondanceSegment = new HashMap<>();
         tabCorrespondanceCase = new HashMap<>();
         tabCorrespondanceSource.put(new PositionIntersection(2, 2, 0), tabSource[0]);
-        tabCorrespondanceSource.put(new PositionIntersection(2, 4, 0), tabSource[1]);
-        tabCorrespondanceSource.put(new PositionIntersection(2, 6, 0), tabSource[2]);
-        tabCorrespondanceSource.put(new PositionIntersection(4, 2, 0), tabSource[3]);
+        tabCorrespondanceSource.put(new PositionIntersection(4, 2, 0), tabSource[1]);
+        tabCorrespondanceSource.put(new PositionIntersection(6, 2, 0), tabSource[2]);
+        tabCorrespondanceSource.put(new PositionIntersection(2, 4, 0), tabSource[3]);
         tabCorrespondanceSource.put(new PositionIntersection(4, 4, 0), tabSource[4]);
-        tabCorrespondanceSource.put(new PositionIntersection(4, 6, 0), tabSource[5]);
+        tabCorrespondanceSource.put(new PositionIntersection(6, 4, 0), tabSource[5]);
         int x1 = 0;
         int y1 = 0;
         int x2 = 2;
