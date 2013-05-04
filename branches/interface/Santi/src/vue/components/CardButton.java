@@ -1,8 +1,8 @@
 package vue.components;
 
 import java.awt.Dimension;
-import java.awt.Image;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
@@ -15,9 +15,13 @@ public class CardButton extends JButton {
 
     public CardButton(Carte carte) {
         this.carte = carte;
-        Image originalImage = getToolkit().getImage(PanelPartie.getPathImage(carte));
-        Image scaledImage = originalImage.getScaledInstance(80, 80, Image.SCALE_AREA_AVERAGING);
-        setIcon(new ImageIcon(scaledImage));
+        // Image originalImage =
+        // getToolkit().getImage(PanelPartie.getPathImage(carte));
+        // Image scaledImage = originalImage.getScaledInstance(80, 80,
+        // Image.SCALE_AREA_AVERAGING);
+        //
+        Icon tmp = new ImageIcon(PanelPartie.getPathImage(carte));
+        setIcon(tmp);
         setMaximumSize(new Dimension(getIcon().getIconWidth(), getIcon().getIconHeight()));
         setMinimumSize(new Dimension(getIcon().getIconWidth(), getIcon().getIconHeight()));
         setRolloverEnabled(false);

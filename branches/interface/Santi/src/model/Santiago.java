@@ -462,27 +462,32 @@ public class Santiago extends Observable {
      * @return
      */
     public boolean encherePositionCanal(PositionSegment canal, int montant) {
-        boolean reussi;
+        boolean reussi = false;
         Joueur joueur = joueurPlaying();
-
-        if (montant > 0 && montant < joueur.getSolde()) {
-            // seter enchère
-            joueur.setEnchereConstructeur(montant);
-            if (enchereConstr.containsKey(canal)) {
-                System.out.println("Canal existe, ajouté à la liste");
-                // ajouter le joueur à l'arrayList si position de
-                // canal déjà proposée
-                enchereConstr.get(canal).add(joueur);
-            } else { // ajouter dans la hashmap
-                System.out.println("proposition n'existe pas, ajoute canal et joueur au tabConstruction");
-                ArrayList<Joueur> enchJoueur = new ArrayList<>();
-                enchJoueur.add(joueur);
-                enchereConstr.put(canal, enchJoueur);
-                System.out.println(enchereConstr.keySet().toString());
+        if (plateau.canalSeraAlimente(canal)) {
+            if (montant > 0 && montant < joueur.getSolde()) {
+                // seter enchère
+                joueur.setEnchereConstructeur(montant);
+                if (enchereConstr.containsKey(canal)) {
+                    System.out.println("Canal existe, ajouté à la liste");
+                    // ajouter le joueur à l'arrayList si position de
+                    // canal déjà proposée
+                    enchereConstr.get(canal).add(joueur);
+                } else { // ajouter dans la hashmap
+                    System.out.println("proposition n'existe pas, ajoute canal et joueur au tabConstruction");
+                    ArrayList<Joueur> enchJoueur = new ArrayList<>();
+                    enchJoueur.add(joueur);
+                    enchereConstr.put(canal, enchJoueur);
+                    System.out.println(enchereConstr.keySet().toString());
+                }
+                incrementerJoueurCourantSoudoiement();
+                reussi = true;
+            } else {
+                reussi = false;
             }
-            incrementerJoueurCourantSoudoiement();
-            reussi = true;
         } else {
+            System.out.println("on ne peut poser des canal qu'à côté de la source ou des autres canaux");
+            System.out.println(canal);
             reussi = false;
         }
         return reussi;
@@ -546,6 +551,8 @@ public class Santiago extends Observable {
                     plateau.majIrrigationTotale();
                     reussi = true;
                     incrementerJoueurCourantChoixConstruction();
+                } else {
+                    System.out.println("Impossible de le poser ici");
                 }
             } else {
                 System.out.println("Cette construction vous est proposé");
@@ -566,6 +573,8 @@ public class Santiago extends Observable {
             place = true;
             plateau.majIrrigationTotale();
             incrementerJoueurCourantCanalSup(true);
+        } else {
+            System.out.println("Veillez à ce que le canal soit adjacent");
         }
 
         return place;

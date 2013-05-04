@@ -134,12 +134,18 @@ public class Plateau extends Observable {
 
     public boolean placerCanal(int x, int y, int x1, int y1) {
         boolean place = false;
-        PositionSegment canal = new PositionSegment(x, y, x1, y1, true);
-        if (emplacementCanaux.contains(canal)) {
-            int index = emplacementCanaux.indexOf(canal);
-            if (!emplacementCanaux.get(index).isOccupe()) {
-                emplacementCanaux.get(emplacementCanaux.indexOf(canal)).setOccupe(true);
-                place = true;
+        PositionSegment canalAPoser = new PositionSegment(x, y, x1, y1, true);
+        if (emplacementCanaux.contains(canalAPoser)) {
+            int index = emplacementCanaux.indexOf(canalAPoser);
+            PositionSegment canal = emplacementCanaux.get(index);
+            if (!canal.isOccupe()) {
+                if (canalSeraAlimente(canal)) {
+                    canal.setOccupe(true);
+                    place = true;
+                } else {
+                    System.out.println("Le canal doit être relié à la source ou a un autre canal");
+                    place = false;
+                }
             } else {
                 // TODO créer une erreur
                 System.out.println("Canal déja occupe");
@@ -150,6 +156,22 @@ public class Plateau extends Observable {
             System.out.println("Position inexistante");
         }
         return place;
+    }
+
+    public boolean canalSeraAlimente(PositionSegment canal) {
+        boolean alimente = false;
+
+        if (canal.possedeExtremite(source)) {
+            return true;
+        }
+        for (PositionSegment ps : emplacementCanaux) {
+            if (ps.isOccupe()) {
+                if (canal.possedeExtremite(new Position(ps.getX(), ps.getY())) || canal.possedeExtremite(new Position(ps.getX2(), ps.getY2()))) {
+                    return true;
+                }
+            }
+        }
+        return alimente;
     }
 
     public boolean placerCanal(PositionSegment canal) {
