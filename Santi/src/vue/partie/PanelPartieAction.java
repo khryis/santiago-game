@@ -6,6 +6,7 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.util.Observable;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import vue.AbstractPanel;
@@ -94,11 +95,27 @@ public class PanelPartieAction extends AbstractPanel {
     public void update(Observable arg0, Object arg1) {
         // TODO Auto-generated method stub
         // System.out.println("update PanelPartieAction");
-        if (santiago.isPhaseFinie()) {
-            santiago.setPhaseFinie(false);
-            incrementerCardLayout();
-            cardLayout.show(phases, listPhases[indice]);
-        }
+    	if (!santiago.isFinish()) {
+    		if (santiago.isPhaseFinie()) {
+    			santiago.setPhaseFinie(false);
+    			incrementerCardLayout();
+    			cardLayout.show(phases, listPhases[indice]);
+    		}
+    	} else {
+    		int [] score = santiago.score();
+    		String msg = "";
+    		int win = 0;
+    		int max = score[win];
+    		for (int i = 0; i  < santiago.getListJoueurs().size(); i ++) {
+    			msg = msg + santiago.getListJoueurs().get(i).getNom() + " : " + score[i] + "\n";
+    			if (score[i] > max) {
+    				max = score[i];
+    				win = i;
+    			}
+    		}
+    		msg = msg + "\n Le joueur " + santiago.getListJoueurs().get(win).getNom() + " gagne avec : " + max + " points\n";
+    		JOptionPane.showMessageDialog(parent, msg, "Résultats", JOptionPane.PLAIN_MESSAGE);
+    	}
     }
 
     private void incrementerCardLayout() {

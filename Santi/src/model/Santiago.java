@@ -101,6 +101,72 @@ public class Santiago extends Observable {
     }
 
     /**
+     * Permet d'afficher le résultat de chaque joueur
+     * 
+     */
+    public int[] score() {
+    	int [] score = {0,0,0,0,0};
+    	int [] nbType = {0,0,0,0,0};
+    	
+    	// Calcul du nombre de cartes posées pour chaque type de champ
+    	for (int i = 0; i < plateau.getCartesPosees().size(); i ++) {
+    		if (!plateau.getCartesPosees().get(i).isDeserte()) {
+    		switch (plateau.getCartesPosees().get(i).getType()) {
+    			case PATATE :
+    				nbType[0] = nbType[0] + 1;
+    				break;
+    			case HARICOT :
+    				nbType[1] = nbType[1] + 1;
+    				break;
+    			case CANNE_A_SUCRE : 
+    				nbType[2] = nbType[2] + 1;
+    				break;
+    			case BANANE :
+    				nbType[3] = nbType[3] + 1;
+    				break;
+    			case PIMENT :
+    				nbType[4] = nbType[4] + 1;
+    				break;
+    			default :
+    				break;
+    		}
+    		}
+    	}
+    	
+    	// Calcul des points des joueurs par rapport à la taille des champs et au nombre de marqueurs
+    	for (int i = 0; i  < listJoueurs.size(); i ++) {
+    		for (int j = 0; j < plateau.getCartesPosees().size(); j ++) {
+    			if (!plateau.getCartesPosees().get(j).isDeserte()) {
+    				if ((listJoueurs.get(i).getCouleur()).compareTo(plateau.getCartesPosees().get(j).getPossesseur().getCouleur()) == 0) {
+    					switch (plateau.getCartesPosees().get(i).getType()) {
+    	    			case PATATE :
+    	    				score[i] = score[i] + (1 * plateau.getCartesPosees().get(j).getNbMarqueurActuel() * nbType[0]);
+    	    				break;
+    	    			case HARICOT :
+    	    				score[i] = score[i] + (1 * plateau.getCartesPosees().get(j).getNbMarqueurActuel() * nbType[1]);
+    	    				break;
+    	    			case CANNE_A_SUCRE : 
+    	    				score[i] = score[i] + (1 * plateau.getCartesPosees().get(j).getNbMarqueurActuel() * nbType[2]);
+    	    				break;
+    	    			case BANANE :
+    	    				score[i] = score[i] + (1 * plateau.getCartesPosees().get(j).getNbMarqueurActuel() * nbType[3]);
+    	    				break;
+    	    			case PIMENT :
+    	    				score[i] = score[i] + (1 * plateau.getCartesPosees().get(j).getNbMarqueurActuel() * nbType[4]);
+    	    				break;
+    	    			default :
+    	    				break;
+    					}
+    					
+    				}
+    			}
+    		}
+    		score[i] = score[i] + listJoueurs.get(i).getSolde();
+    	}
+    	return score;
+    }
+    
+    /**
      * Permet de setter un joueur en constructeur et d'enlever l'ancien
      * 
      * @param indexJoueurs
