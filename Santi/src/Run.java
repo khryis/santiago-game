@@ -187,13 +187,10 @@ public class Run {
     public void soudoyerConstructeur() {
 
         // on récupère les objets de santiago
-        ArrayList<Joueur> listJoueurs = santiago.getListJoueurs();
         santiago.setPhaseFinie(false);
 
         // Tour d'enchères :
-        PositionSegment canal = null;
-        String c = "";
-        int montant = 0;
+        String saisie = "";
         int x, y, x1, y1;
 
         // Tour joueurs, à démarrer à la gauche du constructeur !!
@@ -202,34 +199,40 @@ public class Run {
 
         // Boucle sur les joueurs :
         do {
-            joueurCourant = listJoueurs.get(santiago.getIndiceJoueurCourant());
-            String message = "\nJoueur : " + joueurCourant.getNom();
-            message += "\nVoulez-vous soudoyer le constructeur de canal ? (o/n)";
-            c = Saisie.IN.validStringNotBlank("o|O|n|N", "invalid", "erreur", message);
-            if (c.compareToIgnoreCase("o") == 0) {
-                System.out.println("Indiquez où vous souhaitez poser le canal : ");
+            joueurCourant = santiago.joueurPlaying();
+            boolean termine = false;
+            do {
+                String message = "\nJoueur : " + joueurCourant.getNom();
+                message += "\nVoulez-vous soudoyer le constructeur de canal ? (o/n)";
+                saisie = Saisie.IN.validStringNotBlank("o|O|n|N", "invalid", "erreur", message);
+                if (saisie.compareToIgnoreCase("o") == 0) {
+                    System.out.println("Indiquez où vous souhaitez poser le canal : ");
 
-                System.out.println("1 ère coordonnées: ");
-                x = Saisie.IN.nextIntWithRangeNotBlank(0, 7, "il faut ecrire quelque chose", "erreur", "x ?\n");
-                y = Saisie.IN.nextIntWithRangeNotBlank(0, 5, "il faut ecrire quelque chose", "erreur", "y ?\n");
+                    System.out.println("1 ère coordonnées: ");
+                    x = Saisie.IN.nextIntWithRangeNotBlank(0, 7, "il faut ecrire quelque chose", "erreur", "x ?\n");
+                    y = Saisie.IN.nextIntWithRangeNotBlank(0, 5, "il faut ecrire quelque chose", "erreur", "y ?\n");
 
-                System.out.println("2 ème coordonnées: ");
-                x1 = Saisie.IN.nextIntWithRangeNotBlank(0, 7, "il faut ecrire quelque chose", "erreur", "x ?\n");
-                y1 = Saisie.IN.nextIntWithRangeNotBlank(0, 5, "il faut ecrire quelque chose", "erreur", "y ?\n");
+                    System.out.println("2 ème coordonnées: ");
+                    x1 = Saisie.IN.nextIntWithRangeNotBlank(0, 7, "il faut ecrire quelque chose", "erreur", "x ?\n");
+                    y1 = Saisie.IN.nextIntWithRangeNotBlank(0, 5, "il faut ecrire quelque chose", "erreur", "y ?\n");
 
-                // transformer cette position en positionSegment
-                canal = new PositionSegment(x, y, x1, y1);
+                    // transformer cette position en positionSegment
+                    PositionSegment canal = new PositionSegment(x, y, x1, y1);
 
-                // Prix pour cette position
-                montant = Saisie.IN.nextIntWithRangeNotBlank(0, joueurCourant.getSolde(), "il faut ecrire quelque chose", "erreur", "Votre Prix ?\n");
+                    // Prix pour cette position
+                    int montant = Saisie.IN.nextIntWithRangeNotBlank(0, joueurCourant.getSolde(), "il faut ecrire quelque chose", "erreur", "Votre Prix ?\n");
 
-                if (!santiago.encherePositionCanal(canal, montant)) {
-                    System.out.println("Enchère incorrecte, vous ne pouvez pas poser de canal.");
+                    if (!santiago.encherePositionCanal(canal, montant)) {
+                        System.out.println("Enchère incorrecte, vous ne pouvez pas proposer de construction de canal.");
+                        termine = false;
+                    } else {
+                        termine = true;
+                    }
+                } else {
+                    System.out.println("Vous avez passé votre tour.");
+                    termine = true;
                 }
-
-            } else {
-                System.out.println("Vous avez passé votre tour.");
-            }
+            } while (!termine);
         } while (!santiago.isPhaseFinie());
     }
 
@@ -349,7 +352,7 @@ public class Run {
                     }
                 } else if (choix.compareToIgnoreCase("N") == 0) {
                     System.out.println("Vous n'avez pas placé de canal pour ce tour.");
-                    santiago.passerSonTour();
+                    santiago.incrementerJoueurCourantCanalSup(false);
                     reussi = true;
                 }
             } while (!reussi);
@@ -358,7 +361,7 @@ public class Run {
 
     public void secheresse() {
         if (santiago.getNbTours() > 1) {
-            santiago.getPlateau().secheresse();
+            santiago.secheresse();
         }
     }
 

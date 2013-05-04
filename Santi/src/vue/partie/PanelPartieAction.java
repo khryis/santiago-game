@@ -33,7 +33,7 @@ public class PanelPartieAction extends AbstractPanel {
     public JPanel phases = new JPanel();
     public CardLayout cardLayout = new CardLayout();
     public String[] listPhases = { "PHASE D'ENCHERE", "PHASE DE CHOIX DES CARTES", "PHASE DE SOUDOIEMENT", "PHASE DE CHOIX D'UNE CONSTRUCTION", "PHASE DE CANAL SUPPLEMENTAIRE", "PHASE DE SECHERESSE",
-            "DIA_DE_PAGA" };
+            "DIA DE PAGA" };
     int indice = 0;
 
     public PanelPartieAction(Container parent) {
@@ -93,7 +93,7 @@ public class PanelPartieAction extends AbstractPanel {
     @Override
     public void update(Observable arg0, Object arg1) {
         // TODO Auto-generated method stub
-        System.out.println("update PanelPartieAction");
+        // System.out.println("update PanelPartieAction");
         if (santiago.isPhaseFinie()) {
             santiago.setPhaseFinie(false);
             incrementerCardLayout();

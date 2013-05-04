@@ -98,22 +98,25 @@ public class PanelPartie extends AbstractPanel {
         default:
             break;
         }
+        if (!carte.isDeserte()) {
+            if (carte.getNbMarqueurMax() == 2) {// 2M, 2MSans et 1M1MSans
+                if (carte.getNbMarqueurActuel() == 0) {
+                    path.append("2MSans.jpg");
+                } else if (carte.getNbMarqueurActuel() == 1) {
+                    path.append("1M1MSans.jpg");
+                } else if (carte.getNbMarqueurActuel() == 2) {
+                    path.append("2M.jpg");
+                }
 
-        if (carte.getNbMarqueurMax() == 2) {// 2M, 2MSans et 1M1MSans
-            if (carte.getNbMarqueurActuel() == 0) {
-                path.append("2MSans.jpg");
-            } else if (carte.getNbMarqueurActuel() == 1) {
-                path.append("1M1MSans.jpg");
-            } else if (carte.getNbMarqueurActuel() == 2) {
-                path.append("2M.jpg");
+            } else if (carte.getNbMarqueurMax() == 1) {// 1M, 1MSans
+                if (carte.getNbMarqueurActuel() == 0) {
+                    path.append("1MSans.jpg");
+                } else if (carte.getNbMarqueurActuel() == 1) {
+                    path.append("1M.jpg");
+                }
             }
-
-        } else if (carte.getNbMarqueurMax() == 1) {// 1M, 1MSans
-            if (carte.getNbMarqueurActuel() == 0) {
-                path.append("1MSans.jpg");
-            } else if (carte.getNbMarqueurActuel() == 1) {
-                path.append("1M.jpg");
-            }
+        } else {
+            path = new StringBuilder("img/cartes/desert.jpg");
         }
         return path.toString();
     }

@@ -161,6 +161,8 @@ public class Santiago extends Observable {
         if (nbTours > 1) {
             plateau.secheresse();
         }
+        phaseFinie = true;
+        indiceJoueurCourant = positionConstructeur();
         repercuterModification();
     }
 
@@ -168,11 +170,17 @@ public class Santiago extends Observable {
      * Distribution de l'argent à la fin de chaque tour
      */
     public void diaDePaga() {
-        for (Joueur j : listJoueurs) {
-            j.ajouterArgent(3);
+        if (nbTours > 0) {
+            for (Joueur j : listJoueurs) {
+                j.ajouterArgent(3);
+            }
         }
         // TODO tour - 1
-        resetEnchereVars();
+        nbTours -= 1;
+        phaseFinie = true;
+        indiceJoueurCourant = positionApresConstructeur();
+        resetVars();
+        devoilerCarte();
         repercuterModification();
     }
 
@@ -207,10 +215,7 @@ public class Santiago extends Observable {
     }
 
     public void incrementerJoueurCourantEnchere() {
-        indiceJoueurCourant++;
-        if (indiceJoueurCourant == listJoueurs.size()) {
-            indiceJoueurCourant = 0;
-        }
+        incrementerJoueurCourant();
         if (indiceJoueurCourant == positionApresConstructeur()) {
             setPhaseFinie(true);
             if (trouveConstructeur) {
@@ -228,27 +233,61 @@ public class Santiago extends Observable {
             choisiCarte = enchereMax();
             indiceJoueurCourant = listJoueurs.indexOf(choisiCarte);
         }
+        repercuterModification();
     }
 
     public void incrementerJoueurCourantSoudoiement() {
-        indiceJoueurCourant++;
-        if (indiceJoueurCourant == listJoueurs.size()) {
-            indiceJoueurCourant = 0;
-        }
+        incrementerJoueurCourant();
         if (indiceJoueurCourant == positionConstructeur()) {
             setPhaseFinie(true);
+            indiceJoueurCourant = positionConstructeur();
         }
+        repercuterModification();
+    }
+
+    public void incrementerJoueurCourantPoseDeCarte() {
+        Joueur joueur = choisiCarte;
+        tabEnchere.remove(joueur);
+        positionCaseCourante = null;
+        positionSegmentCourant = null;
+        // on retire de tabEnchere les joueur et son enchère
+        if (!tabEnchere.isEmpty()) {
+            choisiCarte = enchereMax();
+            indiceJoueurCourant = getListJoueurs().indexOf(choisiCarte);
+        } else {
+            if (plateau.getCartesDevoilees().isEmpty()) {
+                phaseFinie = true;
+                indiceJoueurCourant = positionApresConstructeur();
+            } else {
+                choisiCarte = joueurGagnant;
+                indiceJoueurCourant = getListJoueurs().indexOf(choisiCarte);
+            }
+        }
+        repercuterModification();
+    }
+
+    public void incrementerJoueurCourantChoixConstruction() {
+        phaseFinie = true;
+        indiceJoueurCourant = positionApresConstructeur();
+        repercuterModification();
+    }
+
+    public void incrementerJoueurCourantCanalSup(boolean canalPose) {
+        incrementerJoueurCourant();
+        if (canalPose || indiceJoueurCourant == positionApresConstructeur()) {
+            setPhaseFinie(true);
+            indiceJoueurCourant = positionApresConstructeur();
+        }
+        repercuterModification();
     }
 
     public void incrementerJoueurCourant() {
         indiceJoueurCourant++;
+        positionCaseCourante = null;
+        positionSegmentCourant = null;
         if (indiceJoueurCourant == listJoueurs.size()) {
             indiceJoueurCourant = 0;
         }
-        if (indiceJoueurCourant == positionApresConstructeur()) {
-            setPhaseFinie(true);
-        }
-        repercuterModification();
     }
 
     public Joueur joueurPlaying() {
@@ -304,19 +343,14 @@ public class Santiago extends Observable {
             tabEnchere.put(joueur, enchere);
             joueur.setEnchereCarte(enchere);
             if (deviendraConstructeur(enchere)) {
-                System.out.println("joueur : " + joueur + ", enchere " + tabEnchere.get(joueur) + " deviendra constructeur");
+                System.out.println("joueur : " + joueur.getNom() + ", avec une enchere de " + tabEnchere.get(joueur) + " deviendra constructeur");
             } else {
-                System.out.println("joueur : " + joueur + ", enchere " + tabEnchere.get(joueur));
+                System.out.println("joueur : " + joueur.getNom() + ", avec une enchere de " + tabEnchere.get(joueur));
             }
             incrementerJoueurCourantEnchere();
-            repercuterModification();
         }
 
         return reussi;
-    }
-
-    public void passerSonTour() {
-        incrementerJoueurCourant();
     }
 
     /**
@@ -375,24 +409,8 @@ public class Santiago extends Observable {
             // réinitialise l'attribut enchère du joueur
             joueur.setEnchereCarte(0);
 
-            System.out.println("ancien :" + joueur.toString());
-            tabEnchere.remove(joueur);
-            // on retire de tabEnchere les joueur et son enchère
-            if (!tabEnchere.isEmpty()) {
-                choisiCarte = enchereMax();
-                System.out.println("nouveau :" + choisiCarte.toString());
-                indiceJoueurCourant = getListJoueurs().indexOf(choisiCarte);
-            } else {
-                if (plateau.getCartesDevoilees().isEmpty()) {
-                    phaseFinie = true;
-                    indiceJoueurCourant = positionApresConstructeur();
-                } else {
-                    choisiCarte = joueurGagnant;
-                    indiceJoueurCourant = getListJoueurs().indexOf(choisiCarte);
-                }
-            }
             estPosee = true;
-            repercuterModification();
+            incrementerJoueurCourantPoseDeCarte();
         } else {
             estPosee = false;
         }
@@ -460,9 +478,9 @@ public class Santiago extends Observable {
                 ArrayList<Joueur> enchJoueur = new ArrayList<>();
                 enchJoueur.add(joueur);
                 enchereConstr.put(canal, enchJoueur);
+                System.out.println(enchereConstr.keySet().toString());
             }
             incrementerJoueurCourantSoudoiement();
-            repercuterModification();
             reussi = true;
         } else {
             reussi = false;
@@ -495,7 +513,9 @@ public class Santiago extends Observable {
                         joueur.setEnchereConstructeur(0);
                     }
                     reussi = true;
-                    phaseFinie = true;
+                    nbCanaux -= 1;
+                    plateau.majIrrigationTotale();
+                    incrementerJoueurCourantChoixConstruction();
                 } else {
                     reussi = false;
                 }
@@ -519,10 +539,16 @@ public class Santiago extends Observable {
         boolean reussi = false;
         Joueur constructeur = getListJoueurs().get(positionConstructeur());
         if (constructeurPeutEncherir()) {
-            if (plateau.placerCanal(canal)) {
-                constructeur.enleverArgent(plusGrossePropositionCanal() + 1);
-                reussi = true;
-                phaseFinie = true;
+            if (!enchereConstr.containsKey(canal)) {
+                if (plateau.placerCanal(canal)) {
+                    constructeur.enleverArgent(plusGrossePropositionCanal() + 1);
+                    nbCanaux -= 1;
+                    plateau.majIrrigationTotale();
+                    reussi = true;
+                    incrementerJoueurCourantChoixConstruction();
+                }
+            } else {
+                System.out.println("Cette construction vous est proposé");
             }
         }
         return reussi;
@@ -530,15 +556,16 @@ public class Santiago extends Observable {
 
     public boolean irrigationSupplementaire(PositionSegment canal) {
         boolean place = false;
-
-        if (!listJoueurs.get(indiceJoueurCourant).hasTuyauSup()) {
+        Joueur joueurCourant = joueurPlaying();
+        if (!joueurCourant.hasTuyauSup()) {
             System.out.println("Vous n'avez plus de canal supplémentaire!");
-            place = true;
-            incrementerJoueurCourant();
+            place = false;
+            incrementerJoueurCourantCanalSup(false);
         } else if (plateau.placerCanal(canal)) {
-            listJoueurs.get(indiceJoueurCourant).setTuyauSup(false);
+            joueurCourant.setTuyauSup(false);
             place = true;
-            incrementerJoueurCourant();
+            plateau.majIrrigationTotale();
+            incrementerJoueurCourantCanalSup(true);
         }
 
         return place;
@@ -572,10 +599,19 @@ public class Santiago extends Observable {
         return total;
     }
 
+    public int valeurPourUneProposition(PositionSegment canal) {
+        int total = 0;
+        ArrayList<Joueur> joueursEnch = enchereConstr.get(canal);
+        for (Joueur joueur : joueursEnch) {
+            total += joueur.getEnchereConstructeur();
+        }
+        return total;
+    }
+
     /**
      * Permet de réinitialiser les objets stockant les infos sur le enchères
      */
-    public void resetEnchereVars() {
+    public void resetVars() {
         int indiceJoueur;
         ArrayList<Joueur> joueursEnch = new ArrayList<>();
         for (Map.Entry<PositionSegment, ArrayList<Joueur>> entry : enchereConstr.entrySet()) {
@@ -589,6 +625,15 @@ public class Santiago extends Observable {
         }
         enchereConstr.clear();
         tabEnchere.clear();
+
+        indiceJoueurCourant = positionApresConstructeur();
+        trouveConstructeur = false;
+        deviendraConstructeur = null;
+        choisiCarte = null;
+        joueurGagnant = null;
+        positionCaseCourante = null;
+        positionSegmentCourant = null;
+        carteChoisie = null;
     }
 
     @Override

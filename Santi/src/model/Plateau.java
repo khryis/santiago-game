@@ -162,7 +162,6 @@ public class Plateau extends Observable {
     }
 
     public void secheresse() {
-        // TEST secheresse partie 2 Chris
         // décrémenter le nombre de marqueurs des cartes non irriguées
         // mettre en sécheresse les cartes sans marqueurs
         for (Carte carte : cartesPosees) {
@@ -188,8 +187,6 @@ public class Plateau extends Observable {
     }
 
     public void majIrrigation1Carte(Carte carte) {
-        // TEST irrigation pour une carte Chris
-        // appele ceci quand on pose une carte
 
         // On initialise une position, renseigné par la carte
         Position pc = carte.getPosition();
@@ -203,11 +200,13 @@ public class Plateau extends Observable {
         // récupère avec des valeurs valides
         PositionSegment.determineAdjacentAPosition(pc, ps1, ps2);
 
-        // On change l'attribut irrguée des cases (PositionCase) à true si
+        // On change l'attribut irriguée des cases (PositionCase) à true si
         // on les segments adjacent
         // que l'on a calculé sont occupé (déjà posée)
         PositionCase cas = carte.getPositionCase();
         int index, index2;
+        System.out.println("canal adjacent 1 : " + ps1 + " a la carte positionné : " + carte.getPosition().toString());
+        System.out.println("canal adjacent 2 : " + ps2 + " a la carte positionné : " + carte.getPosition().toString());
         if (emplacementCanaux.contains(ps1) || emplacementCanaux.contains(ps2)) {
             index = emplacementCanaux.indexOf(ps1);
             index2 = emplacementCanaux.indexOf(ps2);
