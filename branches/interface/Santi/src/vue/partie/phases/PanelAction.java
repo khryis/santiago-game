@@ -1,5 +1,6 @@
 package vue.partie.phases;
 
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Observable;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
@@ -47,10 +49,7 @@ public class PanelAction extends AbstractPanel {
     public JPanel cardChoisiePanel = new JPanel();
     public JLabel cardChoisie = new JLabel();
 
-    // private final JPanel soudoiement = new JPanel();
-    //
-    // private PositionSegment segmentSelected;
-    // private Carte carteSelected;
+    public JPanel propositionsPanel = new JPanel();
 
     public PanelAction(Container parent) {
         super(parent);
@@ -133,6 +132,7 @@ public class PanelAction extends AbstractPanel {
     }
 
     public JPanel cardsObjects() {
+        // TODO pouvoir rendre le comptour des carte selectionné Rouge
         JPanel cardPanel = new JPanel();
         LayoutManager boxLayout = new BoxLayout(cardPanel, BoxLayout.X_AXIS);
         cardPanel.setLayout(boxLayout);
@@ -154,18 +154,21 @@ public class PanelAction extends AbstractPanel {
         return cardPanel;
     }
 
-    public JPanel propositions() {
-        JPanel propositionsPanel = new JPanel();
+    public void propositions() {
+        propositionsPanel = new JPanel();
         propositionsPanel.setLayout(new BoxLayout(propositionsPanel, BoxLayout.Y_AXIS));
         ButtonGroup group = new ButtonGroup();
         for (final Map.Entry<PositionSegment, ArrayList<Joueur>> entry : santiago.getEnchereContructeur().entrySet()) {
-            JRadioButton radio = new JRadioButton(entry.getKey().toString(), false);
+            final PositionSegment canal = entry.getKey();
+            JRadioButton radio = new JRadioButton(canal.toString() + " , soudoiement actuel : " + santiago.valeurPourUneProposition(canal), false);
+            if (canal.equals(santiago.getPositionSegmentCourant())) {
+                radio.setSelected(true);
+            }
             radio.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     if (((JRadioButton) e.getSource()).isSelected()) {
-                        // TODO Action
-                        // segmentSelected = entry.getKey();
+                        santiago.setPositionSegmentCourant(canal);
                     }
                 }
 
@@ -173,7 +176,6 @@ public class PanelAction extends AbstractPanel {
             group.add(radio);
             propositionsPanel.add(radio);
         }
-        return propositionsPanel;
     }
 
     public static JPanel secheresseInfo() {
@@ -204,8 +206,12 @@ public class PanelAction extends AbstractPanel {
         public void actionPerformed(ActionEvent e) {
             // TODO Auto-generated method stub
             if (e.getSource() instanceof CardButton) {
-                if (((CardButton) e.getSource()).getParent().getParent().getParent() instanceof PanelActionChoixCarte) {
-                    Carte carte = ((CardButton) e.getSource()).getCarte();
+                CardButton cb = (CardButton) e.getSource();
+                if (cb.getParent().getParent().getParent() instanceof PanelActionChoixCarte) {
+
+                    Carte carte = cb.getCarte();
+                    cb.setBorderPainted(true);
+                    cb.setBorder(BorderFactory.createLineBorder(Color.red, 3));
                     santiago.setCarteChoisie(carte);
                 }
             }

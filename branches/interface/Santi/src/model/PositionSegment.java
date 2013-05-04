@@ -39,6 +39,13 @@ public class PositionSegment extends Position {
         this.y2 = y2;
     }
 
+    public void setCoordonnees(int x1, int y1, int x2, int y2) {
+        this.x = x1;
+        this.y = y1;
+        this.x2 = x2;
+        this.y2 = y2;
+    }
+
     /**
      * @param segment1
      * @param segment2
@@ -49,19 +56,19 @@ public class PositionSegment extends Position {
 
         if (isEven(x)) {
             if (isEven(y)) {
-                segment1 = new PositionSegment(x, y, x2 + 2, y2);
-                segment2 = new PositionSegment(x, y, x2, y2 + 2);
+                segment1.setCoordonnees(x, y, x2 + 2, y2);
+                segment2.setCoordonnees(x, y, x2, y2 + 2);
             } else {
-                segment1 = new PositionSegment(x, y - 1, x2, y2 + 1);
-                segment2 = new PositionSegment(x, y + 1, x2 + 2, y2 + 1);
+                segment1.setCoordonnees(x, y - 1, x2, y2 + 1);
+                segment2.setCoordonnees(x, y + 1, x2 + 2, y2 + 1);
             }
         } else {
             if (isEven(y)) {
-                segment1 = new PositionSegment(x - 1, y, x2 + 1, y2);
-                segment2 = new PositionSegment(x + 1, y, x2 + 1, y2 + 2);
+                segment1.setCoordonnees(x - 1, y, x2 + 1, y2);
+                segment2.setCoordonnees(x + 1, y, x2 + 1, y2 + 2);
             } else {
-                segment1 = new PositionSegment(x + 1, y - 1, x2 + 1, y2 + 1);
-                segment2 = new PositionSegment(x - 1, y + 1, x2 + 1, y2 + 1);
+                segment1.setCoordonnees(x + 1, y - 1, x2 + 1, y2 + 1);
+                segment2.setCoordonnees(x - 1, y + 1, x2 + 1, y2 + 1);
             }
         }
     }
@@ -74,6 +81,15 @@ public class PositionSegment extends Position {
     @Override
     public String toString() {
         return "Segment : [ " + x + ", " + y + " ] --> [ " + x2 + ", " + y2 + " ] occuper : " + isOccupe() + "\n";
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + x2;
+        result = prime * result + y2;
+        return result;
     }
 
     @Override

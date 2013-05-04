@@ -2,6 +2,8 @@ package vue.partie.phases;
 
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import vue.components.Bouton;
 
@@ -18,6 +20,7 @@ public class PanelActionDiaDePaga extends PanelAction {
         super(parent, name);
         suivant.setPreferredSize(new Dimension(300, 50));
         boutons.add(suivant);
+        suivant.addActionListener(new SuivantListener());
     }
 
     public PanelActionDiaDePaga(Container parent, String name, String[] actions) {
@@ -29,5 +32,17 @@ public class PanelActionDiaDePaga extends PanelAction {
         super.initComponent();
 
         add(PanelAction.diaDePaga());
+    }
+
+    public class SuivantListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // TODO Auto-generated method stub
+            Bouton b = (Bouton) e.getSource();
+            if (b.getText().compareToIgnoreCase("Phase suivante") == 0) {
+                santiago.diaDePaga();
+            }
+        }
     }
 }

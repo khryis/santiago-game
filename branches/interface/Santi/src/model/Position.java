@@ -25,7 +25,7 @@ public class Position {
 
     @Override
     public String toString() {
-        return "Position [x=" + x + ", y=" + y + ", occupe=" + occupe + "] Ref: " + getClass().getName() + "@" + Integer.toHexString(hashCode()) + "\n";
+        return "Position [x=" + x + ", y=" + y + ", occupe=" + occupe + "]\n";
     }
 
     @Override

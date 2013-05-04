@@ -16,6 +16,7 @@ import java.util.Observable;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -70,7 +71,7 @@ public class PanelPlateau extends AbstractPanel {
         int posY;
 
         // Création de la source
-        JButton[] tabSource = new JButton[6];
+        tabSource = new JButton[6];
         for (int i = 0; i < 6; i++) {
             final JButton jb = new JButton();
             jb.setOpaque(false);
@@ -90,7 +91,7 @@ public class PanelPlateau extends AbstractPanel {
             tabSource[i].setBounds(posX, posY, 20, 20);
         }
         // Création des segments
-        JButton[] tabSegments = new JButton[31];
+        tabSegments = new JButton[31];
         for (int i = 0; i < 31; i++) {
             JButton jb = new JButton();
             jb.setOpaque(false);
@@ -127,7 +128,7 @@ public class PanelPlateau extends AbstractPanel {
         }
 
         // Création des cases
-        JButton[] tabCases = new JButton[48];
+        tabCases = new JButton[48];
         for (int i = 0; i < 48; i++) {
             JButton jb = new JButton();
             jb.setOpaque(false);
@@ -157,9 +158,9 @@ public class PanelPlateau extends AbstractPanel {
         }
 
         // Création d'une table de correspondance Position->JButton
-        tabCorrespondanceSource = new HashMap<PositionIntersection, JButton>();
-        tabCorrespondanceSegment = new HashMap<PositionSegment, JButton>();
-        tabCorrespondanceCase = new HashMap<PositionCase, JButton>();
+        tabCorrespondanceSource = new HashMap<>();
+        tabCorrespondanceSegment = new HashMap<>();
+        tabCorrespondanceCase = new HashMap<>();
         tabCorrespondanceSource.put(new PositionIntersection(2, 2, 0), tabSource[0]);
         tabCorrespondanceSource.put(new PositionIntersection(2, 4, 0), tabSource[1]);
         tabCorrespondanceSource.put(new PositionIntersection(2, 6, 0), tabSource[2]);
@@ -183,7 +184,11 @@ public class PanelPlateau extends AbstractPanel {
                         x2 += 2;
                     }
                 }
-                tabCorrespondanceSegment.put(new PositionSegment(x1, y1, x2, y2, true), tabSegments[i]);
+                int indexPosition = santiago.getPlateau().getCanaux().indexOf(new PositionSegment(x1, y1, x2, y2));
+                PositionSegment ps = santiago.getPlateau().getCanaux().get(indexPosition);
+                tabCorrespondanceSegment.put(ps, tabSegments[i]);
+                // tabCorrespondanceSegment.put(new PositionSegment(x1, y1, x2,
+                // y2, true), tabSegments[i]);
                 // System.out.println(x1 + " " + y1 + " " + x2 + " " + y2 +
                 // " ");
             } else {
@@ -204,7 +209,11 @@ public class PanelPlateau extends AbstractPanel {
                         x2 += 2;
                     }
                 }
-                tabCorrespondanceSegment.put(new PositionSegment(x1, y1, x2, y2, true), tabSegments[i]);
+                int indexPosition = santiago.getPlateau().getCanaux().indexOf(new PositionSegment(x1, y1, x2, y2));
+                PositionSegment ps = santiago.getPlateau().getCanaux().get(indexPosition);
+                tabCorrespondanceSegment.put(ps, tabSegments[i]);
+                // tabCorrespondanceSegment.put(new PositionSegment(x1, y1, x2,
+                // y2, true), tabSegments[i]);
                 // System.out.println("blabla " + x1 + " " + y1 + " " + x2 + " "
                 // + y2 + " ");
             }
@@ -269,7 +278,19 @@ public class PanelPlateau extends AbstractPanel {
 
     @Override
     public void update(Observable arg0, Object arg1) {
-        System.out.println("update PanelPlateau");
+        clearPlateau();
+        if (santiago.getPositionSegmentCourant() != null) {
+            JButton segmentSelected = tabCorrespondanceSegment.get(santiago.getPositionSegmentCourant());
+            // segmentSelected.setContentAreaFilled(true);
+            segmentSelected.setBorderPainted(true);
+            segmentSelected.setBorder(BorderFactory.createLineBorder(Color.red, 3));
+        }
+        if (santiago.getPositionCaseCourante() != null) {
+            JButton caseSelected = tabCorrespondanceCase.get(santiago.getPositionCaseCourante());
+            // caseSelected.setContentAreaFilled(true);
+            caseSelected.setBorderPainted(true);
+            caseSelected.setBorder(BorderFactory.createLineBorder(Color.red, 3));
+        }
 
         tabCorrespondanceSource.get(santiago.getPlateau().getSource()).setOpaque(true);
         tabCorrespondanceSource.get(santiago.getPlateau().getSource()).setContentAreaFilled(true);
@@ -281,7 +302,7 @@ public class PanelPlateau extends AbstractPanel {
             PositionSegment ps = listeSegments.get(i);
             if (ps.isOccupe()) {
                 tabCorrespondanceSegment.get(ps).setContentAreaFilled(true);
-                tabCorrespondanceSegment.get(ps).setBorderPainted(true);
+                tabCorrespondanceSegment.get(ps).setBorderPainted(false);
                 tabCorrespondanceSegment.get(ps).setBackground(Color.blue);
             }
         }
@@ -292,15 +313,26 @@ public class PanelPlateau extends AbstractPanel {
                 Image scaledImage = originalImage.getScaledInstance(80, 80, Image.SCALE_AREA_AVERAGING);
                 Icon tmp = new ImageIcon(scaledImage);
                 JButton b = tabCorrespondanceCase.get(carte.getPositionCase());
-                System.out.println("bouton : " + b);
                 if (b != null) {
                     b.setOpaque(true);
                     b.setContentAreaFilled(true);
-                    b.setBorderPainted(true);
+                    b.setBorderPainted(false);
                     b.setIcon(tmp);
                 }
             }
         }
+    }
 
+    public void clearPlateau() {
+        for (JButton b : tabCorrespondanceCase.values()) {
+            b.setOpaque(false);
+            b.setContentAreaFilled(false);
+            b.setBorderPainted(false);
+        }
+        for (JButton b : tabCorrespondanceSegment.values()) {
+            b.setOpaque(false);
+            b.setContentAreaFilled(false);
+            b.setBorderPainted(false);
+        }
     }
 }

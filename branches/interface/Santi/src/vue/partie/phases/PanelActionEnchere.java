@@ -4,6 +4,7 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Observable;
 
 import javax.swing.BoxLayout;
 import javax.swing.JOptionPane;
@@ -31,6 +32,7 @@ public class PanelActionEnchere extends PanelAction {
 
         passer.setPreferredSize(new Dimension(300, 50));
         boutons.add(passer);
+        passer.addActionListener(new EncherirListener());
     }
 
     public PanelActionEnchere(Container parent, String name, String[] actions) {
@@ -53,11 +55,27 @@ public class PanelActionEnchere extends PanelAction {
         add(enchere);
     }
 
+    @Override
+    public void update(Observable arg0, Object arg1) {
+        // System.out.println("update panelActionSoudoiement");
+        if (!santiago.getPlateau().getCartesDevoilees().isEmpty()) {
+            removeAll();
+            initComponent();
+            validate();
+        }
+    }
+
     private class EncherirListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (!santiago.encherir(Integer.valueOf(betText.getText()))) {
-                JOptionPane.showInputDialog("Mauvaise saisie");
+            if (((Bouton) e.getSource()).getText().compareToIgnoreCase("Encherir") == 0) {
+                if (!santiago.encherir(Integer.valueOf(betText.getText()))) {
+                    JOptionPane.showMessageDialog(parent, "Mauvaise Saisie");
+                }
+            } else if (((Bouton) e.getSource()).getText().compareToIgnoreCase("Passer son tour") == 0) {
+                if (!santiago.encherir(0)) {
+                    JOptionPane.showMessageDialog(parent, "Mauvaise Saisie");
+                }
             }
         }
     }
