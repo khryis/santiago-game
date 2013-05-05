@@ -556,7 +556,7 @@ public class Santiago extends Observable {
                 reussi = false;
             }
         } else {
-            System.out.println("On ne peut poser des canaux qu'à côté de la source ou d'autres canaux");
+            System.out.println("On ne peut poser des canaux qu'a cote de la source ou d'autres canaux");
             reussi = false;
         }
         return reussi;

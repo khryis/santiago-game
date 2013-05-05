@@ -54,7 +54,7 @@ public class SantiagoFrame extends JFrame implements Observer, KeyListener, Wind
         setLayout(new BorderLayout());
         setLocation(insets.left, insets.top);
 
-        // Menu
+        // // Menu
         // JMenuBar menu = new JMenuBar();
         // JMenu fichier = new JMenu("Fichier");
         // JMenuItem save = new JMenuItem("Sauvegarder");

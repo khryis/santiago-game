@@ -57,11 +57,15 @@ public class PanelActionEnchere extends PanelAction {
 
     @Override
     public void update(Observable arg0, Object arg1) {
-        if (!santiago.getPlateau().getCartesDevoilees().isEmpty()) {
+        if (santiago.isConfigured()) {
             removeAll();
             initComponent();
             validate();
         }
+        enchere.repaint();
+        encherir.setEnabled(true);
+        encherir.setEnabled(true);
+        repaint();
     }
 
     private class EncherirListener implements ActionListener {

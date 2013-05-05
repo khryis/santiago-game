@@ -29,15 +29,15 @@ public class PanelActionSoudoiement extends PanelAction {
 
     public PanelActionSoudoiement(Container parent, String name) {
         super(parent, name);
-        soudoyer.setPreferredSize(new Dimension(300, 50));
+        soudoyer.setPreferredSize(new Dimension(200, 50));
         boutons.add(soudoyer);
         soudoyer.addActionListener(new SoudoyerListener());
 
-        soutenir.setPreferredSize(new Dimension(300, 50));
+        soutenir.setPreferredSize(new Dimension(200, 50));
         boutons.add(soutenir);
         soutenir.addActionListener(new SoudoyerListener());
 
-        passer.setPreferredSize(new Dimension(300, 50));
+        passer.setPreferredSize(new Dimension(200, 50));
         boutons.add(passer);
         passer.addActionListener(new SoudoyerListener());
     }
@@ -68,11 +68,15 @@ public class PanelActionSoudoiement extends PanelAction {
 
     @Override
     public void update(Observable arg0, Object arg1) {
-        if (!santiago.getEnchereContructeur().isEmpty()) {
+        if (santiago.isConfigured()) {
             removeAll();
             initComponent();
             validate();
         }
+        soudoyer.setEnabled(true);
+        soutenir.setEnabled(true);
+        passer.setEnabled(true);
+        repaint();
         // if (santiago.getPositionSegmentCourant() != null) {
         // positionValeur.setText(santiago.getPositionSegmentCourant().toString());
         // }

@@ -71,12 +71,7 @@ public class PanelActionChoixCarte extends PanelAction {
             initComponent();
             validate();
         }
-        // if (santiago.getPositionCaseCourante() != null) {
-        // positionValeur.setText(santiago.getPositionCaseCourante().toString());
-        // }
-        // if (santiago.getCarteChoisie() != null) {
-        // cardChoisie.setText(santiago.getCarteChoisie().toString());
-        // }
+        repaint();
 
     }
 

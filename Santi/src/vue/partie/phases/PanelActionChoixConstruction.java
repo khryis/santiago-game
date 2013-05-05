@@ -60,7 +60,7 @@ public class PanelActionChoixConstruction extends PanelAction {
 
     @Override
     public void update(Observable arg0, Object arg1) {
-        if (!santiago.getEnchereContructeur().isEmpty()) {
+        if (santiago.isConfigured()) {
             removeAll();
             initComponent();
             validate();
