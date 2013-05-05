@@ -16,6 +16,8 @@ import vue.components.Bouton;
 public class PanelActionChoixConstruction extends PanelAction {
     private static final long serialVersionUID = 1L;
 
+    JPanel choixPanel = new JPanel();
+
     private final Bouton choisirProposition = new Bouton("Choisir Proposition");
     private final Bouton choisirAutre = new Bouton("Choisir une autre construction");
 
@@ -44,7 +46,7 @@ public class PanelActionChoixConstruction extends PanelAction {
     public void initComponent() {
         super.initComponent();
 
-        JPanel choixPanel = new JPanel();
+        choixPanel = new JPanel();
         choixPanel.setLayout(new BoxLayout(choixPanel, BoxLayout.Y_AXIS));
 
         // positionChoisie();
@@ -62,9 +64,6 @@ public class PanelActionChoixConstruction extends PanelAction {
             removeAll();
             initComponent();
             validate();
-        }
-        if (santiago.getPositionSegmentCourant() != null) {
-            positionValeur.setText(santiago.getPositionSegmentCourant().toString());
         }
         if (!santiago.constructeurPeutEncherir() && santiago.getEnchereContructeur().isEmpty()) {
             santiago.setPhaseFinie(true);

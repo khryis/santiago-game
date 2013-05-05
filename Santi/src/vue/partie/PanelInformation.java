@@ -26,15 +26,17 @@ public class PanelInformation extends AbstractPanel {
         setOpaque(false);
         ((FlowLayout) getLayout()).setHgap(0);
         ((FlowLayout) getLayout()).setVgap(0);
-
-        JTextArea console = new JTextArea(25,78);
-        console.setPreferredSize(new Dimension(800, 8000));
+        JTextArea console = new JTextArea(25, 78);
+        console.setPreferredSize(new Dimension(homeDimension.width - 800, 8000));
         JTextAreaOutputStream outStream = new JTextAreaOutputStream(console);
         JTextAreaOutputStream errStream = new JTextAreaOutputStream(console);
         System.setOut(new PrintStream(outStream));
         System.setErr(new PrintStream(errStream));
-		console.setEditable(false);
-        add(new JScrollPane(console));
+        console.setEditable(false);
+        JScrollPane jsp = new JScrollPane(console);
+        jsp.setPreferredSize(new Dimension(homeDimension.width - 800, 8000));
+        add(jsp);
+
     }
 
     @Override

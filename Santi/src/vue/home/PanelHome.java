@@ -24,10 +24,10 @@ public class PanelHome extends AbstractPanel {
     private Image background;
 
     // Composant de la vue
-    private final PanelChoice panelChoice;
-    private final PanelConfiguration panelConfiguration;
+    final PanelChoice panelChoice;
+    final PanelConfiguration panelConfiguration;
     // private PanelCharger panelCharger = new PanelCharger();
-    private final PanelPartie panelPartie;
+    PanelPartie panelPartie;
     // private PanelReglages panelReglages = new PanelReglages();
     public JPanel cards = new JPanel();
     public CardLayout cardLayout = new CardLayout();
@@ -93,5 +93,13 @@ public class PanelHome extends AbstractPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void retourPartie() {
+        remove(panelPartie);
+        panelPartie = new PanelPartie(this);
+        cards.add(panelPartie, listContent[0]);
+        panelChoice.boutonDemarrer.setEnabled(false);
+        cardLayout.show(cards, listContent[3]);
     }
 }

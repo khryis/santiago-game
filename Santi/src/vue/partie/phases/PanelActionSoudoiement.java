@@ -15,6 +15,9 @@ import vue.components.Bouton;
 
 public class PanelActionSoudoiement extends PanelAction {
     private static final long serialVersionUID = 1L;
+
+    JPanel soudoiementPanel = new JPanel();
+
     private final Bouton soudoyer = new Bouton("Soudoyer");
     private final Bouton soutenir = new Bouton("Soutenir soudoyeur");
     private final Bouton passer = new Bouton("Passer");
@@ -48,7 +51,7 @@ public class PanelActionSoudoiement extends PanelAction {
     public void initComponent() {
         super.initComponent();
 
-        JPanel soudoiementPanel = new JPanel();
+        soudoiementPanel = new JPanel();
         soudoiementPanel.setLayout(new BoxLayout(soudoiementPanel, BoxLayout.Y_AXIS));
 
         enchereObjects();

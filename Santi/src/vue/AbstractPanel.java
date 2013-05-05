@@ -106,4 +106,7 @@ public abstract class AbstractPanel extends JPanel implements Observer, IConstan
         return true;
     }
 
+    public void setInit(boolean init) {
+        isInit = init;
+    }
 }

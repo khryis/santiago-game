@@ -209,6 +209,15 @@ public class PanelAction extends AbstractPanel {
         return diaDePaga;
     }
 
+    public static JPanel finDePartie() {
+        JPanel finDePartie = new JPanel();
+
+        finDePartie.setLayout(new FlowLayout(FlowLayout.CENTER));
+        finDePartie.add(new JLabel("Cette belle partie est maintenant finie"));
+
+        return finDePartie;
+    }
+
     @Override
     public void update(Observable arg0, Object arg1) {
         // TODO

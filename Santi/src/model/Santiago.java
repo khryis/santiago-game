@@ -86,11 +86,11 @@ public class Santiago extends Observable {
         // mettre a jour le nbTours de la partie
         // nbCanaux en fonction nb joueurs
         if (listJoueurs.size() == 3 || listJoueurs.size() == 4) {
-            nbTours = 11;
-            nbCanaux = 11;
+            nbTours = 10;
+            nbCanaux = 10;
         } else {
-            nbTours = 9;
-            nbCanaux = 9;
+            nbTours = 8;
+            nbCanaux = 8;
         }
         determinerUnConstructeur();
         indiceJoueurCourant = positionApresConstructeur();
@@ -105,67 +105,68 @@ public class Santiago extends Observable {
      * 
      */
     public int[] score() {
-    	int [] score = {0,0,0,0,0};
-    	int [] nbType = {0,0,0,0,0};
-    	
-    	// Calcul du nombre de cartes posées pour chaque type de champ
-    	for (int i = 0; i < plateau.getCartesPosees().size(); i ++) {
-    		if (!plateau.getCartesPosees().get(i).isDeserte()) {
-    		switch (plateau.getCartesPosees().get(i).getType()) {
-    			case PATATE :
-    				nbType[0] = nbType[0] + 1;
-    				break;
-    			case HARICOT :
-    				nbType[1] = nbType[1] + 1;
-    				break;
-    			case CANNE_A_SUCRE : 
-    				nbType[2] = nbType[2] + 1;
-    				break;
-    			case BANANE :
-    				nbType[3] = nbType[3] + 1;
-    				break;
-    			case PIMENT :
-    				nbType[4] = nbType[4] + 1;
-    				break;
-    			default :
-    				break;
-    		}
-    		}
-    	}
-    	
-    	// Calcul des points des joueurs par rapport à la taille des champs et au nombre de marqueurs
-    	for (int i = 0; i  < listJoueurs.size(); i ++) {
-    		for (int j = 0; j < plateau.getCartesPosees().size(); j ++) {
-    			if (!plateau.getCartesPosees().get(j).isDeserte()) {
-    				if ((listJoueurs.get(i).getCouleur()).compareTo(plateau.getCartesPosees().get(j).getPossesseur().getCouleur()) == 0) {
-    					switch (plateau.getCartesPosees().get(i).getType()) {
-    	    			case PATATE :
-    	    				score[i] = score[i] + (1 * plateau.getCartesPosees().get(j).getNbMarqueurActuel() * nbType[0]);
-    	    				break;
-    	    			case HARICOT :
-    	    				score[i] = score[i] + (1 * plateau.getCartesPosees().get(j).getNbMarqueurActuel() * nbType[1]);
-    	    				break;
-    	    			case CANNE_A_SUCRE : 
-    	    				score[i] = score[i] + (1 * plateau.getCartesPosees().get(j).getNbMarqueurActuel() * nbType[2]);
-    	    				break;
-    	    			case BANANE :
-    	    				score[i] = score[i] + (1 * plateau.getCartesPosees().get(j).getNbMarqueurActuel() * nbType[3]);
-    	    				break;
-    	    			case PIMENT :
-    	    				score[i] = score[i] + (1 * plateau.getCartesPosees().get(j).getNbMarqueurActuel() * nbType[4]);
-    	    				break;
-    	    			default :
-    	    				break;
-    					}
-    					
-    				}
-    			}
-    		}
-    		score[i] = score[i] + listJoueurs.get(i).getSolde();
-    	}
-    	return score;
+        int[] score = { 0, 0, 0, 0, 0 };
+        int[] nbType = { 0, 0, 0, 0, 0 };
+
+        // Calcul du nombre de cartes posées pour chaque type de champ
+        for (int i = 0; i < plateau.getCartesPosees().size(); i++) {
+            if (!plateau.getCartesPosees().get(i).isDeserte()) {
+                switch (plateau.getCartesPosees().get(i).getType()) {
+                case PATATE:
+                    nbType[0] = nbType[0] + 1;
+                    break;
+                case HARICOT:
+                    nbType[1] = nbType[1] + 1;
+                    break;
+                case CANNE_A_SUCRE:
+                    nbType[2] = nbType[2] + 1;
+                    break;
+                case BANANE:
+                    nbType[3] = nbType[3] + 1;
+                    break;
+                case PIMENT:
+                    nbType[4] = nbType[4] + 1;
+                    break;
+                default:
+                    break;
+                }
+            }
+        }
+
+        // Calcul des points des joueurs par rapport à la taille des champs et
+        // au nombre de marqueurs
+        for (int i = 0; i < listJoueurs.size(); i++) {
+            for (int j = 0; j < plateau.getCartesPosees().size(); j++) {
+                if (!plateau.getCartesPosees().get(j).isDeserte()) {
+                    if ((listJoueurs.get(i).getCouleur()).compareTo(plateau.getCartesPosees().get(j).getPossesseur().getCouleur()) == 0) {
+                        switch (plateau.getCartesPosees().get(i).getType()) {
+                        case PATATE:
+                            score[i] = score[i] + (1 * plateau.getCartesPosees().get(j).getNbMarqueurActuel() * nbType[0]);
+                            break;
+                        case HARICOT:
+                            score[i] = score[i] + (1 * plateau.getCartesPosees().get(j).getNbMarqueurActuel() * nbType[1]);
+                            break;
+                        case CANNE_A_SUCRE:
+                            score[i] = score[i] + (1 * plateau.getCartesPosees().get(j).getNbMarqueurActuel() * nbType[2]);
+                            break;
+                        case BANANE:
+                            score[i] = score[i] + (1 * plateau.getCartesPosees().get(j).getNbMarqueurActuel() * nbType[3]);
+                            break;
+                        case PIMENT:
+                            score[i] = score[i] + (1 * plateau.getCartesPosees().get(j).getNbMarqueurActuel() * nbType[4]);
+                            break;
+                        default:
+                            break;
+                        }
+
+                    }
+                }
+            }
+            score[i] = score[i] + listJoueurs.get(i).getSolde();
+        }
+        return score;
     }
-    
+
     /**
      * Permet de setter un joueur en constructeur et d'enlever l'ancien
      * 
@@ -399,10 +400,10 @@ public class Santiago extends Observable {
             reussi = false;
         } else if (enchere < 0) {
             // Jamais dans ce cas avec le ternaire au dessus
-            System.out.println("Problème, enchère négative");
+            System.out.println("Probleme, enchere negative");
             reussi = false;
         } else if (tabEnchere.containsValue(enchere) && enchere != 0) {
-            System.out.println("Quelqu'un a déjà enchèri par " + enchere + "€");
+            System.out.println("Quelqu'un a deje encheri par " + enchere + "euro(s)");
             reussi = false;
         } else {
             reussi = true;
@@ -454,18 +455,21 @@ public class Santiago extends Observable {
             // Maj possesseur
             carteAPoser.setPossesseur(joueur);
 
-            // Maj marqueurs
-            // TODO pas aseez de marqueurs
-            joueur.setNbMarqueurDispos(joueur.getNbMarqueurDispos() - carteAPoser.getNbMarqueurMax());
-
-            // Maj solde
-            // somme de tabEnchere pour le joueur gagnant
-            joueur.enleverArgent(tabEnchere.isEmpty() ? 0 : tabEnchere.get(joueur));
-
             // MAJ marqueurs de la carte si enchère joueur = 0
             if (joueur.getEnchereCarte() == 0) {
                 carteAPoser.setNbMarqueurActuel(carteAPoser.getNbMarqueurActuel() - 1);
             }
+
+            // Maj marqueurs et si pas aseez de marqueurs
+            int marqueursAEnlever = carteAPoser.getNbMarqueurActuel();
+            if (joueur.getNbMarqueurDispos() < marqueursAEnlever) {
+                marqueursAEnlever = joueur.getNbMarqueurDispos();
+            }
+            joueur.setNbMarqueurDispos(joueur.getNbMarqueurDispos() - marqueursAEnlever);
+
+            // Maj solde
+            // somme de tabEnchere pour le joueur gagnant
+            joueur.enleverArgent(tabEnchere.isEmpty() ? 0 : tabEnchere.get(joueur));
 
             // verifie si la carte est irrigué
             plateau.majIrrigation1Carte(carteAPoser);
@@ -536,16 +540,15 @@ public class Santiago extends Observable {
                 // seter enchère
                 joueur.setEnchereConstructeur(montant);
                 if (enchereConstr.containsKey(canal)) {
-                    System.out.println("Canal existe, ajouté à la liste");
+                    System.out.println("La proposition existe, ajout de " + joueur.getNom() + " pour cette proposition");
                     // ajouter le joueur à l'arrayList si position de
                     // canal déjà proposée
                     enchereConstr.get(canal).add(joueur);
                 } else { // ajouter dans la hashmap
-                    System.out.println("proposition n'existe pas, ajoute canal et joueur au tabConstruction");
+                    System.out.println("La proposition n'existe pas, ajout de la proposition de Construction");
                     ArrayList<Joueur> enchJoueur = new ArrayList<>();
                     enchJoueur.add(joueur);
                     enchereConstr.put(canal, enchJoueur);
-                    System.out.println(enchereConstr.keySet().toString());
                 }
                 incrementerJoueurCourantSoudoiement();
                 reussi = true;
@@ -553,8 +556,7 @@ public class Santiago extends Observable {
                 reussi = false;
             }
         } else {
-            System.out.println("on ne peut poser des canal qu'à côté de la source ou des autres canaux");
-            System.out.println(canal);
+            System.out.println("On ne peut poser des canaux qu'à côté de la source ou d'autres canaux");
             reussi = false;
         }
         return reussi;
@@ -622,7 +624,7 @@ public class Santiago extends Observable {
                     System.out.println("Impossible de le poser ici");
                 }
             } else {
-                System.out.println("Cette construction vous est proposé");
+                System.out.println("Cette construction vous est deja propose");
             }
         }
         return reussi;
@@ -632,7 +634,7 @@ public class Santiago extends Observable {
         boolean place = false;
         Joueur joueurCourant = joueurPlaying();
         if (!joueurCourant.hasTuyauSup()) {
-            System.out.println("Vous n'avez plus de canal supplémentaire!");
+            System.out.println("Vous n'avez plus de canal supplementaire!");
             place = false;
             incrementerJoueurCourantCanalSup(false);
         } else if (plateau.placerCanal(canal)) {
@@ -641,7 +643,7 @@ public class Santiago extends Observable {
             plateau.majIrrigationTotale();
             incrementerJoueurCourantCanalSup(true);
         } else {
-            System.out.println("Veillez à ce que le canal soit adjacent");
+            System.out.println("Veillez a ce que le canal soit adjacent");
         }
 
         return place;
