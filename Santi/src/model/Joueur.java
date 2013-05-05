@@ -1,5 +1,7 @@
 package model;
 
+import java.awt.Color;
+
 public class Joueur {
     private String nom;
     private String couleur;
@@ -30,6 +32,31 @@ public class Joueur {
         solde = 10;
         enchereCarte = 0;
         enchereConstructeur = 0;
+    }
+
+    public Color getColor() {
+        Color color;
+        switch (this.couleur) {
+        case "vert":
+            color = Color.green;
+            break;
+        case "jaune":
+            color = Color.yellow;
+            break;
+        case "bleu":
+            color = Color.blue;
+            break;
+        case "violet":
+            color = Color.magenta;
+            break;
+        case "rouge":
+            color = Color.red;
+            break;
+        default:
+            color = Color.black;
+            break;
+        }
+        return color;
     }
 
     public void ajouterArgent(int somme) {

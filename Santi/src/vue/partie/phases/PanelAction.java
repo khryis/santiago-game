@@ -236,7 +236,7 @@ public class PanelAction extends AbstractPanel {
 
                     Carte carte = cb.getCarte();
                     cb.setBorderPainted(true);
-                    cb.setBorder(BorderFactory.createLineBorder(Color.red, 3));
+                    cb.setBorder(BorderFactory.createLineBorder(Color.black, 3));
                     santiago.setCarteChoisie(carte);
                     // FIXME à voir
                     ((PanelPartie) panelPartieAction.getParent()).changeBoardSelected();

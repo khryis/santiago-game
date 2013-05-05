@@ -7,7 +7,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.HashSet;
 
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import vue.IConstante;
@@ -23,9 +22,9 @@ public class ConfigJoueurListener implements ItemListener, ActionListener {
     public ConfigJoueurListener(Container pc) {
         panelConfigJoueur = (PanelConfigJoueurs) pc;
         colors.add("");
-        colors.add("blanc");
-        colors.add("gris");
-        colors.add("noir");
+        colors.add("vert");
+        colors.add("jaune");
+        colors.add("rouge");
         colors.add("violet");
         colors.add("bleu");
     }
@@ -49,13 +48,18 @@ public class ConfigJoueurListener implements ItemListener, ActionListener {
                 colors.add(avant);
             }
         }
-        input = (String) JOptionPane.showInputDialog(new JFrame(), "Choisir une couleur", "Customized Dialog", JOptionPane.QUESTION_MESSAGE, null, colors.toArray(), "");
+        input = (String) JOptionPane.showInputDialog(panelConfigJoueur, "Choisir une couleur", "Customized Dialog", JOptionPane.QUESTION_MESSAGE, null, colors.toArray(), "");
         if (colors.contains(input)) {
             colorChoose.add(input);
             if (!input.equalsIgnoreCase("")) {
                 colors.remove(colors.remove(input));
             }
         }
-        ((Bouton) e.getSource()).setText(input);
+        if (input != "") {
+            ((Bouton) e.getSource()).setText(input);
+        } else {
+            ((Bouton) e.getSource()).setText("Couleur..");
+        }
+
     }
 }

@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Set;
 
@@ -302,7 +303,8 @@ public class PanelPlateau extends AbstractPanel {
                 if (b != null) {
                     b.setOpaque(true);
                     b.setContentAreaFilled(true);
-                    b.setBorderPainted(false);
+                    b.setBorderPainted(true);
+                    b.setBorder(BorderFactory.createLineBorder(carte.getPossesseur().getColor(), 2));
                     EventQueue.invokeLater(new Runnable() {
                         @Override
                         public void run() {
@@ -316,8 +318,10 @@ public class PanelPlateau extends AbstractPanel {
     }
 
     public void clearPlateau() {
-        for (JButton b : tabCorrespondanceCase.values()) {
-            b.setBorderPainted(false);
+        for (Map.Entry<PositionCase, JButton> entry : tabCorrespondanceCase.entrySet()) {
+            if (!entry.getKey().isOccupe()) {
+                entry.getValue().setBorderPainted(false);
+            }
         }
         for (JButton b : tabCorrespondanceSegment.values()) {
             b.setBorderPainted(false);
@@ -331,7 +335,7 @@ public class PanelPlateau extends AbstractPanel {
             // segmentSelected.setContentAreaFilled(true);
             if (segmentSelected != null) {
                 segmentSelected.setBorderPainted(true);
-                segmentSelected.setBorder(BorderFactory.createLineBorder(Color.red, 2));
+                segmentSelected.setBorder(BorderFactory.createLineBorder(Color.black, 3));
             }
         }
         if (santiago.getPositionCaseCourante() != null) {
@@ -339,7 +343,7 @@ public class PanelPlateau extends AbstractPanel {
             // caseSelected.setContentAreaFilled(true);
             if (caseSelected != null) {
                 caseSelected.setBorderPainted(true);
-                caseSelected.setBorder(BorderFactory.createLineBorder(Color.red, 2));
+                caseSelected.setBorder(BorderFactory.createLineBorder(Color.black, 3));
             }
         }
     }
