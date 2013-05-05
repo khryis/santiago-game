@@ -1,5 +1,3 @@
-package vue;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -18,12 +16,12 @@ import javax.swing.UIManager;
 
 import vue.home.PanelHome;
 
-public class SantiagoFrame extends JFrame implements Observer, KeyListener, WindowListener {
+public class Santiago extends JFrame implements Observer, KeyListener, WindowListener {
 
     private static final long serialVersionUID = 1L;
     private final PanelHome panelHome;
 
-    public SantiagoFrame() {
+    public Santiago() {
         super();
 
         // initialisation des composants
@@ -53,55 +51,6 @@ public class SantiagoFrame extends JFrame implements Observer, KeyListener, Wind
         setLayout(new BorderLayout());
         setLocation(insets.left, insets.top);
 
-        // // Menu
-        // JMenuBar menu = new JMenuBar();
-        // JMenu fichier = new JMenu("Fichier");
-        // JMenuItem save = new JMenuItem("Sauvegarder");
-        // save.addActionListener(new ActionListener() {
-        // @Override
-        // public void actionPerformed(ActionEvent arg0) {
-        // // sauvegarder le fichier
-        // }
-        // });
-        // JMenuItem load = new JMenuItem("Charger");
-        // load.addActionListener(new ActionListener() {
-        // @Override
-        // public void actionPerformed(ActionEvent arg0) {
-        // // charger le fichier
-        // }
-        // });
-        // JMenuItem fermer = new JMenuItem("Fermer l'application");
-        // fermer.addActionListener(new ActionListener() {
-        // @Override
-        // public void actionPerformed(ActionEvent arg0) {
-        // dispose();
-        // }
-        // });
-        // fichier.add(save);
-        // fichier.add(load);
-        // fichier.addSeparator();
-        // fichier.add(fermer);
-        // menu.add(fichier);
-        // JMenu aide = new JMenu("Aide");
-        // JMenuItem regles = new JMenuItem("Règles");
-        // regles.addActionListener(new ActionListener() {
-        // @Override
-        // public void actionPerformed(ActionEvent arg0) {
-        // // afficher les règles du jeu
-        // }
-        // });
-        // JMenuItem apropos = new JMenuItem("A propos de");
-        // apropos.addActionListener(new ActionListener() {
-        // @Override
-        // public void actionPerformed(ActionEvent arg0) {
-        // // pane WTF
-        // }
-        // });
-        // aide.add(regles);
-        // aide.add(apropos);
-        // menu.add(aide);
-        // this.setJMenuBar(menu);
-
         // on ajoute les composants au conteneur principal
         setContentPane(panelHome);
         panelHome.initComponent();
@@ -118,7 +67,7 @@ public class SantiagoFrame extends JFrame implements Observer, KeyListener, Wind
 
             @Override
             public void run() {
-                new SantiagoFrame();
+                new Santiago();
             }
         });
     }
