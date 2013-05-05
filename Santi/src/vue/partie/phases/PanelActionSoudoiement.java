@@ -54,8 +54,8 @@ public class PanelActionSoudoiement extends PanelAction {
         enchereObjects();
         soudoiementPanel.add(betPanel);
 
-        positionChoisie();
-        soudoiementPanel.add(positionChoisiePanel);
+        // positionChoisie();
+        // soudoiementPanel.add(positionChoisiePanel);
 
         propositions();
         soudoiementPanel.add(propositionsPanel);
@@ -65,15 +65,14 @@ public class PanelActionSoudoiement extends PanelAction {
 
     @Override
     public void update(Observable arg0, Object arg1) {
-        // System.out.println("update panelActionSoudoiement");
         if (!santiago.getEnchereContructeur().isEmpty()) {
             removeAll();
             initComponent();
             validate();
         }
-        if (santiago.getPositionSegmentCourant() != null) {
-            positionValeur.setText(santiago.getPositionSegmentCourant().toString());
-        }
+        // if (santiago.getPositionSegmentCourant() != null) {
+        // positionValeur.setText(santiago.getPositionSegmentCourant().toString());
+        // }
     }
 
     private class SoudoyerListener implements ActionListener {

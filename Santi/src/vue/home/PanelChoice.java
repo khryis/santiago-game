@@ -64,19 +64,15 @@ public class PanelChoice extends AbstractPanel {
         boutonConfiguration.initComponent();
         boutonReglage.initComponent();
 
-        // FIXME rdecommenter quand interface partie sera good
-        // boutonDemarrer.setEnabled(false);
+        // FIXME redecommenter quand interface partie sera good
+        boutonDemarrer.setEnabled(false);
 
         isInit = true;
     }
 
     @Override
     public void update(Observable arg0, Object arg1) {
-        if (santiago.isConfigured()) {
-            boutonDemarrer.setEnabled(true);
-        } else {
-            boutonDemarrer.setEnabled(false);
-        }
+
     }
 
     private class BoutonDemarrerListener implements ActionListener {

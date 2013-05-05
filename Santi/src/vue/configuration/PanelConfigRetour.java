@@ -45,10 +45,6 @@ public class PanelConfigRetour extends AbstractPanel {
         isInit = true;
     }
 
-    public void retour() {
-        panelConfiguration.retourAuPanelChoice();
-    }
-
     @Override
     public void update(Observable arg0, Object arg1) {
         // TODO Auto-generated method stub
@@ -59,7 +55,7 @@ public class PanelConfigRetour extends AbstractPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() instanceof BgButton) {
-                retour();
+                panelConfiguration.retourAuPanelChoice();
             }
         }
     }

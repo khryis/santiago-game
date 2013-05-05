@@ -36,8 +36,7 @@ public class PanelConfigJoueurs extends AbstractPanel {
         super.initComponent();
 
         // attribut du conteneur this (panelConfiguration)
-        setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(GREEN_BORDER), "Joueurs", TitledBorder.CENTER,
-                TitledBorder.TOP, POLICE_30, FG_COLOR));
+        setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(GREEN_BORDER), "Joueurs", TitledBorder.CENTER, TitledBorder.TOP, POLICE_30, FG_COLOR));
         setLayout(new FlowLayout());
         setPreferredSize(new Dimension(homeDimension.width, getPreferredSize().height));
         setBackground(BG_COLOR);
@@ -77,10 +76,12 @@ public class PanelConfigJoueurs extends AbstractPanel {
         for (int i = 0; i < nbJ; i++) {
             joueursNames[i].setEditable(true);
             joueursNames[i].setEnabled(true);
+            joueursColor[i].setEnabled(true);
         }
         for (int i = nbJ; i < joueursNames.length; i++) {
             joueursNames[i].setEditable(false);
             joueursNames[i].setEnabled(false);
+            joueursColor[i].setEnabled(false);
         }
     }
 

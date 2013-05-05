@@ -1,6 +1,7 @@
 package vue.components;
 
 import java.awt.Dimension;
+import java.awt.Graphics;
 
 import javax.swing.JComboBox;
 
@@ -26,6 +27,16 @@ public class BgComboBox extends JComboBox<String> implements IConstante {
         setBackground(NICE_GREY);
         setForeground(FG_COLOR);
         setPreferredSize(new Dimension(100, getPreferredSize().height));
+    }
+
+    public void changeList(String[] tabValues) {
+        setModel(new BgComboBox(tabValues).getModel());
+        repaint();
+    }
+
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
     }
 
 }

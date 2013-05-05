@@ -44,11 +44,12 @@ public class ConfigJoueurListener implements ItemListener, ActionListener {
     public void actionPerformed(ActionEvent e) {
         String input = "";
         String avant = ((Bouton) e.getSource()).getText();
-        if (!avant.equalsIgnoreCase(IConstante.TEXT_COULEUR)) {
-            colors.add(avant);
+        if (avant != null) {
+            if (!avant.equalsIgnoreCase(IConstante.TEXT_COULEUR)) {
+                colors.add(avant);
+            }
         }
-        input = (String) JOptionPane.showInputDialog(new JFrame(), "Choisir une couleur", "Customized Dialog",
-                JOptionPane.QUESTION_MESSAGE, null, colors.toArray(), "");
+        input = (String) JOptionPane.showInputDialog(new JFrame(), "Choisir une couleur", "Customized Dialog", JOptionPane.QUESTION_MESSAGE, null, colors.toArray(), "");
         if (colors.contains(input)) {
             colorChoose.add(input);
             if (!input.equalsIgnoreCase("")) {

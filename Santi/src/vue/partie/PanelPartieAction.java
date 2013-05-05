@@ -21,7 +21,6 @@ import vue.partie.phases.PanelActionSoudoiement;
 
 public class PanelPartieAction extends AbstractPanel {
     private static final long serialVersionUID = 1L;
-    private final PanelPartie panelPartie;
 
     private final PanelAction phaseEnchere;
     private final PanelAction phaseChoixCarte;
@@ -31,6 +30,8 @@ public class PanelPartieAction extends AbstractPanel {
     private final PanelAction phaseSecheresse;
     private final PanelAction phaseDiaDePaga;
 
+    private final PanelInformation panelInformation;
+
     public JPanel phases = new JPanel();
     public CardLayout cardLayout = new CardLayout();
     public String[] listPhases = { "PHASE D'ENCHERE", "PHASE DE CHOIX DES CARTES", "PHASE DE SOUDOIEMENT", "PHASE DE CHOIX D'UNE CONSTRUCTION", "PHASE DE CANAL SUPPLEMENTAIRE", "PHASE DE SECHERESSE",
@@ -39,7 +40,6 @@ public class PanelPartieAction extends AbstractPanel {
 
     public PanelPartieAction(Container parent) {
         super(parent);
-        panelPartie = (PanelPartie) parent;
         phaseEnchere = new PanelActionEnchere(this, listPhases[0]);
         phaseChoixCarte = new PanelActionChoixCarte(this, listPhases[1]);
         phaseSoudoiement = new PanelActionSoudoiement(this, listPhases[2]);
@@ -47,6 +47,9 @@ public class PanelPartieAction extends AbstractPanel {
         phaseCanalSup = new PanelActionCanalSup(this, listPhases[4]);
         phaseSecheresse = new PanelActionSecheresse(this, listPhases[5]);
         phaseDiaDePaga = new PanelActionDiaDePaga(this, listPhases[6]);
+
+        panelInformation = new PanelInformation(this);
+
         indice = 0;
     }
 
@@ -61,8 +64,9 @@ public class PanelPartieAction extends AbstractPanel {
 
         // on ajoute les composant au panel CardLayout
         phases.setLayout(cardLayout);
-        phases.setPreferredSize(homeDimension);
+        phases.setPreferredSize(new Dimension(800, homeDimension.height - 600));
         phases.setOpaque(false);
+
         phases.add(phaseEnchere, listPhases[0]);
         phases.add(phaseChoixCarte, listPhases[1]);
         phases.add(phaseSoudoiement, listPhases[2]);
@@ -72,6 +76,7 @@ public class PanelPartieAction extends AbstractPanel {
         phases.add(phaseDiaDePaga, listPhases[6]);
 
         add(phases, BorderLayout.CENTER);
+        add(panelInformation, BorderLayout.EAST);
 
         phaseEnchere.initComponent();
         phaseChoixCarte.initComponent();
@@ -80,11 +85,7 @@ public class PanelPartieAction extends AbstractPanel {
         phaseCanalSup.initComponent();
         phaseSecheresse.initComponent();
         phaseDiaDePaga.initComponent();
-
-        // FIXME a enlever après les test
-        indice = 0;
-        santiago.repercuterModification();
-        //
+        panelInformation.initComponent();
 
         cardLayout.show(phases, listPhases[indice]);
 
@@ -94,7 +95,6 @@ public class PanelPartieAction extends AbstractPanel {
     @Override
     public void update(Observable arg0, Object arg1) {
         // TODO Auto-generated method stub
-        // System.out.println("update PanelPartieAction");
     	if (!santiago.isFinish()) {
     		if (santiago.isPhaseFinie()) {
     			santiago.setPhaseFinie(false);
@@ -124,5 +124,4 @@ public class PanelPartieAction extends AbstractPanel {
             indice = 0;
         }
     }
-
 }

@@ -96,7 +96,6 @@ public class Plateau extends Observable {
     }
 
     public ArrayList<Carte> tirerCarte() {
-        // TEST tirerCarte Chris
         ArrayList<Carte> carteTirage = null;
         if (nbJoueurs == 5) {
             carteTirage = popArrayList(5);
@@ -124,9 +123,7 @@ public class Plateau extends Observable {
                 System.out.println("Position déjà occupé");
             }
         } else {
-            // TODO une exception
             System.out.println("Cette Position n'existe pas sur le plateau");
-            // pour sortir de la boucle
             pose = false;
         }
         return pose;
@@ -147,7 +144,6 @@ public class Plateau extends Observable {
                     place = false;
                 }
             } else {
-                // TODO créer une erreur
                 System.out.println("Canal déja occupe");
                 place = false;
             }
@@ -201,8 +197,6 @@ public class Plateau extends Observable {
     }
 
     public void majIrrigationTotale() {
-        // TEST majIrrigationTotale Chris
-        // XXX ajouté cette maj a chaque fois que l'on pose un canal
         for (Carte carte : cartesPosees) {
             majIrrigation1Carte(carte);
         }
@@ -227,8 +221,6 @@ public class Plateau extends Observable {
         // que l'on a calculé sont occupé (déjà posée)
         PositionCase cas = carte.getPositionCase();
         int index, index2;
-        System.out.println("canal adjacent 1 : " + ps1 + " a la carte positionné : " + carte.getPosition().toString());
-        System.out.println("canal adjacent 2 : " + ps2 + " a la carte positionné : " + carte.getPosition().toString());
         if (emplacementCanaux.contains(ps1) || emplacementCanaux.contains(ps2)) {
             index = emplacementCanaux.indexOf(ps1);
             index2 = emplacementCanaux.indexOf(ps2);
@@ -241,7 +233,6 @@ public class Plateau extends Observable {
     }
 
     private ArrayList<Carte> popArrayList(int nbCartes) {
-        // TEST popArrayList Chris
         ArrayList<Carte> carteTirage = new ArrayList<>(nbCartes);
         for (int i = 0; i < nbCartes; i++) {
             carteTirage.add(cartes.get(cartes.size() - 1));

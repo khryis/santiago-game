@@ -20,7 +20,6 @@ public class PositionCase extends Position {
     }
 
     public static PositionCase aleatoire() {
-        // TEST positionCase aleatoire Chris
         int abscisse, ordonnee;
         double rand = Math.random() * 8;
         rand = Math.floor(rand);
@@ -49,28 +48,4 @@ public class PositionCase extends Position {
 
         this.irriguee = irriguee;
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        final Position other = (Position) obj;
-        if (x != other.x) {
-            return false;
-        }
-        if (y != other.y) {
-            return false;
-        }
-        return true;
-    }
-    
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + (irriguee ? 1231 : 1237);
-        return result;
-    }
-
 }

@@ -3,6 +3,7 @@ package vue.partie;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -42,9 +43,6 @@ public class PanelPlateau extends AbstractPanel {
     JButton[] tabCases;
 
     private final JPanel panelConteneur = new JPanel();
-
-    // TODO structure HashMap<Position, JButton> récupérer listes du modèle
-    // plateau
 
     public PanelPlateau(Container parent) {
         super(parent);
@@ -242,6 +240,7 @@ public class PanelPlateau extends AbstractPanel {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     santiago.setPositionSegmentCourant(p);
+                    paintSelected();
                     // JOptionPane.showMessageDialog(panelConteneur,
                     // p.toString());
                 }
@@ -252,6 +251,7 @@ public class PanelPlateau extends AbstractPanel {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     santiago.setPositionCaseCourante(p1);
+                    paintSelected();
                     // JOptionPane.showMessageDialog(panelConteneur,
                     // p1.toString()); // A
                     // Commenter
@@ -279,21 +279,6 @@ public class PanelPlateau extends AbstractPanel {
     @Override
     public void update(Observable arg0, Object arg1) {
         clearPlateau();
-        if (santiago.getPositionSegmentCourant() != null) {
-            JButton segmentSelected = tabCorrespondanceSegment.get(santiago.getPositionSegmentCourant());
-            // segmentSelected.setContentAreaFilled(true);
-            segmentSelected.setBorderPainted(true);
-            segmentSelected.setBorder(BorderFactory.createLineBorder(Color.red, 3));
-        }
-        if (santiago.getPositionCaseCourante() != null) {
-            JButton caseSelected = tabCorrespondanceCase.get(santiago.getPositionCaseCourante());
-            // caseSelected.setContentAreaFilled(true);
-            caseSelected.setBorderPainted(true);
-            caseSelected.setBorder(BorderFactory.createLineBorder(Color.red, 3));
-        }
-
-        System.out.println(tabCorrespondanceSource.keySet().toString());
-        System.out.println(santiago.getPlateau().getSource().toString());
 
         tabCorrespondanceSource.get(santiago.getPlateau().getSource()).setOpaque(true);
         tabCorrespondanceSource.get(santiago.getPlateau().getSource()).setContentAreaFilled(true);
@@ -312,18 +297,19 @@ public class PanelPlateau extends AbstractPanel {
         for (int i = 0; i < listeCartesPosees.size(); i++) {
             Carte carte = listeCartesPosees.get(i);
             if (carte.getPosition().isOccupe()) {
-                // Image originalImage =
-                // getToolkit().getImage(PanelPartie.getPathImage(carte));
-                // Image scaledImage = originalImage.getScaledInstance(80, 80,
-                // Image.SCALE_AREA_AVERAGING);
-                // Icon tmp = new ImageIcon(scaledImage);
-                Icon tmp = new ImageIcon(PanelPartie.getPathImage(carte));
-                JButton b = tabCorrespondanceCase.get(carte.getPositionCase());
+                final Icon tmp = new ImageIcon(PanelPartie.getPathImage(carte));
+                final JButton b = tabCorrespondanceCase.get(carte.getPositionCase());
                 if (b != null) {
                     b.setOpaque(true);
                     b.setContentAreaFilled(true);
                     b.setBorderPainted(false);
-                    b.setIcon(tmp);
+                    EventQueue.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            b.setIcon(tmp);
+                        }
+                    });
+
                 }
             }
         }
@@ -331,14 +317,30 @@ public class PanelPlateau extends AbstractPanel {
 
     public void clearPlateau() {
         for (JButton b : tabCorrespondanceCase.values()) {
-            b.setOpaque(false);
-            b.setContentAreaFilled(false);
             b.setBorderPainted(false);
         }
         for (JButton b : tabCorrespondanceSegment.values()) {
-            b.setOpaque(false);
-            b.setContentAreaFilled(false);
             b.setBorderPainted(false);
+        }
+    }
+
+    public void paintSelected() {
+        clearPlateau();
+        if (santiago.getPositionSegmentCourant() != null) {
+            JButton segmentSelected = tabCorrespondanceSegment.get(santiago.getPositionSegmentCourant());
+            // segmentSelected.setContentAreaFilled(true);
+            if (segmentSelected != null) {
+                segmentSelected.setBorderPainted(true);
+                segmentSelected.setBorder(BorderFactory.createLineBorder(Color.red, 2));
+            }
+        }
+        if (santiago.getPositionCaseCourante() != null) {
+            JButton caseSelected = tabCorrespondanceCase.get(santiago.getPositionCaseCourante());
+            // caseSelected.setContentAreaFilled(true);
+            if (caseSelected != null) {
+                caseSelected.setBorderPainted(true);
+                caseSelected.setBorder(BorderFactory.createLineBorder(Color.red, 2));
+            }
         }
     }
 }

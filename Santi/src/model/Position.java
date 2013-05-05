@@ -37,7 +37,6 @@ public class Position {
         return result;
     }
 
-    // TODO vérifier que l'objet est de la bonne classe instanceof!!!
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {

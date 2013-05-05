@@ -334,8 +334,6 @@ public class Run {
                 message += "\nVoulez vous placer un canal supplémentaire ? O/N";
                 choix = Saisie.IN.validStringNotBlank("o|O|n|N", "invalid", "erreur", message);
                 if (choix.compareToIgnoreCase("O") == 0) {
-                    // TODO faire ça correct, tester les positions saisies par
-                    // l'utilisateur
                     System.out.println("Indiquez où placer le canal.");
                     int x = Saisie.IN.nextIntWithRangeNotBlank(0, 7, "il faut ecrire quelque chose", "erreur", "Position x1 : \n");
                     System.out.println("Position y1 : ");

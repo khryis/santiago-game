@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,6 +31,7 @@ import model.PositionSegment;
 import vue.AbstractPanel;
 import vue.components.Bouton;
 import vue.components.CardButton;
+import vue.partie.PanelPartie;
 import vue.partie.PanelPartieAction;
 
 public class PanelAction extends AbstractPanel {
@@ -48,6 +50,9 @@ public class PanelAction extends AbstractPanel {
 
     public JPanel cardChoisiePanel = new JPanel();
     public JLabel cardChoisie = new JLabel();
+
+    public JPanel cardPanel = new JPanel();
+    public JButton[] cards;
 
     public JPanel propositionsPanel = new JPanel();
 
@@ -83,6 +88,13 @@ public class PanelAction extends AbstractPanel {
         // init des composants
         super.initComponent();
 
+        Graphics g = getGraphics();
+
+        if (g != null) {
+            g.setColor(this.getBackground());
+            g.fillRect(0, 0, this.getWidth(), this.getHeight());
+        }
+
         // attribut du conteneur PanelAction
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setPreferredSize(homeDimension);
@@ -103,8 +115,6 @@ public class PanelAction extends AbstractPanel {
         betPanel.add(new JLabel("mise : "));
         betText = new JTextField("0", 5);
         betPanel.add(betText);
-        // TODO remplacer par le max par le solde du joueur, besoin d'un booleen
-        // 'A la main' pour un joueur
         Joueur joueurParole = santiago.joueurPlaying();
         betSlider = new JSlider(0, joueurParole.getSolde());
         betSlider.setValue(0);
@@ -132,19 +142,22 @@ public class PanelAction extends AbstractPanel {
     }
 
     public JPanel cardsObjects() {
-        // TODO pouvoir rendre le comptour des carte selectionné Rouge
-        JPanel cardPanel = new JPanel();
+        // TODO pouvoir rendre le compteur des carte selectionné Rouge
+        cardPanel = new JPanel();
         LayoutManager boxLayout = new BoxLayout(cardPanel, BoxLayout.X_AXIS);
         cardPanel.setLayout(boxLayout);
+        cardPanel.setOpaque(true);
+        cardPanel.setOpaque(false);
 
         if (santiago != null) {
             if (santiago.getPlateau() != null) {
                 if (santiago.getPlateau().getCartesDevoilees() != null) {
                     ArrayList<Carte> carteDevoilees = santiago.getPlateau().getCartesDevoilees();
-                    for (Carte carte : carteDevoilees) {
-                        JButton button = new CardButton(carte);
-                        cardPanel.add(button);
-                        button.addActionListener(new CliclOnCard());
+                    cards = new JButton[carteDevoilees.size()];
+                    for (int i = 0; i < carteDevoilees.size(); i++) {
+                        cards[i] = new CardButton(carteDevoilees.get(i));
+                        cardPanel.add(cards[i]);
+                        cards[i].addActionListener(new CliclOnCard());
                         cardPanel.add(Box.createRigidArea(new Dimension(30, 0)));
                     }
                 }
@@ -205,6 +218,9 @@ public class PanelAction extends AbstractPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             // TODO Auto-generated method stub
+            for (JButton b : cards) {
+                b.setBorderPainted(false);
+            }
             if (e.getSource() instanceof CardButton) {
                 CardButton cb = (CardButton) e.getSource();
                 if (cb.getParent().getParent().getParent() instanceof PanelActionChoixCarte) {
@@ -213,6 +229,8 @@ public class PanelAction extends AbstractPanel {
                     cb.setBorderPainted(true);
                     cb.setBorder(BorderFactory.createLineBorder(Color.red, 3));
                     santiago.setCarteChoisie(carte);
+                    // FIXME à voir
+                    ((PanelPartie) panelPartieAction.getParent()).changeBoardSelected();
                 }
             }
         }
