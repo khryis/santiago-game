@@ -42,14 +42,21 @@ public class PanelActionChoixCarte extends PanelAction {
     public void initComponent() {
         super.initComponent();
 
+        // Graphics g = getGraphics();
+        //
+        // if (g != null) {
+        // g.setColor(this.getBackground());
+        // g.fillRect(0, 0, this.getWidth(), this.getHeight());
+        // }
+
         cardChoice = new JPanel();
         cardChoice.setLayout(new BoxLayout(cardChoice, BoxLayout.Y_AXIS));
 
-        positionChoisie();
-        cardChoice.add(positionChoisiePanel);
+        // positionChoisie();
+        // cardChoice.add(positionChoisiePanel);
 
-        selectedCard();
-        cardChoice.add(cardChoisiePanel);
+        // selectedCard();
+        // cardChoice.add(cardChoisiePanel);
 
         cardPanel = cardsObjects();
         cardChoice.add(cardPanel);
@@ -59,18 +66,17 @@ public class PanelActionChoixCarte extends PanelAction {
 
     @Override
     public void update(Observable arg0, Object arg1) {
-        // System.out.println("update panelAction");
         if (!santiago.getPlateau().getCartesDevoilees().isEmpty()) {
             removeAll();
             initComponent();
             validate();
         }
-        if (santiago.getPositionCaseCourante() != null) {
-            positionValeur.setText(santiago.getPositionCaseCourante().toString());
-        }
-        if (santiago.getCarteChoisie() != null) {
-            cardChoisie.setText(santiago.getCarteChoisie().toString());
-        }
+        // if (santiago.getPositionCaseCourante() != null) {
+        // positionValeur.setText(santiago.getPositionCaseCourante().toString());
+        // }
+        // if (santiago.getCarteChoisie() != null) {
+        // cardChoisie.setText(santiago.getCarteChoisie().toString());
+        // }
 
     }
 
@@ -84,6 +90,15 @@ public class PanelActionChoixCarte extends PanelAction {
                 if (positionCase != null) {
                     if (!santiago.poserUneCarte(index, positionCase.getX(), positionCase.getY())) {
                         JOptionPane.showMessageDialog(parent, "Carte non posée !!");
+                    } else {
+                        // cardPanel.removeAll();
+                        // cardPanel.validate();
+                        removeAll();
+
+                        initComponent();
+
+                        validate();
+
                     }
                 } else {
                     JOptionPane.showMessageDialog(parent, "Position de case non séléctionné");

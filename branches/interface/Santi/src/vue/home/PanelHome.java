@@ -24,10 +24,10 @@ public class PanelHome extends AbstractPanel {
     private Image background;
 
     // Composant de la vue
-    private PanelChoice panelChoice;
-    private PanelConfiguration panelConfiguration;
+    private final PanelChoice panelChoice;
+    private final PanelConfiguration panelConfiguration;
     // private PanelCharger panelCharger = new PanelCharger();
-    private PanelPartie panelPartie;
+    private final PanelPartie panelPartie;
     // private PanelReglages panelReglages = new PanelReglages();
     public JPanel cards = new JPanel();
     public CardLayout cardLayout = new CardLayout();
@@ -64,14 +64,23 @@ public class PanelHome extends AbstractPanel {
         // init des panels
         panelChoice.initComponent();
         panelConfiguration.initComponent();
-        panelPartie.initComponent();
+        // FIXME peut pas init tant qu'on a pas configurer des partie
+        // panelPartie.initComponent();
 
         isInit = true;
     }
 
     @Override
     public void update(Observable arg0, Object arg1) {
-        // TODO Auto-generated method stub
+        // FIXME a décommenter
+        if (santiago.isConfigured()) {
+            panelChoice.boutonDemarrer.setEnabled(true);
+            if (!panelPartie.isInit()) {
+                panelPartie.initComponent();
+            }
+        } else {
+            panelChoice.boutonDemarrer.setEnabled(false);
+        }
     }
 
     @Override

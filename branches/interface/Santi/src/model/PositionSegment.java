@@ -99,7 +99,6 @@ public class PositionSegment extends Position {
     @Override
     public boolean equals(Object obj) {
 
-        // TEST méthode equals à tester pour les segments
         if (obj == null) {
             return false;
         }

@@ -41,7 +41,7 @@ public class PanelActionCanalSup extends PanelAction {
     public void initComponent() {
         super.initComponent();
 
-        positionChoisie();
+        // positionChoisie();
 
         add(positionChoisiePanel);
     }

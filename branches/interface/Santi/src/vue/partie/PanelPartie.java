@@ -2,12 +2,9 @@ package vue.partie;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
-import java.util.ArrayList;
 import java.util.Observable;
 
 import model.Carte;
-import model.Joueur;
-import model.NiveauPartie;
 import vue.AbstractPanel;
 import vue.home.PanelHome;
 
@@ -15,6 +12,10 @@ public class PanelPartie extends AbstractPanel {
 
     private static final long serialVersionUID = 1L;
     PanelHome panelHome;
+
+    PanelPlateau pp;
+    PanelJoueurs pj;
+    PanelPartieAction ppa;
 
     public PanelPartie(Container parent) {
         super(parent);
@@ -30,15 +31,16 @@ public class PanelPartie extends AbstractPanel {
         setLayout(new BorderLayout());
 
         // System.out.println(santiago);
-        // FIXME à enlever, pour test
+        // FIXME à enlever après test
         // ---------------------------
-        santiago.setNiveauPartie(NiveauPartie.FACILE);
-        ArrayList<Joueur> listjoueurs = new ArrayList<>();
-        listjoueurs.add(new Joueur("tull", "bleu"));
-        listjoueurs.add(new Joueur("andre", "vert"));
-        listjoueurs.add(new Joueur("marc", "gris"));
-        santiago.setListJoueurs(listjoueurs);
-        santiago.initPartie();
+
+        // santiago.setNiveauPartie(NiveauPartie.FACILE);
+        // ArrayList<Joueur> listjoueurs = new ArrayList<>();
+        // listjoueurs.add(new Joueur("tull", "bleu"));
+        // listjoueurs.add(new Joueur("andre", "vert"));
+        // listjoueurs.add(new Joueur("marc", "gris"));
+        // santiago.setListJoueurs(listjoueurs);
+        // santiago.initPartie();
 
         // santiago.encherePositionCanal(new PositionSegment(0, 0, 0, 1), 3);
         // santiago.encherePositionCanal(new PositionSegment(1, 1, 1, 2), 5);
@@ -56,19 +58,20 @@ public class PanelPartie extends AbstractPanel {
         // santiago.poserUneCarte(0, 4, 1);
         // santiago.poserUneCarte(0, 3, 3);
 
-        PanelPlateau pp = new PanelPlateau(this);
+        pp = new PanelPlateau(this);
         add(pp, BorderLayout.CENTER);
         pp.initComponent();
 
-        PanelJoueurs pj = new PanelJoueurs(this);
+        pj = new PanelJoueurs(this);
         add(pj, BorderLayout.EAST);
         pj.initComponent();
 
-        PanelPartieAction ppa = new PanelPartieAction(this);
+        ppa = new PanelPartieAction(this);
         add(ppa, BorderLayout.SOUTH);
         ppa.initComponent();
 
         isInit = true;
+        santiago.repercuterModification();
     }
 
     @Override
@@ -121,4 +124,7 @@ public class PanelPartie extends AbstractPanel {
         return path.toString();
     }
 
+    public void changeBoardSelected() {
+        pp.paintSelected();
+    }
 }

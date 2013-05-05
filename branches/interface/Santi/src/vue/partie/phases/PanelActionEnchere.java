@@ -15,7 +15,7 @@ import vue.components.Bouton;
 public class PanelActionEnchere extends PanelAction {
     private static final long serialVersionUID = 1L;
 
-    public JPanel cardPanel;
+    JPanel enchere = new JPanel();
 
     private final Bouton encherir = new Bouton("Encherir");
     private final Bouton passer = new Bouton("Passer son tour");
@@ -43,7 +43,7 @@ public class PanelActionEnchere extends PanelAction {
     public void initComponent() {
         super.initComponent();
 
-        JPanel enchere = new JPanel();
+        enchere = new JPanel();
         enchere.setLayout(new BoxLayout(enchere, BoxLayout.Y_AXIS));
 
         enchereObjects();
@@ -57,7 +57,6 @@ public class PanelActionEnchere extends PanelAction {
 
     @Override
     public void update(Observable arg0, Object arg1) {
-        // System.out.println("update panelActionSoudoiement");
         if (!santiago.getPlateau().getCartesDevoilees().isEmpty()) {
             removeAll();
             initComponent();
@@ -70,11 +69,11 @@ public class PanelActionEnchere extends PanelAction {
         public void actionPerformed(ActionEvent e) {
             if (((Bouton) e.getSource()).getText().compareToIgnoreCase("Encherir") == 0) {
                 if (!santiago.encherir(Integer.valueOf(betText.getText()))) {
-                    JOptionPane.showMessageDialog(parent, "Mauvaise Saisie");
+                    JOptionPane.showMessageDialog(parent, "Déjà une enchère similaire !");
                 }
             } else if (((Bouton) e.getSource()).getText().compareToIgnoreCase("Passer son tour") == 0) {
                 if (!santiago.encherir(0)) {
-                    JOptionPane.showMessageDialog(parent, "Mauvaise Saisie");
+                    JOptionPane.showMessageDialog(parent, "Problème la !!");
                 }
             }
         }

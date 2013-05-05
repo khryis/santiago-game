@@ -47,8 +47,8 @@ public class PanelActionChoixConstruction extends PanelAction {
         JPanel choixPanel = new JPanel();
         choixPanel.setLayout(new BoxLayout(choixPanel, BoxLayout.Y_AXIS));
 
-        positionChoisie();
-        choixPanel.add(positionChoisiePanel);
+        // positionChoisie();
+        // choixPanel.add(positionChoisiePanel);
 
         propositions();
         choixPanel.add(propositionsPanel);
@@ -58,8 +58,6 @@ public class PanelActionChoixConstruction extends PanelAction {
 
     @Override
     public void update(Observable arg0, Object arg1) {
-        System.out.println("update panel Choix canal");
-        System.out.println(santiago.getEnchereContructeur().keySet().toString());
         if (!santiago.getEnchereContructeur().isEmpty()) {
             removeAll();
             initComponent();

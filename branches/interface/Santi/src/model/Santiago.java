@@ -222,7 +222,6 @@ public class Santiago extends Observable {
      * de plateau si on est pas au dernier tour de la partie
      */
     public void secheresse() {
-        // TEST secheresse partie 1 Chris
         // check si on est arrivé au dernier tour
         if (nbTours > 1) {
             plateau.secheresse();
@@ -241,7 +240,6 @@ public class Santiago extends Observable {
                 j.ajouterArgent(3);
             }
         }
-        // TODO tour - 1
         nbTours -= 1;
         phaseFinie = true;
         indiceJoueurCourant = positionApresConstructeur();
@@ -333,6 +331,8 @@ public class Santiago extends Observable {
     }
 
     public void incrementerJoueurCourantChoixConstruction() {
+        positionCaseCourante = null;
+        positionSegmentCourant = null;
         phaseFinie = true;
         indiceJoueurCourant = positionApresConstructeur();
         repercuterModification();
@@ -455,6 +455,7 @@ public class Santiago extends Observable {
             carteAPoser.setPossesseur(joueur);
 
             // Maj marqueurs
+            // TODO pas aseez de marqueurs
             joueur.setNbMarqueurDispos(joueur.getNbMarqueurDispos() - carteAPoser.getNbMarqueurMax());
 
             // Maj solde
@@ -698,6 +699,11 @@ public class Santiago extends Observable {
                 indiceJoueur++;
             }
         }
+        // TODO a vérifier, on garde des proposition d'un tour à l'autre, c'est
+        // nimp
+        for (Map.Entry<PositionSegment, ArrayList<Joueur>> entry : enchereConstr.entrySet()) {
+            enchereConstr.remove(entry);
+        }
         enchereConstr.clear();
         tabEnchere.clear();
 
@@ -838,12 +844,10 @@ public class Santiago extends Observable {
 
     public void setPositionCaseCourante(PositionCase pc) {
         this.positionCaseCourante = pc;
-        repercuterModification();
     }
 
     public void setPositionSegmentCourant(PositionSegment ps) {
         this.positionSegmentCourant = ps;
-        repercuterModification();
     }
 
     public Carte getCarteChoisie() {
@@ -852,7 +856,6 @@ public class Santiago extends Observable {
 
     public void setCarteChoisie(Carte carteChoisie) {
         this.carteChoisie = carteChoisie;
-        repercuterModification();
     }
 
 }

@@ -44,6 +44,6 @@ public class BgButton extends JButton implements IConstante {
         } else {
             g.setColor(NICE_GREY_DISABLE);
         }
-        g.drawString(getText(), 0, 60);
+        g.drawString(getText(), 0, 50);
     }
 }

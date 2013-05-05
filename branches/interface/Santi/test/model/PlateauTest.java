@@ -24,9 +24,8 @@ public class PlateauTest {
 
     @Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] { { NiveauPartie.FACILE, 3 }, { NiveauPartie.FACILE, 4 }, { NiveauPartie.FACILE, 5 },
-                { NiveauPartie.MOYEN, 3 }, { NiveauPartie.MOYEN, 4 }, { NiveauPartie.MOYEN, 5 }, { NiveauPartie.DIFFICILE, 3 },
-                { NiveauPartie.DIFFICILE, 4 }, { NiveauPartie.DIFFICILE, 5 } });
+        return Arrays.asList(new Object[][] { { NiveauPartie.FACILE, 3 }, { NiveauPartie.FACILE, 4 }, { NiveauPartie.FACILE, 5 }, { NiveauPartie.MOYEN, 3 }, { NiveauPartie.MOYEN, 4 },
+                { NiveauPartie.MOYEN, 5 }, { NiveauPartie.DIFFICILE, 3 }, { NiveauPartie.DIFFICILE, 4 }, { NiveauPartie.DIFFICILE, 5 } });
     }
 
     public PlateauTest(NiveauPartie niveau, int nbJoueur) {
@@ -59,7 +58,7 @@ public class PlateauTest {
 
     @Test
     public void testTirerCarte() {
-        // TODO tirer carte Chris --> Antho
+        // TODO tirer carte
         fail("Not yet implemented");
     }
 
