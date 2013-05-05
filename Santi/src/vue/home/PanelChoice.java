@@ -59,7 +59,6 @@ public class PanelChoice extends AbstractPanel {
         boutonDemarrer.initComponent();
         boutonConfiguration.initComponent();
 
-        // FIXME redecommenter quand interface partie sera good
         boutonDemarrer.setEnabled(false);
 
         isInit = true;

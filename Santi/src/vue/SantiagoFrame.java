@@ -41,7 +41,6 @@ public class SantiagoFrame extends JFrame implements Observer, KeyListener, Wind
         }
         setUndecorated(true);
 
-        Toolkit toolkit = Toolkit.getDefaultToolkit();
         // Screen size
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         // Screen insets

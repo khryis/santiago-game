@@ -701,8 +701,6 @@ public class Santiago extends Observable {
                 indiceJoueur++;
             }
         }
-        // TODO a vérifier, on garde des proposition d'un tour à l'autre, c'est
-        // nimp
         for (Map.Entry<PositionSegment, ArrayList<Joueur>> entry : enchereConstr.entrySet()) {
             enchereConstr.remove(entry);
         }

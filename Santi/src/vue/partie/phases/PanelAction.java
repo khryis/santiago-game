@@ -141,7 +141,7 @@ public class PanelAction extends AbstractPanel {
         cardChoisiePanel.add(cardChoisie);
     }
 
-    public JPanel cardsObjects() {
+    public void cardsObjects() {
         // TODO pouvoir rendre le compteur des carte selectionné Rouge
         cardPanel = new JPanel();
         LayoutManager boxLayout = new BoxLayout(cardPanel, BoxLayout.X_AXIS);
@@ -164,7 +164,7 @@ public class PanelAction extends AbstractPanel {
             }
         }
 
-        return cardPanel;
+        // return cardPanel;
     }
 
     public void propositions() {
@@ -230,7 +230,6 @@ public class PanelAction extends AbstractPanel {
 
     @Override
     public void update(Observable arg0, Object arg1) {
-        // TODO
     }
 
     private class CliclOnCard implements ActionListener {
@@ -248,7 +247,6 @@ public class PanelAction extends AbstractPanel {
                     cb.setBorderPainted(true);
                     cb.setBorder(BorderFactory.createLineBorder(Color.black, 3));
                     santiago.setCarteChoisie(carte);
-                    // FIXME à voir
                     ((PanelPartie) panelPartieAction.getParent()).changeBoardSelected();
                     ((PanelPartie) panelPartieAction.getParent()).paintPropositions();
                 }

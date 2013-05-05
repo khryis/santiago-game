@@ -33,7 +33,6 @@ public class PanelActionFinDePartie extends PanelAction {
 
     public PanelActionFinDePartie(Container parent, String name, String[] actions) {
         super(parent, name, actions);
-        // TODO Auto-generated constructor stub
     }
 
     @Override
@@ -49,7 +48,6 @@ public class PanelActionFinDePartie extends PanelAction {
         public void actionPerformed(ActionEvent e) {
             Bouton b = (Bouton) e.getSource();
             if (b.getText().compareToIgnoreCase("résultat") == 0) {
-                // TODO
                 int[] score = santiago.score();
                 String msg = "";
                 int win = 0;
@@ -71,7 +69,6 @@ public class PanelActionFinDePartie extends PanelAction {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            // TODO Auto-generated method stub
             Bouton b = (Bouton) e.getSource();
             if (b.getText().compareToIgnoreCase("retour") == 0) {
                 ((PanelHome) parent.getParent().getParent().getParent()).retourPartie();

@@ -18,7 +18,6 @@ public class PanelActionChoixCarte extends PanelAction {
 
     public JPanel cardChoice;
     public JPanel selectedPanel;
-    public JPanel cardPanel;
 
     private final Bouton valider = new Bouton("Valider");
 
@@ -42,23 +41,10 @@ public class PanelActionChoixCarte extends PanelAction {
     public void initComponent() {
         super.initComponent();
 
-        // Graphics g = getGraphics();
-        //
-        // if (g != null) {
-        // g.setColor(this.getBackground());
-        // g.fillRect(0, 0, this.getWidth(), this.getHeight());
-        // }
-
         cardChoice = new JPanel();
         cardChoice.setLayout(new BoxLayout(cardChoice, BoxLayout.Y_AXIS));
 
-        // positionChoisie();
-        // cardChoice.add(positionChoisiePanel);
-
-        // selectedCard();
-        // cardChoice.add(cardChoisiePanel);
-
-        cardPanel = cardsObjects();
+        cardsObjects();
         cardChoice.add(cardPanel);
 
         add(cardChoice);

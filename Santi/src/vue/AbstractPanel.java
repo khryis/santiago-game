@@ -48,7 +48,6 @@ public abstract class AbstractPanel extends JPanel implements Observer, IConstan
 
     // Méthode dans laquelle on ajoute tout les composants voulu au JPanel
     public void initComponent() {
-        Toolkit toolkit = Toolkit.getDefaultToolkit();
         // Screen size
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         // Screen insets

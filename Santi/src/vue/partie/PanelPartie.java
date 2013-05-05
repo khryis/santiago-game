@@ -30,34 +30,6 @@ public class PanelPartie extends AbstractPanel {
         setBackground(NICE_GREY);
         setLayout(new BorderLayout());
 
-        // System.out.println(santiago);
-        // FIXME à enlever après test
-        // ---------------------------
-
-        // santiago.setNiveauPartie(NiveauPartie.FACILE);
-        // ArrayList<Joueur> listjoueurs = new ArrayList<>();
-        // listjoueurs.add(new Joueur("tull", "bleu"));
-        // listjoueurs.add(new Joueur("andre", "vert"));
-        // listjoueurs.add(new Joueur("marc", "gris"));
-        // santiago.setListJoueurs(listjoueurs);
-        // santiago.initPartie();
-
-        // santiago.encherePositionCanal(new PositionSegment(0, 0, 0, 1), 3);
-        // santiago.encherePositionCanal(new PositionSegment(1, 1, 1, 2), 5);
-        // santiago.encherePositionCanal(new PositionSegment(3, 4, 4, 4), 4);
-
-        // PositionSegment ps = new PositionSegment(0, 0, 2, 0);
-        // santiago.placerCanalDeSonChoix(ps);
-
-        // santiago.setPhaseFinie(false);
-        // santiago.encherir(1);
-        // santiago.encherir(2);
-        // santiago.encherir(3);
-        // santiago.poserUneCarte(0, 1, 1);
-        // santiago.poserUneCarte(0, 5, 1);
-        // santiago.poserUneCarte(0, 4, 1);
-        // santiago.poserUneCarte(0, 3, 3);
-
         pp = new PanelPlateau(this);
         add(pp, BorderLayout.CENTER);
         pp.initComponent();
@@ -76,7 +48,6 @@ public class PanelPartie extends AbstractPanel {
 
     @Override
     public void update(Observable arg0, Object arg1) {
-        // TODO Auto-generated method stub
 
     }
 
