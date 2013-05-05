@@ -77,9 +77,6 @@ public class PanelActionSoudoiement extends PanelAction {
         soutenir.setEnabled(true);
         passer.setEnabled(true);
         repaint();
-        // if (santiago.getPositionSegmentCourant() != null) {
-        // positionValeur.setText(santiago.getPositionSegmentCourant().toString());
-        // }
     }
 
     private class SoudoyerListener implements ActionListener {

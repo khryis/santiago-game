@@ -28,6 +28,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 
 import model.Carte;
+import model.Joueur;
 import model.PositionCase;
 import model.PositionIntersection;
 import model.PositionSegment;
@@ -241,7 +242,9 @@ public class PanelPlateau extends AbstractPanel {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     santiago.setPositionSegmentCourant(p);
+                    clearPlateau();
                     paintSelected();
+                    paintPropositions();
                     // JOptionPane.showMessageDialog(panelConteneur,
                     // p.toString());
                 }
@@ -252,7 +255,9 @@ public class PanelPlateau extends AbstractPanel {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     santiago.setPositionCaseCourante(p1);
+                    clearPlateau();
                     paintSelected();
+                    paintPropositions();
                     // JOptionPane.showMessageDialog(panelConteneur,
                     // p1.toString()); // A
                     // Commenter
@@ -315,6 +320,7 @@ public class PanelPlateau extends AbstractPanel {
                 }
             }
         }
+        paintPropositions();
     }
 
     public void clearPlateau() {
@@ -344,6 +350,21 @@ public class PanelPlateau extends AbstractPanel {
             if (caseSelected != null) {
                 caseSelected.setBorderPainted(true);
                 caseSelected.setBorder(BorderFactory.createLineBorder(Color.black, 3));
+            }
+        }
+    }
+
+    public void paintPropositions() {
+        if (santiago.getEnchereContructeur() != null) {
+            for (Map.Entry<PositionSegment, ArrayList<Joueur>> entry : santiago.getEnchereContructeur().entrySet()) {
+                if (!entry.getKey().isOccupe()) {
+                    JButton b = tabCorrespondanceSegment.get(entry.getKey());
+                    if (b != null) {
+                        b.setBorderPainted(true);
+                        Joueur j = entry.getValue().get(0);
+                        b.setBorder(BorderFactory.createLineBorder(j.getColor(), 3));
+                    }
+                }
             }
         }
     }

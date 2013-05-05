@@ -173,16 +173,26 @@ public class PanelAction extends AbstractPanel {
         ButtonGroup group = new ButtonGroup();
         for (final Map.Entry<PositionSegment, ArrayList<Joueur>> entry : santiago.getEnchereContructeur().entrySet()) {
             final PositionSegment canal = entry.getKey();
-            JRadioButton radio = new JRadioButton(canal.toString() + " , soudoiement actuel : " + santiago.valeurPourUneProposition(canal), false);
+            StringBuilder sb = new StringBuilder("Proposition de ");
+            for (Joueur joueur : entry.getValue()) {
+                sb.append(joueur.getNom()).append(", ");
+            }
+            sb = new StringBuilder(sb.subSequence(0, sb.length() - 2));
+            sb.append(" --> total : ").append(santiago.valeurPourUneProposition(canal)).append(" pesos ");
+            JRadioButton radio = new JRadioButton(sb.toString(), false);
             if (canal.equals(santiago.getPositionSegmentCourant())) {
                 radio.setSelected(true);
+            } else {
+                radio.setSelected(false);
             }
             radio.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     if (((JRadioButton) e.getSource()).isSelected()) {
                         santiago.setPositionSegmentCourant(canal);
+                        ((PanelPartie) panelPartieAction.getParent()).changeBoardSelected();
                     }
+                    ((PanelPartie) panelPartieAction.getParent()).paintPropositions();
                 }
 
             });
@@ -240,6 +250,7 @@ public class PanelAction extends AbstractPanel {
                     santiago.setCarteChoisie(carte);
                     // FIXME à voir
                     ((PanelPartie) panelPartieAction.getParent()).changeBoardSelected();
+                    ((PanelPartie) panelPartieAction.getParent()).paintPropositions();
                 }
             }
         }
