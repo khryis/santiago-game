@@ -3,8 +3,13 @@ package vue.partie;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
 import java.util.Observable;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -54,16 +59,12 @@ public class PanelJoueurs extends AbstractPanel {
 
             JLabel enchereCarte = new JLabel();
             JLabel enchereConstructeur = new JLabel();
-            JLabel constructeur = new JLabel();
             JLabel parole = new JLabel();
             if (joueur.getEnchereCarte() > 0) {
                 enchereCarte = new JLabel("Enchere : " + joueur.getEnchereCarte());
             }
             if (joueur.getEnchereConstructeur() > 0) {
                 enchereConstructeur = new JLabel("Soudoiement : " + joueur.getEnchereConstructeur());
-            }
-            if (joueur.isConstructeur()) {
-                constructeur = new JLabel("Il est le constructeur de canal");
             }
             if (i == santiago.getIndiceJoueurCourant()) {
                 parole = new JLabel("Il a la parole");
@@ -84,38 +85,81 @@ public class PanelJoueurs extends AbstractPanel {
             info.add(tuyauSup);
             info.add(enchereCarte);
             info.add(enchereConstructeur);
-            info.add(constructeur);
             info.add(parole);
 
-            JPanel couleur = new JPanel();
-            couleur.setMaximumSize(new Dimension(50, 100));
-            couleur.setMinimumSize(new Dimension(20, 20));
-            Color c = Color.DARK_GRAY;
+            final String imgPath;
             switch ((santiago.getListJoueurs().get(i).getCouleur())) {
-            case "blanc":
-                c = Color.WHITE;
+            case "vert":
+                // imgPath = Color.WHITE;
+                imgPath = "img/Vert.jpg";
                 break;
-            case "noir":
-                c = Color.BLACK;
+            case "jaune":
+                // imgPath = Color.BLACK;
+                imgPath = "img/Jaune.jpg";
                 break;
             case "bleu":
-                c = Color.BLUE;
+                // imgPath = Color.BLUE;
+                imgPath = "img/Bleu.jpg";
                 break;
             case "violet":
-                c = Color.MAGENTA;
+                // imgPath = Color.MAGENTA;
+                imgPath = "img/Violet.jpg";
                 break;
-            case "gris":
-                c = Color.GRAY;
+            case "rouge":
+                // imgPath = Color.GRAY;
+                imgPath = "img/Rouge.jpg";
                 break;
             default:
-                c = Color.DARK_GRAY;
+                // imgPath = Color.DARK_GRAY;
+                imgPath = "img/Bleu.jpg";
                 break;
             }
-            couleur.setBackground(c);
 
-            panelJoueur.add(couleur);
+            JPanel image = new JPanel() {
+                private static final long serialVersionUID = 1L;
+
+                @Override
+                public void paintComponent(Graphics g) {
+                    super.paintComponent(g);
+
+                    try {
+                        Image background = ImageIO.read(new File(imgPath));
+                        // Pour l'image de fond
+                        g.drawImage(background, 0, 0, 80, 80, this);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+            image.setMaximumSize(new Dimension(80, 80));
+            image.setMinimumSize(new Dimension(80, 80));
+
+            JPanel constructeur = new JPanel() {
+                private static final long serialVersionUID = 1L;
+
+                @Override
+                public void paintComponent(Graphics g) {
+                    super.paintComponent(g);
+
+                    try {
+                        Image background = ImageIO.read(new File("img/constructeur.jpg"));
+                        // Pour l'image de fond
+                        g.drawImage(background, 0, 0, 80, 80, this);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+            constructeur.setMaximumSize(new Dimension(80, 80));
+            constructeur.setMinimumSize(new Dimension(80, 80));
+
+            panelJoueur.add(image);
             panelJoueur.add(Box.createRigidArea(new Dimension(10, 0)));
             panelJoueur.add(info);
+            panelJoueur.add(Box.createRigidArea(new Dimension(10, 0)));
+            if (joueur.isConstructeur()) {
+                panelJoueur.add(constructeur);
+            }
 
             add(panelJoueur);
         }

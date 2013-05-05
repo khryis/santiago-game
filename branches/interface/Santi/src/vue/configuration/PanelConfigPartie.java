@@ -31,8 +31,7 @@ public class PanelConfigPartie extends AbstractPanel {
     public void initComponent() {
         super.initComponent();
         // attribut du conteneur this (panelChoice
-        setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(GREEN_BORDER), "Niveau de la partie",
-                TitledBorder.CENTER, TitledBorder.TOP, POLICE_30, FG_COLOR));
+        setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(GREEN_BORDER), "Niveau de la partie", TitledBorder.CENTER, TitledBorder.TOP, POLICE_30, FG_COLOR));
         setLayout(new FlowLayout());
         setBackground(BG_COLOR);
         setForeground(FG_COLOR);
@@ -56,6 +55,9 @@ public class PanelConfigPartie extends AbstractPanel {
         radioB1.initComponent();
         radioB2.initComponent();
         radioB3.initComponent();
+
+        radioB2.setEnabled(false);
+        radioB3.setEnabled(false);
 
         isInit = true;
     }

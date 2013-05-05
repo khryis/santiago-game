@@ -6,8 +6,6 @@ import java.awt.EventQueue;
 import java.awt.Frame;
 import java.awt.Insets;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
@@ -16,9 +14,6 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.UIManager;
 
 import vue.home.PanelHome;
@@ -60,53 +55,53 @@ public class SantiagoFrame extends JFrame implements Observer, KeyListener, Wind
         setLocation(insets.left, insets.top);
 
         // Menu
-        JMenuBar menu = new JMenuBar();
-        JMenu fichier = new JMenu("Fichier");
-        JMenuItem save = new JMenuItem("Sauvegarder");
-        save.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                // sauvegarder le fichier
-            }
-        });
-        JMenuItem load = new JMenuItem("Charger");
-        load.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                // charger le fichier
-            }
-        });
-        JMenuItem fermer = new JMenuItem("Fermer l'application");
-        fermer.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                dispose();
-            }
-        });
-        fichier.add(save);
-        fichier.add(load);
-        fichier.addSeparator();
-        fichier.add(fermer);
-        menu.add(fichier);
-        JMenu aide = new JMenu("Aide");
-        JMenuItem regles = new JMenuItem("Règles");
-        regles.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                // afficher les règles du jeu
-            }
-        });
-        JMenuItem apropos = new JMenuItem("A propos de");
-        apropos.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                // pane WTF
-            }
-        });
-        aide.add(regles);
-        aide.add(apropos);
-        menu.add(aide);
-        this.setJMenuBar(menu);
+        // JMenuBar menu = new JMenuBar();
+        // JMenu fichier = new JMenu("Fichier");
+        // JMenuItem save = new JMenuItem("Sauvegarder");
+        // save.addActionListener(new ActionListener() {
+        // @Override
+        // public void actionPerformed(ActionEvent arg0) {
+        // // sauvegarder le fichier
+        // }
+        // });
+        // JMenuItem load = new JMenuItem("Charger");
+        // load.addActionListener(new ActionListener() {
+        // @Override
+        // public void actionPerformed(ActionEvent arg0) {
+        // // charger le fichier
+        // }
+        // });
+        // JMenuItem fermer = new JMenuItem("Fermer l'application");
+        // fermer.addActionListener(new ActionListener() {
+        // @Override
+        // public void actionPerformed(ActionEvent arg0) {
+        // dispose();
+        // }
+        // });
+        // fichier.add(save);
+        // fichier.add(load);
+        // fichier.addSeparator();
+        // fichier.add(fermer);
+        // menu.add(fichier);
+        // JMenu aide = new JMenu("Aide");
+        // JMenuItem regles = new JMenuItem("Règles");
+        // regles.addActionListener(new ActionListener() {
+        // @Override
+        // public void actionPerformed(ActionEvent arg0) {
+        // // afficher les règles du jeu
+        // }
+        // });
+        // JMenuItem apropos = new JMenuItem("A propos de");
+        // apropos.addActionListener(new ActionListener() {
+        // @Override
+        // public void actionPerformed(ActionEvent arg0) {
+        // // pane WTF
+        // }
+        // });
+        // aide.add(regles);
+        // aide.add(apropos);
+        // menu.add(aide);
+        // this.setJMenuBar(menu);
 
         // on ajoute les composants au conteneur principal
         setContentPane(panelHome);
