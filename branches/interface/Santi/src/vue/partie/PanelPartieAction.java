@@ -6,7 +6,6 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.util.Observable;
 
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import vue.AbstractPanel;
@@ -16,6 +15,7 @@ import vue.partie.phases.PanelActionChoixCarte;
 import vue.partie.phases.PanelActionChoixConstruction;
 import vue.partie.phases.PanelActionDiaDePaga;
 import vue.partie.phases.PanelActionEnchere;
+import vue.partie.phases.PanelActionFinDePartie;
 import vue.partie.phases.PanelActionSecheresse;
 import vue.partie.phases.PanelActionSoudoiement;
 
@@ -29,13 +29,14 @@ public class PanelPartieAction extends AbstractPanel {
     private final PanelAction phaseCanalSup;
     private final PanelAction phaseSecheresse;
     private final PanelAction phaseDiaDePaga;
+    private final PanelAction phaseFinDePartie;
 
     private final PanelInformation panelInformation;
 
     public JPanel phases = new JPanel();
     public CardLayout cardLayout = new CardLayout();
     public String[] listPhases = { "PHASE D'ENCHERE", "PHASE DE CHOIX DES CARTES", "PHASE DE SOUDOIEMENT", "PHASE DE CHOIX D'UNE CONSTRUCTION", "PHASE DE CANAL SUPPLEMENTAIRE", "PHASE DE SECHERESSE",
-            "DIA DE PAGA" };
+            "DIA DE PAGA", "FIN DE PARTIE" };
     int indice = 0;
 
     public PanelPartieAction(Container parent) {
@@ -47,6 +48,7 @@ public class PanelPartieAction extends AbstractPanel {
         phaseCanalSup = new PanelActionCanalSup(this, listPhases[4]);
         phaseSecheresse = new PanelActionSecheresse(this, listPhases[5]);
         phaseDiaDePaga = new PanelActionDiaDePaga(this, listPhases[6]);
+        phaseFinDePartie = new PanelActionFinDePartie(this, listPhases[7]);
 
         panelInformation = new PanelInformation(this);
 
@@ -74,6 +76,7 @@ public class PanelPartieAction extends AbstractPanel {
         phases.add(phaseCanalSup, listPhases[4]);
         phases.add(phaseSecheresse, listPhases[5]);
         phases.add(phaseDiaDePaga, listPhases[6]);
+        phases.add(phaseFinDePartie, listPhases[7]);
 
         add(phases, BorderLayout.CENTER);
         add(panelInformation, BorderLayout.EAST);
@@ -86,6 +89,7 @@ public class PanelPartieAction extends AbstractPanel {
         phaseSecheresse.initComponent();
         phaseDiaDePaga.initComponent();
         panelInformation.initComponent();
+        phaseFinDePartie.initComponent();
 
         cardLayout.show(phases, listPhases[indice]);
 
@@ -94,34 +98,21 @@ public class PanelPartieAction extends AbstractPanel {
 
     @Override
     public void update(Observable arg0, Object arg1) {
-        // TODO Auto-generated method stub
-    	if (!santiago.isFinish()) {
-    		if (santiago.isPhaseFinie()) {
-    			santiago.setPhaseFinie(false);
-    			incrementerCardLayout();
-    			cardLayout.show(phases, listPhases[indice]);
-    		}
-    	} else {
-    		int [] score = santiago.score();
-    		String msg = "";
-    		int win = 0;
-    		int max = score[win];
-    		for (int i = 0; i  < santiago.getListJoueurs().size(); i ++) {
-    			msg = msg + santiago.getListJoueurs().get(i).getNom() + " : " + score[i] + "\n";
-    			if (score[i] > max) {
-    				max = score[i];
-    				win = i;
-    			}
-    		}
-    		msg = msg + "\n Le joueur " + santiago.getListJoueurs().get(win).getNom() + " gagne avec : " + max + " points\n";
-    		JOptionPane.showMessageDialog(parent, msg, "Résultats", JOptionPane.PLAIN_MESSAGE);
-    	}
+        if (santiago.isPhaseFinie()) {
+            santiago.setPhaseFinie(false);
+            incrementerCardLayout();
+            cardLayout.show(phases, listPhases[indice]);
+        }
     }
 
     private void incrementerCardLayout() {
         indice++;
-        if (indice == listPhases.length) {
-            indice = 0;
+        if (!santiago.isFinish()) {
+            if (indice == 7) {
+                indice = 0;
+            }
+        } else {
+            indice = 7;
         }
     }
 }

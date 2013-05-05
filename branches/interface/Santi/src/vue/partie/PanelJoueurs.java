@@ -57,10 +57,10 @@ public class PanelJoueurs extends AbstractPanel {
             JLabel constructeur = new JLabel();
             JLabel parole = new JLabel();
             if (joueur.getEnchereCarte() > 0) {
-                constructeur = new JLabel("Enchere : " + joueur.getEnchereCarte());
+                enchereCarte = new JLabel("Enchere : " + joueur.getEnchereCarte());
             }
             if (joueur.getEnchereConstructeur() > 0) {
-                constructeur = new JLabel("Soudoiement : " + joueur.getEnchereConstructeur());
+                enchereConstructeur = new JLabel("Soudoiement : " + joueur.getEnchereConstructeur());
             }
             if (joueur.isConstructeur()) {
                 constructeur = new JLabel("Il est le constructeur de canal");

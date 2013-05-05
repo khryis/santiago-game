@@ -120,7 +120,7 @@ public class Plateau extends Observable {
                 carteAPoser.setPosition(positionCase);
                 pose = true;
             } else {
-                System.out.println("Position déjà occupé");
+                System.out.println("Position deja occupe");
             }
         } else {
             System.out.println("Cette Position n'existe pas sur le plateau");
@@ -140,11 +140,11 @@ public class Plateau extends Observable {
                     canal.setOccupe(true);
                     place = true;
                 } else {
-                    System.out.println("Le canal doit être relié à la source ou a un autre canal");
+                    System.out.println("Le canal doit etre relie a la source ou a un autre canal");
                     place = false;
                 }
             } else {
-                System.out.println("Canal déja occupe");
+                System.out.println("Canal deja occupe");
                 place = false;
             }
 
@@ -235,8 +235,8 @@ public class Plateau extends Observable {
     private ArrayList<Carte> popArrayList(int nbCartes) {
         ArrayList<Carte> carteTirage = new ArrayList<>(nbCartes);
         for (int i = 0; i < nbCartes; i++) {
-            carteTirage.add(cartes.get(cartes.size() - 1));
-            cartes.remove(cartes.size() - 1);
+            carteTirage.add(cartes.get(0));
+            cartes.remove(0);
         }
         return carteTirage;
     }
