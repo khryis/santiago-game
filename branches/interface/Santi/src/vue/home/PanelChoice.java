@@ -19,7 +19,6 @@ public class PanelChoice extends AbstractPanel {
     // composants du JPanel
     BgButton boutonDemarrer;
     BgButton boutonConfiguration;
-    BgButton boutonReglage;
     PanelHome panelHome;
     JPanel cards;
 
@@ -43,7 +42,6 @@ public class PanelChoice extends AbstractPanel {
         // init composants du panel
         boutonDemarrer = new BgButton("Demarrer");
         boutonConfiguration = new BgButton("Configurer");
-        boutonReglage = new BgButton("Réglages");
         JPanel intermediaire = new JPanel();
         intermediaire.setLayout(new FlowLayout());
         intermediaire.setPreferredSize(new Dimension(homeDimension.width, homeDimension.height / 2));
@@ -52,17 +50,14 @@ public class PanelChoice extends AbstractPanel {
         // Listener
         boutonDemarrer.addActionListener(new BoutonDemarrerListener());
         boutonConfiguration.addActionListener(new BoutonConfigurationListener());
-        boutonReglage.addActionListener(new BoutonReglageListener());
 
         // on ajoute les composants au conteneur
         intermediaire.add(boutonDemarrer);
         intermediaire.add(boutonConfiguration);
-        intermediaire.add(boutonReglage);
         add(intermediaire, BorderLayout.SOUTH);
 
         boutonDemarrer.initComponent();
         boutonConfiguration.initComponent();
-        boutonReglage.initComponent();
 
         // FIXME redecommenter quand interface partie sera good
         boutonDemarrer.setEnabled(false);
@@ -86,13 +81,6 @@ public class PanelChoice extends AbstractPanel {
         @Override
         public void actionPerformed(ActionEvent event) {
             panelHome.cardLayout.show(panelHome.cards, panelHome.listContent[1]);
-        }
-    }
-
-    private class BoutonReglageListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent event) {
-            // cards.cardLayout.show(cards, cards.listContent[2]);
         }
     }
 }
