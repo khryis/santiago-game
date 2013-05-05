@@ -48,17 +48,17 @@ public class PanelActionCanalSup extends PanelAction {
 
     @Override
     public void update(Observable arg0, Object arg1) {
-        if (!santiago.getEnchereContructeur().isEmpty()) {
+        if (santiago.isConfigured()) {
             removeAll();
             initComponent();
             validate();
         }
-        if (santiago.getPositionSegmentCourant() != null) {
-            positionValeur.setText(santiago.getPositionSegmentCourant().toString());
-        }
         if (santiago.joueurPlaying().hasTuyauSup()) {
             valider.setEnabled(true);
+        } else {
+            valider.setEnabled(false);
         }
+        repaint();
     }
 
     private class PoserIrrigation implements ActionListener {

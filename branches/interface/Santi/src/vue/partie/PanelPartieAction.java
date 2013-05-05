@@ -66,7 +66,7 @@ public class PanelPartieAction extends AbstractPanel {
 
         // on ajoute les composant au panel CardLayout
         phases.setLayout(cardLayout);
-        phases.setPreferredSize(new Dimension(800, homeDimension.height - 600));
+        phases.setPreferredSize(new Dimension(800, homeDimension.height - 650));
         phases.setOpaque(false);
 
         phases.add(phaseEnchere, listPhases[0]);

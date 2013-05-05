@@ -2,7 +2,6 @@ package vue.home;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -11,7 +10,6 @@ import java.io.IOException;
 import java.util.Observable;
 
 import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 import vue.AbstractPanel;
@@ -49,7 +47,6 @@ public class PanelHome extends AbstractPanel {
         // attribut du conteneur PanelHome
         setLayout(new BorderLayout());
         setPreferredSize(homeDimension);
-        setBorder(BorderFactory.createLineBorder(Color.GREEN));
 
         // on ajoute les composant au panel CardLayout
         cards.setLayout(cardLayout);
