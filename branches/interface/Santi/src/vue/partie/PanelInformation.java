@@ -13,11 +13,13 @@ import vue.AbstractPanel;
 import vue.components.JTextAreaOutputStream;
 
 public class PanelInformation extends AbstractPanel {
+    private static final long serialVersionUID = 1L;
 
     public PanelInformation(Container parent) {
         super(parent);
     }
 
+    @SuppressWarnings("resource")
     @Override
     public void initComponent() {
         super.initComponent();

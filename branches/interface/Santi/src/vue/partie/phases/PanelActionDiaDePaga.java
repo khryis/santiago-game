@@ -38,7 +38,6 @@ public class PanelActionDiaDePaga extends PanelAction {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            // TODO Auto-generated method stub
             Bouton b = (Bouton) e.getSource();
             if (b.getText().compareToIgnoreCase("Phase suivante") == 0) {
                 santiago.diaDePaga();

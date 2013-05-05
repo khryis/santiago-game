@@ -61,7 +61,7 @@ public class PanelHome extends AbstractPanel {
         // init des panels
         panelChoice.initComponent();
         panelConfiguration.initComponent();
-        // FIXME peut pas init tant qu'on a pas configurer des partie
+        // peut pas init tant qu'on a pas configurer des partie
         // panelPartie.initComponent();
 
         isInit = true;
@@ -69,7 +69,6 @@ public class PanelHome extends AbstractPanel {
 
     @Override
     public void update(Observable arg0, Object arg1) {
-        // FIXME a décommenter
         if (santiago.isConfigured()) {
             panelChoice.boutonDemarrer.setEnabled(true);
             if (!panelPartie.isInit()) {

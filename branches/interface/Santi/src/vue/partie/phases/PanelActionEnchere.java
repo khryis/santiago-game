@@ -49,7 +49,7 @@ public class PanelActionEnchere extends PanelAction {
         enchereObjects();
         enchere.add(betPanel);
 
-        cardPanel = cardsObjects();
+        cardsObjects();
         enchere.add(cardPanel);
 
         add(enchere);
