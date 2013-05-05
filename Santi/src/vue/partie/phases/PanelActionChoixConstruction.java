@@ -95,7 +95,7 @@ public class PanelActionChoixConstruction extends PanelAction {
             if (bouton.getText().compareToIgnoreCase("Choisir une autre construction") == 0) {
                 if (canal != null) {
                     if (!santiago.placerCanalDeSonChoix(canal)) {
-                        JOptionPane.showMessageDialog(parent, "Pas possible");
+                        JOptionPane.showMessageDialog(parent, "Pas possible de placer ce canal");
                     }
                 }
             }

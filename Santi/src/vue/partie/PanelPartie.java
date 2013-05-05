@@ -127,4 +127,8 @@ public class PanelPartie extends AbstractPanel {
     public void changeBoardSelected() {
         pp.paintSelected();
     }
+
+    public void paintPropositions() {
+        pp.paintPropositions();
+    }
 }
